@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('contenu');
             $table->date('date-envoi');
             $table->boolean('est_lu');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

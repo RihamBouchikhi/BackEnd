@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date-debut');
             $table->date('date-fin');
             $table->foreignId('Offrestage_id')->constrained()->on('offre_stages')->onDelete('cascade');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

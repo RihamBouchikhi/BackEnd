@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom_equipe') ;
             $table->foreignId('projet_id')->references('id')->on('projet')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

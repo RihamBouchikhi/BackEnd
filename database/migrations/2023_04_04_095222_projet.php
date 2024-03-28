@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('status');
             $table->text('description');
             $table->foreignId('encadrant_id')->references('id')->on('encadrant')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

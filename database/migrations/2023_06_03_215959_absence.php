@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('etat') ;
             $table->text('justification') ;
             $table->foreignId('stagiaire_id')->references('id')->on('stagiaire')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

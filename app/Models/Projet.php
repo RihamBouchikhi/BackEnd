@@ -41,4 +41,8 @@ class Projet extends Model
         return $this->hasMany(OffreStage::class);
     }
 
+    public function taches()
+    {
+        return $this->hasMany(Taches::class);
+    }
 }
