@@ -35,6 +35,8 @@ class EquipeController extends Controller
     public function create()
     {
         //
+        //$equipe = new Equipe;
+
     }
 
     /**

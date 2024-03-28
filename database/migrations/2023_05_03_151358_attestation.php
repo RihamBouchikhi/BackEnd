@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('date') ;
             $table->foreignId('administrateur_id')->references('id')->on('administrateur')->onDelete('cascade');
             $table->foreignId('stagiaire_id')->references('id')->on('stagiaire')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

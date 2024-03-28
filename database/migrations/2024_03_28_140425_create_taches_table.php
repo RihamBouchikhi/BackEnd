@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -10,10 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('administrateur', function (Blueprint $table) {
+        Schema::create('taches', function (Blueprint $table) {
             $table->id();
+            $table->string('titre');
+            $table->text('description');
+            $table->foreignId('stagiaire_id')->constrained()->on('stagiaire')->onDelete('cascade');
+            $table->foreignId('Projet_id')->constrained()->on('projet')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('administrateur');
+        Schema::dropIfExists('taches');
     }
 };

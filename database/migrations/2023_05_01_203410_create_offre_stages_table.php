@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('dure');
             $table->foreignId('Projet_id')->references('id')->on('projet')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

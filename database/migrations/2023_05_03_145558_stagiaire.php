@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('ProjetFinale');
             //$table->string('Attestation_id')->references('id')->on('attestation')->onDelete('cascade')->nullable();
             $table->string('Form_id')->references('id')->on('formulaire')->onDelete('cascade')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
