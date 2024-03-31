@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\OffreStage;
 use App\Models\Projet;
 
-class OffreStageController extends Controller
+class OffresController extends Controller
 {
 
     public function index()
@@ -15,21 +15,21 @@ class OffreStageController extends Controller
         return response()->json($offres);
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
             'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
-            'projet_titre' => 'required|string|exists:projet,titre', // Ajout de la validation pour le titre du projet
+            'sujet_projet' => 'required|string|exists:projet,sujet', // Ajout de la validation pour le titre du projet
         ]);
 
         // Récupérer le projet par son titre
-        $projet = Projet::where('titre', $request->projet_titre)->firstOrFail();
+        $projet = Projet::where('sujet', $request->sujet_projet)->firstOrFail();
 
         // Créer une nouvelle offre de stage avec l'ID du projet 
-        $offre = OffreStage::create([
+        $offre = OffreStage::store([
             'titre' => $request->titre,
             'description' => $request->description,
             'domaine' => $request->domaine,
