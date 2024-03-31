@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdministrateurController;
-use App\Http\Controllers\OffreStageController;
+use App\Http\Controllers\OffresController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StagiaireController;
 use App\Http\Controllers\AvancementController;
@@ -49,7 +49,7 @@ Route::post('/admins/stagiaires/create', [StagiaireController::class, 'createSta
 
 
 //OffreStage
-Route::apiResource('offres', \App\Http\Controllers\OffreStageController::class);
+Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
 
 
 
