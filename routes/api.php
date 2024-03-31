@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StagiaireController;
 use App\Http\Controllers\AvancementController;
@@ -22,12 +23,6 @@ use App\Models\Administrateur;
 |
 */
 
-
-
-
-
-
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -40,9 +35,30 @@ Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'lo
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 //Administrateur
+
+
+// Route pour créer un compte administrateur
+Route::post('/admin/create', [AdministrateurController::class, 'createAdmin']);
+
+// Route pour mettre à jour les informations de l'administrateur
+Route::put('/admin/update', [AdministrateurController::class, 'updateAdmin'])->middleware('auth:sanctum'); // Middleware d'authentification Sanctum
+
+// Route pour que l'administrateur crée un compte de stagiaire
+Route::post('/admins/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
+
+
+
+
+
+
+
+
+
+
+/*
 Route::apiResource('administrateur',\App\Http\Controllers\AdministrateurController::class);
 Route::post('admin/login',[\App\Http\Controllers\AdministrateurController::class, 'login']);
-
+*/
 use App\Http\Controllers\MessageController;
 
 Route::post('/messages', [MessageController::class, 'store']);
