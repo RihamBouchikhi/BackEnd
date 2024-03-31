@@ -23,6 +23,7 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'telephone',
+        'username',
         'email',
         'motdepasse',
         'avatar',

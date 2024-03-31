@@ -30,7 +30,8 @@ class UserController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'telephone' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'email' => 'required|email|unique:users,email', 
             'password' => 'required|string',
             'avatar' => 'nullable|string',
             'role' => 'required|string',
@@ -40,31 +41,14 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return response()->json($user);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
         $request->validate([
             'nom' => 'string',
             'prenom' => 'string',
             'telephone' => 'string',
-            'email' => 'email|unique:users,email,' . $user->id,
+            'username' => 'string|unique:users,username,' . $user->id,
+            'email' => 'email|unique:users,email,' . $user->id, 
             'password' => 'string',
             'avatar' => 'nullable|string',
             'role' => 'string',
@@ -73,6 +57,7 @@ class UserController extends Controller
         $user->update($request->all());
         return response()->json($user, 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
