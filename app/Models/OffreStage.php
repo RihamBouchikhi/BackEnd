@@ -17,11 +17,16 @@ class OffreStage extends Model
         'description',
         'domaine',
         'dure',
+        'Admin_id',
         'Projet_id',
         
         
     ];
 
+    public function administrateur()
+    {
+        return $this->belongsTo(Administrateur::class, 'Admin_id');
+    }
     public function projet()
     {
         return $this->belongsTo(Projet::class, 'Projet_id');

@@ -18,7 +18,10 @@ class Administrateur extends Authenticatable
 
     
 
-
+    public function offrestage()
+    {
+        return $this->hasMany(OffreStage::class);
+    }
     public function attestation()
     {
         return $this->hasMany(Attestation::class);
