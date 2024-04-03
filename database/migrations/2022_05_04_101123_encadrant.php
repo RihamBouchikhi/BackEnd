@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('encadrant', function (Blueprint $table) {
             $table->id();
+            $table->string('specialite');
             $table->softDeletes();
             $table->timestamps();
         });
