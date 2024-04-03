@@ -11,13 +11,13 @@ class AdministrateurController extends Controller
     // Méthode pour créer un compte administrateur
     public function createAdmin()
     {
-        $email = 'dsiadmin@gmail.com';
-        $motdepasse = 'administrateur2024';
-        $username = 'admin2024'; 
+        $email = 'dsiadmin123@gmail.com';
+        $password = 'admin56267';
+        $username = 'admin2'; 
 
         $user = User::create([
             'email' => $email,
-            'motdepasse' => bcrypt($motdepasse),
+            'password' => bcrypt($password),
             'role' => 'admin',
             'username' => $username, 
         ]);
@@ -31,30 +31,40 @@ class AdministrateurController extends Controller
     }
 
 
-    public function updateAdmin(Request $request)
+        public function updateAdmin(Request $request, $id)
     {
-        $user = auth()->user(); 
-
+        // Valider les données de la requête
         $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
+            'nom' => 'nullable|string|max:255',
+            'prenom' => 'nullable|string|max:255',
             'telephone' => 'nullable|string|max:20',
             'avatar' => 'nullable|image|max:2048', 
         ]);
 
-        
+    
+        // Récupérer l'administrateur à mettre à jour
+        $admin = Administrateur::findOrFail($id);
+        if (!$admin) {
+        return response()->json(['message' => 'Administrateur non trouvé'], 404);
+    }
+        $user = $admin->user;
+
+        // Mettre à jour les informations de l'utilisateur
         $user->update([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'telephone' => $request->telephone,
         ]);
 
+        // Mettre à jour l'avatar si présent dans la requête
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
             $user->avatar = $avatarPath;
             $user->save();
         }
 
+        // Répondre avec un message de succès
         return response()->json(['message' => 'Informations administrateur mises à jour avec succès', 'admin' => $user]);
     }
+
 }

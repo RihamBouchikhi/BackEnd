@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('formulaires', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('telephone');
             $table->text('etablissement');
             $table->binary('CV');
             $table->binary('demande-stage');

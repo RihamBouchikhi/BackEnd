@@ -16,6 +16,10 @@ class Administrateur extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $fillable = [
+        'user_id',
+        
+    ];
     
 
     public function offrestage()

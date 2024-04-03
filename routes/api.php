@@ -4,10 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\OffresController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StagiaireController;
+use App\Http\Controllers\EncadrantController;
 use App\Http\Controllers\AvancementController;
-use App\Http\Controllers\UtilisationTechnologieController;
 use App\Models\Equipe;
 use App\Models\Stagiaire;
 use App\Models\Encadrant;
@@ -23,7 +22,7 @@ use App\Models\Administrateur;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -34,22 +33,26 @@ Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class
 Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
 Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
-
+*/
 //Administrateur
-
 
 // Route pour créer un compte administrateur
 Route::post('/admin/create', [AdministrateurController::class, 'createAdmin']);
 
 // Route pour mettre à jour les informations de l'administrateur
-Route::put('/admin/update', [AdministrateurController::class, 'updateAdmin'])->middleware('auth:sanctum'); 
+Route::put('/admin/{id}/update', [AdministrateurController::class, 'updateAdmin']);
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::post('/admins/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
-
+Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
 
 //OffreStage
 Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
+
+//Encadrant 
+Route::post('/admin/encadrants/create', [EncadrantController::class, 'createEncadrantByAdmin']);
+
+
+
 
 
 
@@ -59,7 +62,7 @@ Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
 /*
 Route::apiResource('administrateur',\App\Http\Controllers\AdministrateurController::class);
 Route::post('admin/login',[\App\Http\Controllers\AdministrateurController::class, 'login']);
-*/
+
 use App\Http\Controllers\MessageController;
 
 Route::post('/messages', [MessageController::class, 'store']);
@@ -137,11 +140,12 @@ Route::apiResource('etablissement',\App\Http\Controllers\EtablissementController
 //UtilisationTechnologie
 Route::apiResource('utilisationTechnologie',\App\Http\Controllers\UtilisationTechnologieController::class);
 Route::post('/utilisation-technologie', [UtilisationTechnologieController::class, 'store']);
+*/
+
+
+//UseFull Requests
 
 /*
- * UseFull Requests
- */
-
 //getting stagiaires-with-stage
 Route::get('/stagiaires-with-stage', [\App\Http\Controllers\StagiaireController::class, 'getStagiairesWithStage']);
 
@@ -202,3 +206,4 @@ Route::get('/projet/{projet_id}/avancements', [AvancementController::class,'getL
 Route::put('stagiaire/{id}/update-equipe-id', [StagiaireController::class, 'updateEquipeId']);
 
 Route::get('/projet/last-id', [ProjetController::class, 'getLastProjetId']);
+*/

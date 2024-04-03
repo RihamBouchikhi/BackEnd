@@ -25,7 +25,7 @@ class User extends Authenticatable
         'telephone',
         'username',
         'email',
-        'motdepasse',
+        'password',
         'avatar',
         'role',
     ];
@@ -53,6 +53,7 @@ class User extends Authenticatable
 
 
  // Observer la création d'un utilisateur
+ /*
     protected static function boot()
     {
         parent::boot();
@@ -69,14 +70,15 @@ class User extends Authenticatable
             }
         });
     }
-
+*/
 
     // Relation avec les administrateurs
-    public function admin()
+    
+    public function administrateur()
     {
         return $this->hasOne(Administrateur::class);
     }
-
+    
     // Relation avec les stagiaires
     public function stagiaire()
     {

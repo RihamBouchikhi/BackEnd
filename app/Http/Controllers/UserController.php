@@ -27,15 +27,17 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
-            'telephone' => 'required|string',
+            'nom' => 'nullable|string',
+            'prenom' => 'nullable|string',
+            'telephone' => 'nullable|string',
             'username' => 'required|string|unique:users,username',
             'email' => 'required|email|unique:users,email', 
             'password' => 'required|string',
             'avatar' => 'nullable|string',
-            'role' => 'required|string',
         ]);
+
+        // Définir le rôle par défaut comme "simpleuser"
+        $request->merge(['role' => 'simpleuser']);
 
         $user = User::create($request->all());
         return response()->json($user, 201);
@@ -51,7 +53,6 @@ class UserController extends Controller
             'email' => 'email|unique:users,email,' . $user->id, 
             'password' => 'string',
             'avatar' => 'nullable|string',
-            'role' => 'string',
         ]);
 
         $user->update($request->all());

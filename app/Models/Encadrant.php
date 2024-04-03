@@ -16,7 +16,9 @@ class Encadrant extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
      // Par défaut, le modèle Encadrant hérite de tous les attributs et relations du modèle Utilisateur
-
+    protected $fillable = [
+        'specialite',
+    ];
 
     public function projet()
     {
