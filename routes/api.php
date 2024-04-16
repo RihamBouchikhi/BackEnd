@@ -2,15 +2,19 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\OffresController;
+use App\Http\Controllers\FormulaireController;
 use App\Http\Controllers\StagiaireController;
 use App\Http\Controllers\EncadrantController;
+use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\AvancementController;
 use App\Models\Equipe;
 use App\Models\Stagiaire;
 use App\Models\Encadrant;
 use App\Models\Administrateur;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +26,7 @@ use App\Models\Administrateur;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-/*
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -33,7 +37,10 @@ Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class
 Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
 Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
-*/
+
+
+Route::apiResource('users', UserController::class);
+
 //Administrateur
 
 // Route pour créer un compte administrateur
@@ -42,17 +49,26 @@ Route::post('/admin/create', [AdministrateurController::class, 'createAdmin']);
 // Route pour mettre à jour les informations de l'administrateur
 Route::put('/admin/{id}/update', [AdministrateurController::class, 'updateAdmin']);
 
+
 // Route pour que l'administrateur crée un compte de stagiaire
 Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
 
+
 //OffreStage
 Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
+//Route::post('/offers/create', [OffresController::class, 'create']);
+
 
 //Encadrant 
 Route::post('/admin/encadrants/create', [EncadrantController::class, 'createEncadrantByAdmin']);
 
+//Formulaire Condidature
+
+Route::post('/formulaires', [FormulaireController::class, 'store']);
 
 
+// Projet
+Route::apiResource('projets', ProjetController::class);
 
 
 

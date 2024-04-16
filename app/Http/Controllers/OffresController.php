@@ -8,7 +8,6 @@ use App\Models\Projet;
 
 class OffresController extends Controller
 {
-
     public function index()
     {
         $offres = OffreStage::all();
@@ -22,20 +21,20 @@ class OffresController extends Controller
             'description' => 'required|string',
             'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
-            'sujet_projet' => 'required|string|exists:projet,sujet', // Ajout de la validation pour le titre du projet
+            'sujet_projet' => 'required|string|exists:projet,sujet', 
         ]);
 
         // Récupérer le projet par son titre
         $projet = Projet::where('sujet', $request->sujet_projet)->firstOrFail();
 
-        // Créer une nouvelle offre de stage avec l'ID du projet 
-        $offre = OffreStage::store([
+        
+        $offre = OffreStage::create([
             'titre' => $request->titre,
             'description' => $request->description,
             'domaine' => $request->domaine,
             'dure' => $request->dure,
             'Admin_id' => auth()->id(),
-            'Projet_id' => $projet->id, // Utilisation de l'ID du projet
+            'Projet_id' => $projet->id, 
         ]);
 
         return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);

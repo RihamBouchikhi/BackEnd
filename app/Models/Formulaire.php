@@ -12,9 +12,8 @@ class Formulaire extends Model
     protected $table = 'formulaire';
 
     protected $fillable = [
-        'nom',
-        'prenom',
-        'telephone',
+        
+        'niveau-etude',
         'etablissement',
         'CV',
         'demmande-stage',

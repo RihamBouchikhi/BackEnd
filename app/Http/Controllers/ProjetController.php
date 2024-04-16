@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Projet;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProjetController extends Controller
 {
@@ -13,50 +12,24 @@ class ProjetController extends Controller
      */
     public function index()
     {
-        $projet = Projet::all();
-        return response()->json($projet);
+        $projets = Projet::all();
+        return response()->json($projets);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-
-
-// ...
-
-    public function getLastProjetId()
-    {
-        $lastProjetId = DB::table('projet')->orderBy('created_at', 'desc')->value('id');
-        return response()->json(['last_projet_id' => $lastProjetId]);
-    }
-
-
-
-
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-
-
-
-        $projet = new Projet([
-            'sujet' => $request->input('sujet'),
-            'status' => $request->input('status'),
-            'type' => $request->input('type'),
-            'description' => $request->input('description'),
-            'image'=> $request->input('image'),
-            'equipe_id' => $request->input('equipe_id'),
+        $request->validate([
+            'sujet' => 'required|string',
+            'status' => 'required|string',
+            'description' => 'required|string',
+            'encadrant_id' => 'required|exists:encadrant,id',
         ]);
-        $projet->save();
-        return response()->json('');
+
+        $projet = Projet::create($request->all());
+        return response()->json($projet, 201);
     }
 
     /**
@@ -64,16 +37,8 @@ class ProjetController extends Controller
      */
     public function show($id)
     {
-        $projet = Projet::find($id) ;
+        $projet = Projet::findOrFail($id);
         return response()->json($projet);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -81,9 +46,15 @@ class ProjetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $projet = Projet::find($id);
+        $request->validate([
+            'sujet' => 'required|string',
+            'status' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        $projet = Projet::findOrFail($id);
         $projet->update($request->all());
-        return response()->json('');
+        return response()->json($projet, 200);
     }
 
     /**
@@ -91,32 +62,8 @@ class ProjetController extends Controller
      */
     public function destroy($id)
     {
-        $projet = Projet::find($id);
+        $projet = Projet::findOrFail($id);
         $projet->delete();
-        return response()->json('');
+        return response()->json('', 204);
     }
-
-
-    public function getProjetsDetails()
-    {
-        $projets = Projet::with([
-            'equipe' => function ($query) {
-                $query->select('id', 'nom_equipe');
-            },
-            'equipe.stagiaires' => function ($query) {
-                $query->select('id', 'nom', 'prenom', 'equipe_id');
-            },
-        ])->select('id', 'sujet', 'status', 'equipe_id')->get();
-
-        return response()->json($projets);
-    }
-
-
-
-
-
-
-
-
-
 }

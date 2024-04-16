@@ -24,4 +24,9 @@ class Encadrant extends Authenticatable
     {
         return $this->hasMany(Projet::class);
     }
+
+    public function equipe()
+    {
+        return $this->hasMany(Equipe::class);
+    }
 }
