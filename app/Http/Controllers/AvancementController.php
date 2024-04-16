@@ -22,7 +22,7 @@ class AvancementController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

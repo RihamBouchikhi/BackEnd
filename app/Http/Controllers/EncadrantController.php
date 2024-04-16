@@ -22,7 +22,7 @@ class EncadrantController extends Controller
     
         $user = User::create([
             'email' => $validatedData['email'],
-            'motdepasse' => bcrypt($validatedData['motdepasse']),
+            'password' => bcrypt($validatedData['motdepasse']),
             'role' => 'encadrant', 
             'username' => $validatedData['username'],
             'nom' => $validatedData['nom'],
