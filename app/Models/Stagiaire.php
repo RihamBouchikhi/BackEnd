@@ -23,6 +23,7 @@ class Stagiaire extends Authenticatable
         'ProjetFinale',
         //'Attestation_id',
         'Form_id',
+        'Equipe_id',
 
     ];
 
@@ -35,6 +36,11 @@ class Stagiaire extends Authenticatable
     public function formulaire()
     {
         return $this->belongsTo(Formulaire::class, 'Form_id');
+    }
+
+    public function equipe()
+    {
+        return $this->belongsTo(Equipe::class, 'Equipe_id');
     }
 
     public function absences()

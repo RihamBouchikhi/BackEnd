@@ -9,6 +9,7 @@ use App\Http\Controllers\FormulaireController;
 use App\Http\Controllers\StagiaireController;
 use App\Http\Controllers\EncadrantController;
 use App\Http\Controllers\ProjetController;
+use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\AvancementController;
 use App\Models\Equipe;
 use App\Models\Stagiaire;
@@ -69,6 +70,27 @@ Route::post('/formulaires', [FormulaireController::class, 'store']);
 
 // Projet
 Route::apiResource('projets', ProjetController::class);
+
+// Route pour les opérations CRUD sur l'entité Equipe
+Route::resource('equipes', EquipeController::class)->only(['store', 'show', 'update', 'destroy']);
+
+// Route pour récupérer les stagiaires par date
+Route::post('/equipes/stagiaires-by-date', [EquipeController::class, 'getStagiairesByDate']);
+
+// Route pour assigner des stagiaires à une équipe spécifique
+Route::post('/equipes/{equipe_id}/assign-stagiaires', [EquipeController::class, 'assignStagiaires']);
+
+// Route pour ajouter des stagiaires à une équipe spécifique
+Route::post('/equipes/{equipe_id}/add-stagiaire', [EquipeController::class, 'addStagiaire']);
+
+
+
+
+
+
+
+
+
 
 
 

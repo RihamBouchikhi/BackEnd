@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('equipe', function (Blueprint $table) {
             $table->id();
             $table->string('nom_equipe') ;
-            $table->foreignId('projet_id')->references('id')->on('projet')->onDelete('cascade');
+            $table->foreignId('Projet_id')->references('id')->on('projet')->onDelete('cascade');
             $table->foreignId('encadrant_id')->references('id')->on('encadrant')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

@@ -52,26 +52,6 @@ class User extends Authenticatable
 
 
 
- // Observer la création d'un utilisateur
- /*
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($utilisateur) 
-        {
-            // Définir le rôle en fonction du type d'utilisateur
-            if ($utilisateur instanceof Stagiaire) {
-                $utilisateur->role = 'stagiaire';
-            } elseif ($utilisateur instanceof Encadrant) {
-                $utilisateur->role = 'encadrant';
-            } elseif ($utilisateur instanceof Admin) {
-                $utilisateur->role = 'admin';
-            }
-        });
-    }
-*/
-
     // Relation avec les administrateurs
     
     public function administrateur()
