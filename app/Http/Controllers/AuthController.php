@@ -2,108 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Administrateur;
-use App\Models\Encadrant;
-use App\Models\Stagiaire;
+use App\Models\User;
+use App\Models\Mdp_tokens;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Login user and create token
+     */
     public function login(Request $request)
     {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        // Check Email
-        $user = Administrateur::where('email', $fields['email'])->first()
-            ?? Encadrant::where('email', $fields['email'])->first()
-            ?? Stagiaire::where('email', $fields['email'])->first();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('authToken')->plainTextToken;
 
-        //Check password
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Incorrect informations'
-            ], 401);
+            // Stocker le token dans la table mdp_tokens
+            Mdp_tokens::create([
+                'user_id' => $user->id,
+                'token' => $token,
+            ]);
+
+            return response()->json(['user' => $user, 'token' => $token], 200);
         }
 
-        $token = $user->createToken($user->getTable().'Token')->plainTextToken;
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
 
-    public function loginStagiaire(Request $request)
+    /**
+     * Logout user and revoke token
+     */
+    public function logout(Request $request)
     {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $request->user()->tokens()->delete();
 
-        // Check Email
-        $user = Stagiaire::where('email', $fields['email'])->first();
+        // Supprimer le token de la table mdp_tokens
+        Mdp_tokens::where('user_id', $request->user()->id)->delete();
 
-        return $this->loginUser($user, $fields);
-    }
-
-    public function loginEncadrant(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        // Check Email
-        $user = Encadrant::where('email', $fields['email'])->first();
-
-        return $this->loginUser($user, $fields);
-    }
-
-    public function loginAdministrateur(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        // Check Email
-        $user = Administrateur::where('email', $fields['email'])->first();
-
-        return $this->loginUser($user, $fields);
-    }
-
-    private function loginUser($user, $fields)
-    {
-        //Check password
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Incorrect informations'
-            ], 401);
-        }
-
-        $token = $user->createToken($user->getTable().'Token')->plainTextToken;
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
-    }
-
-    public function logout(Request $request) {
-        $user = auth()->user();
-        if ($user) {
-            $user->tokens()->delete();
-        }
-        return[
-            'message' => 'Disconnected'
-        ];
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
 }
