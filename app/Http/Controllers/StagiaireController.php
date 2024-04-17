@@ -30,8 +30,7 @@ class StagiaireController extends Controller
         $validatedData = $request->validate([
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:6',
-                'username' => 'required|string|unique:users,username', 
-                // ...........
+                
         ]);
     
         
@@ -39,14 +38,13 @@ class StagiaireController extends Controller
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'role' => 'stagiaire', 
-                'username' => $validatedData['username'], 
-                // ..............
+               
         ]);
     
 
         $stagiaire = Stagiaire::create([
             'user_id' => $user->id,
-            // ................
+           
         ]);
     
         return response()->json(['message' => 'Compte de stagiaire créé avec succès', 'stagiaire' => $stagiaire], 201);

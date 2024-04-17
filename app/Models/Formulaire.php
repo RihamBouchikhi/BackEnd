@@ -19,7 +19,7 @@ class Formulaire extends Model
         'demmande-stage',
         'date-debut',
         'date-fin',
-        'Offrestage_id',
+        'Offres_id',
         
     ];
 
@@ -28,9 +28,9 @@ class Formulaire extends Model
         return $this->hasMany(Stagiaire::class);
     }
 
-    public function offrestage()
+    public function offres()
     {
-        return $this->belongsTo(OffreStage::class, 'Offrestage_id');
+        return $this->belongsTo(OffreStage::class, 'Offres_id');
     } 
     
 }

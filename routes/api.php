@@ -59,9 +59,23 @@ Route::post('/admin/create', [AdministrateurController::class, 'createAdmin']);
 // Route pour mettre à jour les informations de l'administrateur
 Route::put('/admin/{id}/update', [AdministrateurController::class, 'updateAdmin']);
 
+Route::get('/admin/{id}/show', [AdministrateurController::class, 'showAdmin']);
+
+Route::delete('/admin/{id}/delete', [AdministrateurController::class, 'deleteAdmin']);
+
+
+
 
 // Route pour que l'administrateur crée un compte de stagiaire
 Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
+
+
+
+
+
+
+
+
 
 
 //OffreStage

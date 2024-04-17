@@ -14,9 +14,7 @@ class EncadrantController extends Controller
         $validatedData = $request->validate([
             'email' => 'required|email|unique:users,email',
             'motdepasse' => 'required|string|min:6',
-            'username' => 'required|string|unique:users,username', 
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
+            'fullName' => 'required|string',
             'specialite' => 'required|string',
         ]);
     
@@ -24,9 +22,7 @@ class EncadrantController extends Controller
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['motdepasse']),
             'role' => 'encadrant', 
-            'username' => $validatedData['username'],
-            'nom' => $validatedData['nom'],
-            'prenom' => $validatedData['prenom'],
+            'fullName' => $validatedData['fullName'],
         ]);
 
         $encadrant = Encadrant::create([

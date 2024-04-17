@@ -21,10 +21,14 @@ class Administrateur extends Authenticatable
         
     ];
     
-
-    public function offrestage()
+    public function user()
     {
-        return $this->hasMany(OffreStage::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function offres()
+    {
+        return $this->hasMany(Offres::class);
     }
     public function attestation()
     {
