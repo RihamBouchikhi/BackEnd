@@ -45,6 +45,15 @@ return [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
+          'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+        'user' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
         'administrateur' => [
             'driver' => 'sanctum',
             'provider' => 'administrateurs',
