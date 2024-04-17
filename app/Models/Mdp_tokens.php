@@ -11,6 +11,7 @@ class Mdp_tokens extends Model
 
     use HasFactory;
     protected $fillable = [
+        'user_id',
         'token',
     ];
     public function user()

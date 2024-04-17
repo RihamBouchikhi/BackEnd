@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('mdp_tokens', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('token');
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
         });
-    }
+    } 
 
     /**
      * Reverse the migrations.
