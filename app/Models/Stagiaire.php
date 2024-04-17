@@ -19,6 +19,7 @@ class Stagiaire extends Authenticatable
 
     // Les propriétés  spécifiques aux stagiaires
     protected $fillable = [
+        'user_id',
         'RapportStage',
         'ProjetFinale',
         //'Attestation_id',
@@ -33,6 +34,12 @@ class Stagiaire extends Authenticatable
         return $this->belongsTo(Attestation::class, 'Attestation_id');
     }
     */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function formulaire()
     {
         return $this->belongsTo(Formulaire::class, 'Form_id');

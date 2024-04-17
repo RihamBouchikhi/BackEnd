@@ -34,7 +34,7 @@ class OffresController extends Controller
             'domaine' => $request->domaine,
             'dure' => $request->dure,
             'Admin_id' => auth()->id(),
-            'Projet_id' => $projet->id, 
+            //'Projet_id' => $projet->id, 
         ]);
 
         return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);

@@ -10,7 +10,7 @@ class Demmande extends Model
     use HasFactory;
 
     protected $fillable = [
-        'offre_id',
+        'offres_id',
         'user_id',
     ];   
 
@@ -20,7 +20,7 @@ class Demmande extends Model
     }
     public function OffreStage()
     {
-        return $this->belongsTo(OffreStage::class, 'offre_id');
+        return $this->belongsTo(Offres::class, 'offres_id');
     }
 }
 

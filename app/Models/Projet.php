@@ -36,9 +36,9 @@ class Projet extends Model
         return $this->hasMany(Equipe::class);
     }
 
-    public function offrestage()
+    public function offres()
     {
-        return $this->hasMany(OffreStage::class);
+        return $this->hasMany(Offres::class);
     }
 
     public function taches()

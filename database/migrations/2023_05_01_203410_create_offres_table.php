@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('offre_stages', function (Blueprint $table) {
+        Schema::create('offres', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
             $table->text('description');
@@ -20,14 +20,13 @@ return new class extends Migration
             $table->foreignId('Projet_id')->references('id')->on('projet')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
-        });
-    }
+        });    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('offre_stages');
+        Schema::dropIfExists('offres');
     }
 };

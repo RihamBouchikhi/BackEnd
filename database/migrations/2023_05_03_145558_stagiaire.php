@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('stagiaire', function (Blueprint $table) {
             // Inherit columns from the 'utilisateurs' table
             $table->id();
-            $table->text('RapportStage');
-            $table->string('ProjetFinale');
+            $table->integer('user_id');
+            $table->text('RapportStage')->nullable();
+            $table->string('ProjetFinale')->nullable();
             //$table->string('Attestation_id')->references('id')->on('attestation')->onDelete('cascade')->nullable();
             $table->string('Form_id')->references('id')->on('formulaire')->onDelete('cascade')->nullable();
             $table->string('Equipe_id')->references('id')->on('equipe')->onDelete('cascade')->nullable();

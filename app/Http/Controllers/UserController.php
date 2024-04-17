@@ -27,13 +27,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'nullable|string',
-            'prenom' => 'nullable|string',
-            'telephone' => 'nullable|string',
-            'username' => 'required|string|unique:users,username',
+            'fullName' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'city' => 'nullable|string',
+            'niveau_id' => 'nullable|string',
             'email' => 'required|email|unique:users,email', 
             'password' => 'required|string',
             'avatar' => 'nullable|string',
+
         ]);
 
         // Définir le rôle par défaut comme "simpleuser"
@@ -46,10 +47,10 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'nom' => 'string',
-            'prenom' => 'string',
-            'telephone' => 'string',
-            'username' => 'string|unique:users,username,' . $user->id,
+            'fullName' => 'string',
+            'phone' => 'string',
+            'city' => 'string',
+            'niveau_id' => 'string',
             'email' => 'email|unique:users,email,' . $user->id, 
             'password' => 'string',
             'avatar' => 'nullable|string',

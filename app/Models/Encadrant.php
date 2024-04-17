@@ -17,8 +17,15 @@ class Encadrant extends Authenticatable
 
      // Par défaut, le modèle Encadrant hérite de tous les attributs et relations du modèle Utilisateur
     protected $fillable = [
+        'user_id',
         'specialite',
+        
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function projet()
     {

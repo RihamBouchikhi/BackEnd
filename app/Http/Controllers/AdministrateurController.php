@@ -13,13 +13,11 @@ class AdministrateurController extends Controller
     {
         $email = 'dsiadmin123@gmail.com';
         $password = 'admin56267';
-        $username = 'admin2'; 
 
         $user = User::create([
             'email' => $email,
             'password' => bcrypt($password),
             'role' => 'admin',
-            'username' => $username, 
         ]);
 
         // Création du compte administrateur associé
@@ -35,10 +33,13 @@ class AdministrateurController extends Controller
     {
         // Valider les données de la requête
         $request->validate([
-            'nom' => 'nullable|string|max:255',
-            'prenom' => 'nullable|string|max:255',
-            'telephone' => 'nullable|string|max:20',
+            'fullName' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:255',
+            'niveau_id' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|max:2048', 
+
+            
         ]);
 
     
@@ -48,12 +49,16 @@ class AdministrateurController extends Controller
         return response()->json(['message' => 'Administrateur non trouvé'], 404);
     }
         $user = $admin->user;
-
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
+        }
         // Mettre à jour les informations de l'utilisateur
         $user->update([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'telephone' => $request->telephone,
+            'fullName' => $request->fullName,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'niveau_id' => $request->niveau_id,
+
         ]);
 
         // Mettre à jour l'avatar si présent dans la requête
@@ -66,5 +71,37 @@ class AdministrateurController extends Controller
         // Répondre avec un message de succès
         return response()->json(['message' => 'Informations administrateur mises à jour avec succès', 'admin' => $user]);
     }
+
+    public function showAdmin($id)
+    {
+        // Rechercher l'administrateur par ID
+        $admin = Administrateur::with('user')->find($id);
+
+        if (!$admin) {
+            return response()->json(['message' => 'Administrateur non trouvé'], 404);
+        }
+
+        return response()->json(['admin' => $admin], 200);
+    }
+
+    
+    public function deleteAdmin($id)
+    {
+        // Rechercher l'administrateur par ID
+        $admin = Administrateur::findOrFail($id);
+
+        if (!$admin) {
+            return response()->json(['message' => 'Administrateur non trouvé'], 404);
+        }
+
+        // Supprimer l'utilisateur associé
+        $admin->user->delete();
+
+        // Supprimer l'administrateur
+        $admin->delete();
+
+        return response()->json(['message' => 'Administrateur supprimé avec succès'], 200);
+    }
+
 
 }
