@@ -37,6 +37,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => new UserResource($user),
+           
         ])->withCookie($cookie);
     }
  public function register(RegisterRequest $request) {
