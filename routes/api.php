@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\OffresController;
@@ -34,11 +35,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Authentification
+<<<<<<< HEAD
 // Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 // Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class, 'loginAdministrateur']);
 // Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
 // Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
 // Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+=======
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
+>>>>>>> f82d45bb1dbebc624509d682b91ed99a13775f83
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -65,8 +74,13 @@ Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStag
 
 
 //OffreStage
+<<<<<<< HEAD
 Route::apiResource('offres', OffresController::class);
 //Route::post('/offers/create', [OffresController::class, 'create']);
+=======
+Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
+
+>>>>>>> f82d45bb1dbebc624509d682b91ed99a13775f83
 
 
 //Encadrant 
