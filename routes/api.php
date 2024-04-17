@@ -72,7 +72,7 @@ Route::post('/formulaires', [FormulaireController::class, 'store']);
 Route::apiResource('projets', ProjetController::class);
 
 // Route pour les opérations CRUD sur l'entité Equipe
-Route::resource('equipes', EquipeController::class)->only(['store', 'show', 'update', 'destroy']);
+Route::apiResource('equipes', EquipeController::class)->only(['store', 'show', 'update', 'destroy']);
 
 // Route pour récupérer les stagiaires par date
 Route::post('/equipes/stagiaires-by-date', [EquipeController::class, 'getStagiairesByDate']);
