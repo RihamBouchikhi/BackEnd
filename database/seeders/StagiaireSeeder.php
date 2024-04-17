@@ -17,10 +17,8 @@ class StagiaireSeeder extends Seeder
         //
         DB::table('stagiaire')->insert(
             [
-                'id' => '33',
-                'nom' => 'zaid',
-                'prenom' => 'ouzzani',
-                'email' => 'zaid.oz@gmail.com',
+                'fullName' => 'zaid',
+                'email' => 'zaid@gmail.com',
                 'password' => \Hash::make('zaid1991'),
                 'telephone' => '0635956057',
                 'dateNaissance' => '1991-10-23',

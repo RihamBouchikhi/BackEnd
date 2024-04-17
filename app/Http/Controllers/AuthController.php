@@ -6,104 +6,70 @@ use App\Models\Administrateur;
 use App\Models\Encadrant;
 use App\Models\Stagiaire;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
+
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
 
-        // Check Email
-        $user = Administrateur::where('email', $fields['email'])->first()
-            ?? Encadrant::where('email', $fields['email'])->first()
-            ?? Stagiaire::where('email', $fields['email'])->first();
+      // login a user methods
+    public function login(LoginRequest $request) {
+        $data = $request->validated();
 
-        //Check password
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Incorrect informations'
+        $user = User::where('email', $data['email'])->first()
+            ??Administrateur::where('email', $data['email'])->first()
+            ?? Encadrant::where('email', $data['email'])->first()
+            ?? Stagiaire::where('email', $data['email'])->first();
+
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+            return response()->json([
+                'message' => 'Email or password is incorrect!'
             ], 401);
         }
 
-        $token = $user->createToken($user->getTable().'Token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
 
-        return response($response, 201);
+        return response()->json([
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
     }
+ public function register(RegisterRequest $request) {
 
-    public function loginStagiaire(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
+        $data = $request->validated();
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
         ]);
 
-        // Check Email
-        $user = Stagiaire::where('email', $fields['email'])->first();
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return $this->loginUser($user, $fields);
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+
+        return response()->json([
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
     }
-
-    public function loginEncadrant(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        // Check Email
-        $user = Encadrant::where('email', $fields['email'])->first();
-
-        return $this->loginUser($user, $fields);
-    }
-
-    public function loginAdministrateur(Request $request)
-    {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        // Check Email
-        $user = Administrateur::where('email', $fields['email'])->first();
-
-        return $this->loginUser($user, $fields);
-    }
-
-    private function loginUser($user, $fields)
-    {
-        //Check password
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Incorrect informations'
-            ], 401);
-        }
-
-        $token = $user->createToken($user->getTable().'Token')->plainTextToken;
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
-    }
-
+        // logout a user method
     public function logout(Request $request) {
-        $user = auth()->user();
-        if ($user) {
-            $user->tokens()->delete();
-        }
-        return[
-            'message' => 'Disconnected'
-        ];
+        $request->user()->currentAccessToken()->delete();
+
+        $cookie = cookie()->forget('token');
+
+        return response()->json([
+            'message' => 'Logged out successfully!'
+        ])->withCookie($cookie);
+    }
+
+    // get the authenticated user method
+    public function user(Request $request) {
+        return new UserResource($request->user());
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\OffresController;
 use App\Http\Controllers\FormulaireController;
 use App\Http\Controllers\StagiaireController;
 use App\Http\Controllers\EncadrantController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\AvancementController;
@@ -33,12 +34,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Authentification
-Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class, 'loginAdministrateur']);
-Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
-Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
-Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+// Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+// Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class, 'loginAdministrateur']);
+// Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
+// Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
+// Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::POST('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
+});
 
 Route::apiResource('users', UserController::class);
 
@@ -56,7 +65,7 @@ Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStag
 
 
 //OffreStage
-Route::apiResource('offres', \App\Http\Controllers\OffresController::class);
+Route::apiResource('offres', OffresController::class);
 //Route::post('/offers/create', [OffresController::class, 'create']);
 
 
