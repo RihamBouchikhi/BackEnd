@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
             'city' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'niveau_id' => 'required|integer',
+            'role'=>'required',
             'email' => 'required|email|unique:users,email|max:255',
            // 'email' => 'required|email|unique:users,email|unique:stagiaires,email|max:255',
             'password' => [
