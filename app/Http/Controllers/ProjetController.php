@@ -16,7 +16,7 @@ class ProjetController extends Controller
         return response()->json($projets);
     }
 
-    /**
+    /** 
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -64,6 +64,6 @@ class ProjetController extends Controller
     {
         $projet = Projet::findOrFail($id);
         $projet->delete();
-        return response()->json('', 204);
+        return response()->json(['message' => 'Encadrant supprimé avec succès'], 200);
     }
 }
