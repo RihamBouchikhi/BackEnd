@@ -38,16 +38,88 @@ class StagiaireController extends Controller
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'role' => 'stagiaire', 
-               
         ]);
     
 
         $stagiaire = Stagiaire::create([
             'user_id' => $user->id,
-           
         ]);
     
         return response()->json(['message' => 'Compte de stagiaire créé avec succès', 'stagiaire' => $stagiaire], 201);
     }
     
+
+
+    public function updateStagiaire(Request $request, $id)
+    {
+        // Valider les données de la requête
+        $request->validate([
+            'fullName' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:255',
+            'niveau_id' => 'nullable|string|max:255',
+            'avatar' => 'nullable|image|max:2048', 
+
+            
+        ]);
+
+
+        $stagiaire = Stagiaire::findOrFail($id);
+        if (!$stagiaire) {
+        return response()->json(['message' => 'stagiaire non trouvé'], 404);
+        }
+        $user = $stagiaire->user;
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
+        }
+        // Mettre à jour les informations de l'utilisateur
+        $user->update([
+            'fullName' => $request->fullName,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'niveau_id' => $request->niveau_id,
+
+        ]);
+
+        // Mettre à jour l'avatar si présent dans la requête
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars'); 
+            $user->avatar = $avatarPath;
+            $user->save();
+        }
+
+        // Répondre avec un message de succès
+        return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'stagiaire' => $user]);
+    }
+
+
+    public function showStagiaire($id)
+    {
+        
+        $stagiaire = Stagiaire::with('user')->find($id);
+
+        if (!$stagiaire) {
+            return response()->json(['message' => 'stagiaire non trouvé'], 404);
+        }
+
+        return response()->json(['stagiaire' => $stagiaire], 200);
+    }
+
+
+    public function deleteStagiaire($id)
+    {
+        $stagiaire = Stagiaire::findOrFail($id);
+
+        if (!$stagiaire) {
+            return response()->json(['message' => 'Stagiaire non trouvé'], 404);
+        }
+
+        
+        $stagiaire->user->delete();
+
+        $stagiaire->delete();
+
+        return response()->json(['message' => 'Stagiaire supprimé avec succès'], 200);
+    }
+
 }
