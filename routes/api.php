@@ -69,7 +69,15 @@ Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStag
 Route::put('/stagiaire/{id}/update', [StagiaireController::class, 'updateStagiaire']);
 Route::get('/stagiaire/{id}/show', [StagiaireController::class, 'showStagiaire']);
 Route::delete('/stagiaire/{id}/delete', [StagiaireController::class, 'deleteStagiaire']);
+Route::post('/stagiaire/{id}/soumettreRP', [StagiaireController::class, 'soumettreRapportEtProjet']);
 
+
+
+//Encadrant 
+Route::post('/admin/encadrants/create', [EncadrantController::class, 'createEncadrantByAdmin']);
+Route::put('/encadrant/{id}/update', [EncadrantController::class, 'updateEncadrant']);
+Route::get('/encadrant/{id}/show', [EncadrantController::class, 'showEncadrant']);
+Route::delete('/encadrant/{id}/delete', [EncadrantController::class, 'deleteEncadrant']);
 
 
 
@@ -80,8 +88,6 @@ Route::apiResource('offres', OffresController::class);
 
 
 
-//Encadrant 
-Route::post('/admin/encadrants/create', [EncadrantController::class, 'createEncadrantByAdmin']);
 
 //Formulaire Condidature
 

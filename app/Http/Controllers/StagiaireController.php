@@ -52,14 +52,13 @@ class StagiaireController extends Controller
 
     public function updateStagiaire(Request $request, $id)
     {
-        // Valider les données de la requête
+        
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
             'city' => 'nullable|string|max:255',
             'niveau_id' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|max:2048', 
-
             
         ]);
 
@@ -68,6 +67,7 @@ class StagiaireController extends Controller
         if (!$stagiaire) {
         return response()->json(['message' => 'stagiaire non trouvé'], 404);
         }
+
         $user = $stagiaire->user;
         if (!$user) {
             return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
@@ -81,14 +81,13 @@ class StagiaireController extends Controller
 
         ]);
 
-        // Mettre à jour l'avatar si présent dans la requête
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
             $user->avatar = $avatarPath;
             $user->save();
         }
 
-        // Répondre avec un message de succès
+
         return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'stagiaire' => $user]);
     }
 
@@ -122,4 +121,25 @@ class StagiaireController extends Controller
         return response()->json(['message' => 'Stagiaire supprimé avec succès'], 200);
     }
 
+
+    public function soumettreRapportEtProjet(Request $request, $id)
+    {
+        $request->validate([
+            'rapport' => 'required|string',
+            'projet_final' => 'required|string',
+        ]);
+
+        $stagiaire = Stagiaire::findOrFail($id);
+        if (!$stagiaire) {
+            return response()->json(['message' => 'Stagiaire non trouvé'], 404);
+        }
+
+        $stagiaire->update([
+            'RapportStage' => $request->rapport,
+            'ProjetFinale' => $request->projet_final,
+        ]);
+
+        
+        return response()->json(['message' => 'Rapport et projet final soumis avec succès', 'stagiaire' => $stagiaire]);
+    }
 }
