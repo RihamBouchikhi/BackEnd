@@ -80,22 +80,18 @@ Route::get('/encadrant/{id}/show', [EncadrantController::class, 'showEncadrant']
 Route::delete('/encadrant/{id}/delete', [EncadrantController::class, 'deleteEncadrant']);
 
 
-
+// Projet
+Route::apiResource('projets', ProjetController::class);
 
 
 //OffreStage
 Route::apiResource('offres', OffresController::class);
-
-
-
 
 //Formulaire Condidature
 
 Route::post('/formulaires', [FormulaireController::class, 'store']);
 
 
-// Projet
-Route::apiResource('projets', ProjetController::class);
 
 // Route pour les opérations CRUD sur l'entité Equipe
 Route::apiResource('equipes', EquipeController::class)->only(['store', 'show', 'update', 'destroy']);

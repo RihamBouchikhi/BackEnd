@@ -9,7 +9,7 @@ class Offres extends Model
 {
     use HasFactory;
 
-    protected $table = 'offrestage';
+    protected $table = 'offres';
 
     protected $fillable = [
 

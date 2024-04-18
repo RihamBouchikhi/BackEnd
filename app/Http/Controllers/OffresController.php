@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\OffreStage;
+use App\Models\Offres;
 use App\Models\Projet;
 
 class OffresController extends Controller
 {
     public function index()
     {
-        $offres = OffreStage::all();
+        $offres = Offres::all();
         return response()->json($offres);
     }
 
@@ -19,22 +19,21 @@ class OffresController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
             'sujet_projet' => 'required|string|exists:projet,sujet', 
+            'Admin_id' => 'required|integer',
         ]);
 
         // Récupérer le projet par son titre
         $projet = Projet::where('sujet', $request->sujet_projet)->firstOrFail();
 
         
-        $offre = OffreStage::create([
+        $offre = Offres::create([
             'titre' => $request->titre,
             'description' => $request->description,
-            'domaine' => $request->domaine,
             'dure' => $request->dure,
-            'Admin_id' => auth()->id(),
-            //'Projet_id' => $projet->id, 
+            'Admin_id' => $request->Admin_id,
+            'Projet_id' => $projet->id, 
         ]);
 
         return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);
@@ -42,8 +41,8 @@ class OffresController extends Controller
 
 
     public function show($id)
-    {
-        $offre = OffreStage::findOrFail($id);
+    { 
+        $offre = Offres::findOrFail($id);
 
         if (!$offre) {
             return response()->json(['message' => 'Offre de stage non trouvée'], 404);
@@ -56,12 +55,11 @@ class OffresController extends Controller
     
     public function update(Request $request, $id)
     {
-        $offre = OffreStage::findOrFail($id);
+        $offre = Offres::findOrFail($id);
 
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
             'Projet_id' => 'required|exists:projet,id',
         ]);
@@ -74,7 +72,7 @@ class OffresController extends Controller
 
     public function destroy($id)
     {
-        $offre = OffreStage::findOrFail($id);
+        $offre = Offres::findOrFail($id);
         $offre->delete();
 
         return response()->json(['message' => 'Offre de stage supprimée avec succès']);

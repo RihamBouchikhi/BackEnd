@@ -37,7 +37,7 @@ class UserController extends Controller
 
         ]);
 
-        // Définir le rôle par défaut comme "simpleuser"
+        
         $request->merge(['role' => 'simpleuser']);
 
         $user = User::create($request->all());
