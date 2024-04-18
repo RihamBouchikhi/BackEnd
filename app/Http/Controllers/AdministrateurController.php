@@ -29,7 +29,7 @@ class AdministrateurController extends Controller
     }
 
 
-        public function updateAdmin(Request $request, $id)
+    public function updateAdmin(Request $request, $id)
     {
         // Valider les données de la requête
         $request->validate([
@@ -61,20 +61,18 @@ class AdministrateurController extends Controller
 
         ]);
 
-        // Mettre à jour l'avatar si présent dans la requête
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
             $user->avatar = $avatarPath;
             $user->save();
         }
 
-        // Répondre avec un message de succès
         return response()->json(['message' => 'Informations administrateur mises à jour avec succès', 'admin' => $user]);
     }
 
     public function showAdmin($id)
     {
-        // Rechercher l'administrateur par ID
+        
         $admin = Administrateur::with('user')->find($id);
 
         if (!$admin) {
