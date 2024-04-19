@@ -4,18 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdministrateurController;
-use App\Http\Controllers\OffresController;
-use App\Http\Controllers\FormulaireController;
-use App\Http\Controllers\StagiaireController;
-use App\Http\Controllers\EncadrantController;
-use App\Http\Controllers\ProjetController;
-use App\Http\Controllers\EquipeController;
-use App\Http\Controllers\AvancementController;
-use App\Models\Equipe;
-use App\Models\Stagiaire;
-use App\Models\Encadrant;
-use App\Models\Administrateur;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\DemandeController;
+use App\Http\Controllers\InternController;
+use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\ProjectController;
 
 
 /*
@@ -42,11 +36,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::POST('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
 });
 
 Route::apiResource('users', UserController::class);
@@ -54,45 +47,33 @@ Route::apiResource('users', UserController::class);
 //Administrateur
 
 // Route pour créer un compte administrateur
-Route::post('/admin/create', [AdministrateurController::class, 'createAdmin']);
+Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 
 // Route pour mettre à jour les informations de l'administrateur
-Route::put('/admin/{id}/update', [AdministrateurController::class, 'updateAdmin']);
+Route::put('/admin/{id}/update', [AdminController::class, 'updateAdmin']);
 
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::post('/admin/stagiaires/create', [StagiaireController::class, 'createStagiaireByAdmin']);
+Route::post('/admin/stagiaires/create', [InternController::class, 'createStagiaireByAdmin']);
 
 
 //OffreStage
-Route::apiResource('offres', OffresController::class);
+Route::apiResource('offers', OfferController::class);
 
 
 
 //Encadrant 
-Route::post('/admin/encadrants/create', [EncadrantController::class, 'createEncadrantByAdmin']);
+Route::post('/admin/encadrants/create', [SupervisorController::class, 'createEncadrantByAdmin']);
 
 //Formulaire Condidature
 
-Route::post('/formulaires', [FormulaireController::class, 'store']);
+Route::post('/formulaires', [DemandeController::class, 'store']);
 
 
 // Projet
-Route::apiResource('projets', ProjetController::class);
+Route::apiResource('projets', ProjectController::class);
 
 // Route pour les opérations CRUD sur l'entité Equipe
-Route::apiResource('equipes', EquipeController::class)->only(['store', 'show', 'update', 'destroy']);
-
-// Route pour récupérer les stagiaires par date
-Route::post('/equipes/stagiaires-by-date', [EquipeController::class, 'getStagiairesByDate']);
-
-// Route pour assigner des stagiaires à une équipe spécifique
-Route::post('/equipes/{equipe_id}/assign-stagiaires', [EquipeController::class, 'assignStagiaires']);
-
-// Route pour ajouter des stagiaires à une équipe spécifique
-Route::post('/equipes/{equipe_id}/add-stagiaire', [EquipeController::class, 'addStagiaire']);
-
-
 
 
 
@@ -107,8 +88,8 @@ Route::post('/equipes/{equipe_id}/add-stagiaire', [EquipeController::class, 'add
 
 
 /*
-Route::apiResource('administrateur',\App\Http\Controllers\AdministrateurController::class);
-Route::post('admin/login',[\App\Http\Controllers\AdministrateurController::class, 'login']);
+Route::apiResource('administrateur',\App\Http\Controllers\AdminController::class);
+Route::post('admin/login',[\App\Http\Controllers\AdminController::class, 'login']);
 
 use App\Http\Controllers\MessageController;
 
@@ -118,8 +99,8 @@ Route::get('/messages', [MessageController::class, 'index']);
 
 
 //Encadrant
-Route::apiResource('encadrant',\App\Http\Controllers\EncadrantController::class);
-Route::post('encadrant/login',[\App\Http\Controllers\EncadrantController::class, 'login']);
+Route::apiResource('encadrant',\App\Http\Controllers\SupervisorController::class);
+Route::post('encadrant/login',[\App\Http\Controllers\SupervisorController::class, 'login']);
 
 
 //image upload
@@ -156,7 +137,7 @@ Route::apiResource('participation',\App\Http\Controllers\ParticipationController
 Route::apiResource('presentation',\App\Http\Controllers\PresentationController::class);
 
 //Projet
-Route::apiResource('projet',\App\Http\Controllers\ProjetController::class);
+Route::apiResource('projet',\App\Http\Controllers\ProjectController::class);
 
 //RapportStage
 Route::apiResource('rapportStage',\App\Http\Controllers\RapportStageController::class);
@@ -168,8 +149,8 @@ Route::apiResource('reunion',\App\Http\Controllers\ReunionController::class);
 Route::apiResource('stage',\App\Http\Controllers\StageController::class);
 
 //Stagiaire
-Route::apiResource('stagiaire',\App\Http\Controllers\StagiaireController::class);
-Route::post('stagiaire/login',[\App\Http\Controllers\StagiaireController::class, 'login']);
+Route::apiResource('stagiaire',\App\Http\Controllers\InternController::class);
+Route::post('stagiaire/login',[\App\Http\Controllers\InternController::class, 'login']);
 Route::get('/equipe/{equipeId}/stagiaires',[\App\Http\Controllers\EquipeController::class, 'getStagiairesByEquipe']);
 
 //Technologie
@@ -194,10 +175,10 @@ Route::post('/utilisation-technologie', [UtilisationTechnologieController::class
 
 /*
 //getting stagiaires-with-stage
-Route::get('/stagiaires-with-stage', [\App\Http\Controllers\StagiaireController::class, 'getStagiairesWithStage']);
+Route::get('/stagiaires-with-stage', [\App\Http\Controllers\InternController::class, 'getStagiairesWithStage']);
 
 //updating stagiaires couvertures
-Route::post('/stagiaire/{id}/update-couverture', [\App\Http\Controllers\StagiaireController::class, 'updateCouverture']);
+Route::post('/stagiaire/{id}/update-couverture', [\App\Http\Controllers\InternController::class, 'updateCouverture']);
 
 //getting equipes details
 Route::get('equipes/details', [\App\Http\Controllers\EquipeController::class, 'getEquipesDetails']);
@@ -206,10 +187,10 @@ Route::get('equipes/{equipeId}', [\App\Http\Controllers\EquipeController::class,
 Route::get('/equipes/details/{encadrant_id}', [\App\Http\Controllers\EquipeController::class, 'getEncadrantEquipesDetails']);
 
 //getting Stagiaires Absences
-Route::get('/stagiaires/absences', [\App\Http\Controllers\StagiaireController::class, 'getAbsenceStagiaires']);
+Route::get('/stagiaires/absences', [\App\Http\Controllers\InternController::class, 'getAbsenceStagiaires']);
 
 //getting projects details
-Route::get('projet/datails', [\App\Http\Controllers\ProjetController::class, 'getProjetDetails']);
+Route::get('projet/datails', [\App\Http\Controllers\ProjectController::class, 'getProjetDetails']);
 
 
 //getting the biggedt id from equipe, administrateur, encadrant, stagiaire
@@ -231,9 +212,9 @@ Route::get('/max-id', function () {
 
 
 
-Route::get('stagiaires/{stagiaireId}/projet', [StagiaireController::class, 'getProjetStagiaire']);
+Route::get('stagiaires/{stagiaireId}/projet', [InternController::class, 'getProjetStagiaire']);
 
-Route::get('stagiaire/{stagiaireId}/avancements', [StagiaireController::class, 'getAvancements']);
+Route::get('stagiaire/{stagiaireId}/avancements', [InternController::class, 'getAvancements']);
 
 Route::get('/avancements/{projetId}', [AvancementController::class, 'getAvancementSumByType']);
 
@@ -241,7 +222,7 @@ Route::get('/projet/{projetId}/avancements/this-week', [AvancementController::cl
 
 Route::get('/projet/{projetId}/avancements/all-time', [AvancementController::class,'getAllTimeAvancement']);
 
-Route::get('projets/details', [\App\Http\Controllers\ProjetController::class, 'getProjetsDetails']);
+Route::get('projets/details', [\App\Http\Controllers\ProjectController::class, 'getProjetsDetails']);
 
 //getting today absences
 Route::get('absences/aujourdhui', [\App\Http\Controllers\AbsenceController::class, 'getAbsencesAujourdhui']);
@@ -250,7 +231,7 @@ Route::get('absences/aujourdhui', [\App\Http\Controllers\AbsenceController::clas
 Route::get('/projet/{projet_id}/avancements', [AvancementController::class,'getLastFourAvancements']);
 
 //update equipe id for a specific stagiaire
-Route::put('stagiaire/{id}/update-equipe-id', [StagiaireController::class, 'updateEquipeId']);
+Route::put('stagiaire/{id}/update-equipe-id', [InternController::class, 'updateEquipeId']);
 
-Route::get('/projet/last-id', [ProjetController::class, 'getLastProjetId']);
+Route::get('/projet/last-id', [ProjectController::class, 'getLastProjetId']);
 */

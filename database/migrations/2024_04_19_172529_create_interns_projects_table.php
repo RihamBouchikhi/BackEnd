@@ -6,14 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
-    {        
-        Schema::disableForeignKeyConstraints();
-        Schema::create('interns', function (Blueprint $table) {
+    {
+        Schema::create('interns_projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
-            $table->string('projectLink')->nullable();
-            $table->softDeletes();
+            $table->foreignId('intern_id')->constrained();
+            $table->foreignId('project_id')->constrained();
+
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('interns');
+        Schema::dropIfExists('interns_projects');
     }
 };

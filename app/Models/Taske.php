@@ -18,13 +18,11 @@ class Taske extends Model
         'projet_id',
     ];
 
-    public function intern()
-    {
+    public function intern(){
         return $this->belongsTo(Intern::class,'intern_id');
     }
 
-    public function project()
-    {
+    public function project(){
         return $this->belongsTo(Project::class,'projet_id');
     }
 
