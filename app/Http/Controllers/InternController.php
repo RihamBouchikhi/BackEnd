@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Intern;
-use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Project;
@@ -26,23 +26,22 @@ class InternController extends Controller
     {
 
         $validatedData = $request->validate([
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|unique:profiles,email',
                 'password' => 'required|string|min:6',
                 
         ]);
     
         
-        $user = User::create([
+        $profile = Profile::create([
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'role' => 'Intern', 
-                'username' => $validatedData['username'], 
-                // ..............
+                
         ]);
     
 
         $intern = Intern::create([
-            'user_id' => $user->id,
+            'profile_id' => $profile->id,
         ]);
     
         return response()->json(['message' => 'Compte de Intern créé avec succès', 'Intern' => $intern], 201);
@@ -50,96 +49,71 @@ class InternController extends Controller
     
 
 
-    public function updateStagiaire(Request $request, $id)
+    public function updateIntern(Request $request, $id)
     {
         
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
-            'niveau_id' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|max:2048', 
             
         ]);
 
 
-        $stagiaire = Stagiaire::findOrFail($id);
-        if (!$stagiaire) {
+        $intern = Intern::findOrFail($id);
+        if (!$intern) {
         return response()->json(['message' => 'stagiaire non trouvé'], 404);
         }
 
-        $user = $stagiaire->user;
-        if (!$user) {
+        $profile = $intern->profile;
+        if (!$profile) {
             return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
         }
         // Mettre à jour les informations de l'utilisateur
-        $user->update([
+        $profile->update([
             'fullName' => $request->fullName,
             'phone' => $request->phone,
-            'city' => $request->city,
-            'niveau_id' => $request->niveau_id,
 
         ]);
-
+        /*
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
-            $user->avatar = $avatarPath;
-            $user->save();
-        }
+            $profile->avatar = $avatarPath;
+            $profile->save();
+        }*/
 
 
-        return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'stagiaire' => $user]);
+        return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'stagiaire' => $profile]);
     }
 
 
-    public function showStagiaire($id)
+    public function showIntern($id)
     {
         
-        $stagiaire = Stagiaire::with('user')->find($id);
+        $intern = Intern::with('profile')->find($id);
 
-        if (!$stagiaire) {
+        if (!$intern) {
             return response()->json(['message' => 'stagiaire non trouvé'], 404);
         }
 
-        return response()->json(['stagiaire' => $stagiaire], 200);
+        return response()->json(['stagiaire' => $intern], 200);
     }
 
 
-    public function deleteStagiaire($id)
+    public function deleteIntern($id)
     {
-        $stagiaire = Stagiaire::findOrFail($id);
+        $intern = Intern::findOrFail($id);
 
-        if (!$stagiaire) {
+        if (!$intern) {
             return response()->json(['message' => 'Stagiaire non trouvé'], 404);
         }
 
         
-        $stagiaire->user->delete();
+        $intern->profile->delete();
 
-        $stagiaire->delete();
+        $intern->delete();
 
         return response()->json(['message' => 'Stagiaire supprimé avec succès'], 200);
     }
 
 
-    public function soumettreRapportEtProjet(Request $request, $id)
-    {
-        $request->validate([
-            'rapport' => 'required|string',
-            'projet_final' => 'required|string',
-        ]);
-
-        $stagiaire = Stagiaire::findOrFail($id);
-        if (!$stagiaire) {
-            return response()->json(['message' => 'Stagiaire non trouvé'], 404);
-        }
-
-        $stagiaire->update([
-            'RapportStage' => $request->rapport,
-            'ProjetFinale' => $request->projet_final,
-        ]);
-
-        
-        return response()->json(['message' => 'Rapport et projet final soumis avec succès', 'stagiaire' => $stagiaire]);
-    }
 }

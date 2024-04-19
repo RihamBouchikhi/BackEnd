@@ -57,8 +57,12 @@ Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::post('/admin/stagiaires/create', [InternController::class, 'createStagiaireByAdmin']);
+Route::post('/interns/create', [InternController::class, 'createInternByAdmin']);
 
+// Route pour mettre à jour les informations de l'administrateur
+Route::put('/intern/{id}/update', [InternController::class, 'updateIntern']);
+Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
+Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
 
 
 //OffreStage
