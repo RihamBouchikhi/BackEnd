@@ -14,7 +14,7 @@ class AdminController extends Controller
         $email = 'dsiadmin123@gmail.com';
         $password = 'admin56267';
 
-        $user = User::create([
+        $profile = Profile::create([
             'email' => $email,
             'password' => bcrypt($password),
             'role' => 'admin',
@@ -22,7 +22,7 @@ class AdminController extends Controller
 
         // Création du compte Admin associé
         $admin = Admin::create([
-            'user_id' => $user->id,
+            'profile_id' => $profile->id,
         ]);
 
         return response()->json(['message' => 'Compte Admin créé avec succès', 'admin' => $admin], 201);
@@ -31,44 +31,43 @@ class AdminController extends Controller
 
     public function updateAdmin(Request $request, $id)
     {
-        // Valider les données de la requête
+        
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
             
         ]);
 
-    
-        // Récupérer l'Admin à mettre à jour
+        
         $admin = Admin::findOrFail($id);
         if (!$admin) {
         return response()->json(['message' => 'Admin non trouvé'], 404);
     }
-        $user = $admin->user;
-        if (!$user) {
+        $profile = $admin->profile;
+        if (!$profile) {
             return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
         }
-        // Mettre à jour les informations de l'utilisateur
-        $user->update([
+        
+        $profile->update([
             'fullName' => $request->fullName,
             'phone' => $request->phone,
 
         ]);
-
+        /*
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
             $user->avatar = $avatarPath;
             $user->save();
-        }
+        }*/
 
-        // Répondre avec un message de succès
-        return response()->json(['message' => 'Informations Admin mises à jour avec succès', 'admin' => $user]);
+
+        return response()->json(['message' => 'Informations Admin mises à jour avec succès', 'admin' => $profile]);
     }
 
     public function showAdmin($id)
     {
         
-        $admin = Administrateur::with('user')->find($id);
+        $admin = Admin::with('profile')->find($id);
 
         if (!$admin) {
             return response()->json(['message' => 'Administrateur non trouvé'], 404);
@@ -81,14 +80,14 @@ class AdminController extends Controller
     public function deleteAdmin($id)
     {
         // Rechercher l'administrateur par ID
-        $admin = Administrateur::findOrFail($id);
+        $admin = Admin::findOrFail($id);
 
         if (!$admin) {
             return response()->json(['message' => 'Administrateur non trouvé'], 404);
         }
 
         // Supprimer l'utilisateur associé
-        $admin->user->delete();
+        $admin->profile->delete();
 
         // Supprimer l'administrateur
         $admin->delete();

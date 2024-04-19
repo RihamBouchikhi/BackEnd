@@ -50,7 +50,8 @@ Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 
 // Route pour mettre à jour les informations de l'administrateur
 Route::put('/admin/{id}/update', [AdminController::class, 'updateAdmin']);
-
+Route::get('/admin/{id}/show', [AdminController::class, 'showAdmin']);
+Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 
 
