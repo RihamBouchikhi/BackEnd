@@ -10,11 +10,13 @@ class AdminController extends Controller
 {
     // Méthode pour créer un compte Admin
     public function createAdmin()
-    {
+    {   
+        $fullName = 'Mohammed Karim';
         $email = 'dsiadmin123@gmail.com';
         $password = 'admin56267';
 
         $profile = Profile::create([
+            'fullName' => $fullName,
             'email' => $email,
             'password' => bcrypt($password),
             'role' => 'admin',

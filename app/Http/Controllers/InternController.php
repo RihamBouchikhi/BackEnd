@@ -26,6 +26,7 @@ class InternController extends Controller
     {
 
         $validatedData = $request->validate([
+                'fullName' => 'required|string',
                 'email' => 'required|email|unique:profiles,email',
                 'password' => 'required|string|min:6',
                 
@@ -33,6 +34,7 @@ class InternController extends Controller
     
         
         $profile = Profile::create([
+                'fullName' => $validatedData['fullName'],
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'role' => 'Intern', 

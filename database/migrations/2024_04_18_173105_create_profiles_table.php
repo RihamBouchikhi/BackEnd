@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('fullName')->nullable();
+            $table->string('fullName');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone')->nullable();
