@@ -58,21 +58,23 @@ Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 // Route pour que l'administrateur crée un compte de stagiaire
 Route::post('/interns/create', [InternController::class, 'createInternByAdmin']);
-
-// Route pour mettre à jour les informations de l'administrateur
 Route::put('/intern/{id}/update', [InternController::class, 'updateIntern']);
 Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
 Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
+
+
+//Encadrant 
+
+Route::post('/Supervisors/create', [SupervisorController::class, 'createSupervisorByAdmin']);
+Route::put('/Supervisor/{id}/update', [InternController::class, 'updateSupervisor']);
+Route::get('/Supervisor/{id}/show', [InternController::class, 'showSupervisor']);
+Route::delete('/Supervisor/{id}/delete', [InternController::class, 'deleteSupervisor']);
 
 
 //OffreStage
 Route::apiResource('offers', OfferController::class);
 
 
-
-//Encadrant 
-
-Route::post('/admin/encadrants/create', [SupervisorController::class, 'createEncadrantByAdmin']);
 
 
 

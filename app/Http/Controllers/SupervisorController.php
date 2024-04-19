@@ -2,111 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Encadrant;
+use App\Models\Profile;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class SupervisorController extends Controller
 {
-    public function createEncadrantByAdmin(Request $request)
+    public function createSupervisorByAdmin(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'motdepasse' => 'required|string|min:6',
             'fullName' => 'required|string',
-            'specialite' => 'required|string',
+            'email' => 'required|email|unique:profiles,email',
+            'password' => 'required|string|min:6',
         ]);
     
-        $user = User::create([
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['motdepasse']),
-            'role' => 'encadrant', 
+        $profile = Profile::create([
             'fullName' => $validatedData['fullName'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'role' => 'Supervisor', 
         ]);
 
-        $encadrant = Encadrant::create([
-            'user_id' => $user->id,
-            'specialite' => $validatedData['specialite'],
+        $supervisor = Supervisor::create([
+            'profile_id' => $profile->id,
             ]);
-        return response()->json(['message' => 'Compte d\'encadrant créé avec succès', 'encadrant' => $encadrant], 201);
+        return response()->json(['message' => 'Compte d\'Supervisor créé avec succès', 'Supervisor' => $supervisor], 201);
     }
 
 
-    public function updateEncadrant(Request $request, $id)
+    public function updateSupervisor(Request $request, $id)
     {
         
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
-            'niveau_id' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|max:2048', 
-            'specialite' => 'required|string',
+            //'avatar' => 'nullable|image|max:2048', 
             
         ]);
 
     
         
-        $encadrant = Encadrant::findOrFail($id);
-        if (!$encadrant) {
-        return response()->json(['message' => 'Encadrant non trouvé'], 404);
+        $supervisor = Supervisor::findOrFail($id);
+        if (!$supervisor) {
+        return response()->json(['message' => 'Supervisor non trouvé'], 404);
         }
 
-        $encadrant->update([
-            'specialite' => $request->specialite,
-        ]);
 
-        $user = $encadrant->user;
-        if (!$user) {
+        $profile = $supervisor->profile;
+        if (!$profile) {
             return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
         }
         
-        $user->update([
+        $profile->update([
             'fullName' => $request->fullName,
             'phone' => $request->phone,
-            'city' => $request->city,
-            'niveau_id' => $request->niveau_id,
         ]);
 
-        
+        /*
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars'); 
             $user->avatar = $avatarPath;
             $user->save();
-        }
+        }*/
 
-        return response()->json(['message' => 'Informations encadrant mises à jour avec succès', 'encadrant' => $user]);
+        return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'Supervisor' => $profile]);
     }
 
 
-    public function showEncadrant($id)
+    public function showSupervisor($id)
     {
         
-        $encadrant = Encadrant::with('user')->find($id);
+        $supervisor = Supervisor::with('profile')->find($id);
 
-        if (!$encadrant) {
-            return response()->json(['message' => 'Encadrant non trouvé'], 404);
+        if (!$supervisor) {
+            return response()->json(['message' => 'Supervisor non trouvé'], 404);
         }
 
-        return response()->json(['encadrant' => $encadrant], 200);
+        return response()->json(['Supervisor' => $Supervisor], 200);
     }
 
 
-    public function deleteEncadrant($id)
+    public function deleteSupervisor($id)
     {
-        $encadrant = Encadrant::findOrFail($id);
+        $supervisor = Supervisor::findOrFail($id);
 
-        if (!$encadrant) {
-            return response()->json(['message' => 'Encadrant non trouvé'], 404);
+        if (!$supervisor) {
+            return response()->json(['message' => 'Supervisor non trouvé'], 404);
         }
 
         
-        $encadrant->user->delete();
+        $supervisor->profile->delete();
 
         
-        $encadrant->delete();
+        $supervisor->delete();
 
-        return response()->json(['message' => 'Encadrant supprimé avec succès'], 200);
+        return response()->json(['message' => 'Supervisor supprimé avec succès'], 200);
     }
 }
