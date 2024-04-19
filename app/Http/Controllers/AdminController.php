@@ -35,10 +35,6 @@ class AdminController extends Controller
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
-            'niveau_id' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|max:2048', 
-
             
         ]);
 
@@ -56,8 +52,6 @@ class AdminController extends Controller
         $user->update([
             'fullName' => $request->fullName,
             'phone' => $request->phone,
-            'city' => $request->city,
-            'niveau_id' => $request->niveau_id,
 
         ]);
 
