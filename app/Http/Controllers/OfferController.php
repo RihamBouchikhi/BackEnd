@@ -19,9 +19,9 @@ class OffreController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
             'sujet_projet' => 'required|string|exists:projet,sujet', 
+            'Admin_id' => 'required|integer',
         ]);
 
         // Récupérer le projet par son titre
@@ -31,9 +31,8 @@ class OffreController extends Controller
         $offre = Offer::create([
             'titre' => $request->titre,
             'description' => $request->description,
-            'domaine' => $request->domaine,
             'dure' => $request->dure,
-            'Admin_id' => auth()->id(),
+            'Admin_id' => $request->Admin_id,
             'Projet_id' => $projet->id, 
         ]);
 
@@ -61,7 +60,6 @@ class OffreController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'domaine' => 'required|string|max:255',
             'dure' => 'required|string|max:100',
             'Projet_id' => 'required|exists:projet,id',
         ]);

@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 class Profile extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
-    protected $fillable = [
+    protected $fillable = [ 
         'fullName',
         'phone',
         'email',

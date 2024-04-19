@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('fullName');
+            $table->string('fullName')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role');
             $table->softDeletes();

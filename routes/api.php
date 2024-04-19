@@ -47,12 +47,17 @@ Route::apiResource('users', UserController::class);
 // Route pour créer un compte administrateur
 Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 
+
 // Route pour mettre à jour les informations de l'administrateur
 Route::put('/admin/{id}/update', [AdminController::class, 'updateAdmin']);
 
 
+
+
+
 // Route pour que l'administrateur crée un compte de stagiaire
 Route::post('/admin/stagiaires/create', [InternController::class, 'createStagiaireByAdmin']);
+
 
 
 //OffreStage
@@ -61,15 +66,25 @@ Route::apiResource('offers', OfferController::class);
 
 
 //Encadrant 
+
 Route::post('/admin/encadrants/create', [SupervisorController::class, 'createEncadrantByAdmin']);
 
-//Formulaire Condidature
 
-Route::post('/formulaires', [DemandeController::class, 'store']);
 
 
 // Projet
 Route::apiResource('projets', ProjectController::class);
+
+
+
+
+//OffreStage
+Route::apiResource('offres', OffresController::class);
+
+
+
+
+
 
 // Route pour les opérations CRUD sur l'entité Equipe
 
