@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Models\User;
-use App\Models\Encadrant;
-use App\Models\Stagiaire;
-use App\Models\Administrateur;
+use App\Models\Supervisor;
+use App\Models\Intern;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;

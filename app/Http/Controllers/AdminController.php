@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Administrateur;
+use App\Models\Admin;
 use App\Models\User;
 
-class AdministrateurController extends Controller
+class AdminController extends Controller
 {
-    // Méthode pour créer un compte administrateur
+    // Méthode pour créer un compte Admin
     public function createAdmin()
     {
         $email = 'dsiadmin123@gmail.com';
@@ -22,12 +22,12 @@ class AdministrateurController extends Controller
             'username' => $username, 
         ]);
 
-        // Création du compte administrateur associé
-        $admin = Administrateur::create([
+        // Création du compte Admin associé
+        $admin = Admin::create([
             'user_id' => $user->id,
         ]);
 
-        return response()->json(['message' => 'Compte administrateur créé avec succès', 'admin' => $admin], 201);
+        return response()->json(['message' => 'Compte Admin créé avec succès', 'admin' => $admin], 201);
     }
 
 
@@ -42,10 +42,10 @@ class AdministrateurController extends Controller
         ]);
 
     
-        // Récupérer l'administrateur à mettre à jour
-        $admin = Administrateur::findOrFail($id);
+        // Récupérer l'Admin à mettre à jour
+        $admin = Admin::findOrFail($id);
         if (!$admin) {
-        return response()->json(['message' => 'Administrateur non trouvé'], 404);
+        return response()->json(['message' => 'Admin non trouvé'], 404);
     }
         $user = $admin->user;
 
@@ -64,7 +64,7 @@ class AdministrateurController extends Controller
         }
 
         // Répondre avec un message de succès
-        return response()->json(['message' => 'Informations administrateur mises à jour avec succès', 'admin' => $user]);
+        return response()->json(['message' => 'Informations Admin mises à jour avec succès', 'admin' => $user]);
     }
 
 }

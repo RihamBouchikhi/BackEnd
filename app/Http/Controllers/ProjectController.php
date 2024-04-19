@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Projet;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
-class ProjetController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $projets = Projet::all();
-        return response()->json($projets);
+        $projects = Project::all();
+        return response()->json($projects);
     }
 
     /**
@@ -28,8 +28,8 @@ class ProjetController extends Controller
             'encadrant_id' => 'required|exists:encadrant,id',
         ]);
 
-        $projet = Projet::create($request->all());
-        return response()->json($projet, 201);
+        $project = Project::create($request->all());
+        return response()->json($project, 201);
     }
 
     /**
@@ -37,8 +37,8 @@ class ProjetController extends Controller
      */
     public function show($id)
     {
-        $projet = Projet::findOrFail($id);
-        return response()->json($projet);
+        $project = Project::findOrFail($id);
+        return response()->json($project);
     }
 
     /**
@@ -52,9 +52,9 @@ class ProjetController extends Controller
             'description' => 'required|string',
         ]);
 
-        $projet = Projet::findOrFail($id);
-        $projet->update($request->all());
-        return response()->json($projet, 200);
+        $project = Project::findOrFail($id);
+        $project->update($request->all());
+        return response()->json($project, 200);
     }
 
     /**
@@ -62,8 +62,8 @@ class ProjetController extends Controller
      */
     public function destroy($id)
     {
-        $projet = Projet::findOrFail($id);
-        $projet->delete();
+        $project = Project::findOrFail($id);
+        $project->delete();
         return response()->json('', 204);
     }
 }

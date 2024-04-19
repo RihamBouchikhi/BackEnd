@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stagiaire;
+use App\Models\Intern;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Absence;
-use App\Models\Avancement;
-use App\Models\Projet;
+use App\Models\Project;
 use Carbon\Carbon;
 
-class StagiaireController extends Controller
+class InternController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $stagiaire = Stagiaire::all();
-        return response()->json($stagiaire);
+        $intern = Intern::all();
+        return response()->json($intern);
     }
 
-        // Méthode pour créer un compte de stagiaire par l'administrateur
+        // Méthode pour créer un compte de Intern par l'administrateur
     
-    public function createStagiaireByAdmin(Request $request)
+    public function createInternByAdmin(Request $request)
     {
 
         $validatedData = $request->validate([
@@ -38,18 +36,18 @@ class StagiaireController extends Controller
         $user = User::create([
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
-                'role' => 'stagiaire', 
+                'role' => 'Intern', 
                 'username' => $validatedData['username'], 
                 // ..............
         ]);
     
 
-        $stagiaire = Stagiaire::create([
+        $intern = Intern::create([
             'user_id' => $user->id,
             // ................
         ]);
     
-        return response()->json(['message' => 'Compte de stagiaire créé avec succès', 'stagiaire' => $stagiaire], 201);
+        return response()->json(['message' => 'Compte de Intern créé avec succès', 'Intern' => $intern], 201);
     }
     
 }

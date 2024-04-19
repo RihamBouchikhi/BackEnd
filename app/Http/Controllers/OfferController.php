@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\OffreStage;
-use App\Models\Projet;
+use App\Models\Offer;
+use App\Models\Project;
 
-class OffresController extends Controller
+class OffreController extends Controller
 {
     public function index()
     {
-        $offres = OffreStage::all();
+        $offres = Offer::all();
         return response()->json($offres);
     }
 
@@ -25,10 +25,10 @@ class OffresController extends Controller
         ]);
 
         // Récupérer le projet par son titre
-        $projet = Projet::where('sujet', $request->sujet_projet)->firstOrFail();
+        $projet = Project::where('sujet', $request->sujet_projet)->firstOrFail();
 
         
-        $offre = OffreStage::create([
+        $offre = Offer::create([
             'titre' => $request->titre,
             'description' => $request->description,
             'domaine' => $request->domaine,
@@ -43,7 +43,7 @@ class OffresController extends Controller
 
     public function show($id)
     {
-        $offre = OffreStage::findOrFail($id);
+        $offre = Offer::findOrFail($id);
 
         if (!$offre) {
             return response()->json(['message' => 'Offre de stage non trouvée'], 404);
@@ -56,7 +56,7 @@ class OffresController extends Controller
     
     public function update(Request $request, $id)
     {
-        $offre = OffreStage::findOrFail($id);
+        $offre = Offer::findOrFail($id);
 
         $request->validate([
             'titre' => 'required|string|max:255',
@@ -74,7 +74,7 @@ class OffresController extends Controller
 
     public function destroy($id)
     {
-        $offre = OffreStage::findOrFail($id);
+        $offre = Offer::findOrFail($id);
         $offre->delete();
 
         return response()->json(['message' => 'Offre de stage supprimée avec succès']);

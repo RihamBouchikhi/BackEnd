@@ -7,7 +7,7 @@ use App\Models\Encadrant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class EncadrantController extends Controller
+class SupervisorController extends Controller
 {
     public function createEncadrantByAdmin(Request $request)
     {
