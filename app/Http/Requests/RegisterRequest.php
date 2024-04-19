@@ -24,16 +24,13 @@ class RegisterRequest extends FormRequest
     {
         return [
             'fullName' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
-            'niveau_id' => 'required|integer',
-            'email' => 'required|email|unique:users,email|max:255',
-           // 'email' => 'required|email|unique:users,email|unique:stagiaires,email|max:255',
+            'email' => 'required|email|unique:profiles,email|max:255',
             'password' => [
                 'required',
                 'string',
-                Password::min(8)->mixedCase()->numbers()->uncompromised(),
-              //  'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed',
             ]
         ];
     }
