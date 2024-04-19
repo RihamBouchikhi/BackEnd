@@ -12,23 +12,35 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $profiles = Profile::all();
+        return response()->json($profiles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'fullName' => 'required|string',
+            'phone' => 'required|string',
+            'email' => 'required|email|unique:profiles,email',
+            'password' => 'required|string',
+
+        ]);
+
+        $profile = Profile::create([
+            'fullName' => $validatedData['fullName'],
+            'phone' => $validatedData['phone'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']), 
+            
+        ]);
+
+        return response()->json(['profile' => $profile], 201);
+        
     }
 
     /**

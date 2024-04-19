@@ -38,7 +38,6 @@ class UserController extends Controller
         ]);
 
         
-        $request->merge(['role' => 'simpleuser']);
 
         $user = User::create($request->all());
         return response()->json($user, 201);
