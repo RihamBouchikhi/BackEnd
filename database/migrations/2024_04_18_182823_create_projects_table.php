@@ -17,8 +17,9 @@ return new class extends Migration
             $table->date('endDate');  
             $table->string('status');
             $table->string('priority');
-            $table->foreignId('supervisor_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('intern_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('supervisor_id')->constrained();
+            //intern_id is the prorject manager
+            $table->foreignId('intern_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
         });

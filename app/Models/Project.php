@@ -15,14 +15,17 @@ class Project extends Model
         'status',
         'priority',
         'supervisor_id',
-        "projectManger"
+        "projectManager"
     ];
 
     public function supervisor(){
         return $this->belongsTo(Supervisor::class,'supervisor_id');
     }
-    public function projectManger(){
-        return $this->belongsTo(Intern::class,'projectManger');
+    public function projectManager(){
+        return $this->belongsTo(Intern::class,'intern_id');
+    }
+    public function interns(){
+        return $this->belongsToMany(Intern::class,'interns_projects', 'intern_id', 'project_id');
     }
     public function taskes(){
         return $this->hasMany(Taske::class);

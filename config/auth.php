@@ -16,7 +16,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        'passwords' => 'profiles',
     ],
 
     /*
@@ -39,32 +39,20 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'profiles',
         ],
         'sanctum' => [
             'driver' => 'sanctum',
-            'provider' => 'users',
+            'provider' => 'profiles',
         ],
           'api' => [
             'driver' => 'sanctum',
-            'provider' => 'users',
+            'provider' => 'profiles',
             'hash' => false,
         ],
-        'user' => [
+        'profile' => [
             'driver' => 'sanctum',
-            'provider' => 'users',
-        ],
-        'administrateur' => [
-            'driver' => 'sanctum',
-            'provider' => 'administrateurs',
-        ],
-        'intern' => [
-            'driver' => 'sanctum',
-            'provider' => 'interns',
-        ],
-        'encadrant' => [
-            'driver' => 'sanctum',
-            'provider' => 'encadrants',
+            'provider' => 'profiles',
         ],
     ],
 
@@ -86,22 +74,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'profiles' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'administrateurs' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Administrateur::class,
-        ],
-        'stagiaires' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Stagiaire::class,
-        ],
-        'encadrants' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Encadrant::class,
-        ],
+            'model' => App\Models\Profile::class,
+        ]
     ],
 
         // 'users' => [
@@ -130,8 +106,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'profiles' => [
+            'provider' => 'profiles',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

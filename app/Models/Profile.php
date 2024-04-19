@@ -31,6 +31,10 @@ class Profile extends Model
     {
         return $this->hasOne(Intern::class);
     }
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
     public function supervisor()
     {
         return $this->hasOne(Supervisor::class);
