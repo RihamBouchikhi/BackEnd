@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('Form_id')->references('id')->on('formulaire')->onDelete('cascade')->nullable();
             $table->string('fullName')->nullable();
             $table->string('phone')->nullable();
             $table->string('city')->nullable();

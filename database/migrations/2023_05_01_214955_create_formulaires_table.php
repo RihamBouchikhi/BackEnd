@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('formulaires', function (Blueprint $table) {
             $table->id();
-            $table->text('niveau-etude');
+            $table->text('niveau_etude');
             $table->text('etablissement');
             $table->binary('CV');
-            $table->binary('demande-stage');
-            $table->date('date-debut');
-            $table->date('date-fin');
+            $table->binary('demande_stage');
+            $table->date('date_debut');
+            $table->date('date_fin');
             $table->foreignId('Offres_id')->constrained()->on('offres')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

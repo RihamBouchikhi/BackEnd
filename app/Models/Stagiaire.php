@@ -23,7 +23,6 @@ class Stagiaire extends Authenticatable
         'RapportStage',
         'ProjetFinale',
         //'Attestation_id',
-        'Form_id',
         'Equipe_id',
 
     ];

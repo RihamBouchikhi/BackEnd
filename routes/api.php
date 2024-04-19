@@ -87,8 +87,8 @@ Route::apiResource('projets', ProjetController::class);
 //OffreStage
 Route::apiResource('offres', OffresController::class);
 
-//Formulaire Condidature
 
+//Formulaire Condidature
 Route::post('/formulaires', [FormulaireController::class, 'store']);
 
 
