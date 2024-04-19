@@ -58,9 +58,9 @@ return [
             'driver' => 'sanctum',
             'provider' => 'administrateurs',
         ],
-        'stagiaire' => [
+        'intern' => [
             'driver' => 'sanctum',
-            'provider' => 'stagiaires',
+            'provider' => 'interns',
         ],
         'encadrant' => [
             'driver' => 'sanctum',

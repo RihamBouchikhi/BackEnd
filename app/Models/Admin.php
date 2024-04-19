@@ -9,25 +9,15 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
-class Administrateur extends Authenticatable
+class Admin extends Authenticatable
 
 {
-    protected $table = 'administrateur';
-
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'user_id',
-        
+        'person_id',    
     ];
-    
-
-    public function offrestage()
-    {
-        return $this->hasMany(OffreStage::class);
+    public function person(){
+        return $this->belongsTo(Person::class,'person_id');
     }
-    public function attestation()
-    {
-        return $this->hasMany(Attestation::class);
-    } 
 }

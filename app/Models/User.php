@@ -14,65 +14,22 @@ class User extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'fullName',
-        'phone',
-        'city',
-        'niveau_id',
-        'email',
-        'password',
-        'avatar',
-        'role',
+        "academicLevel",
+        "establishment",
+        "startDate",
+        "endDate",
+        "person_id"
     ];
 
-
-/**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-
-
-    // Relation avec les administrateurs
-    
-    public function administrateur()
-    {
-        return $this->hasOne(Administrateur::class);
+    public function person(){
+        return $this->belongsTo(Person::class,'person_id');
     }
-    
-    // Relation avec les stagiaires
-    public function stagiaire()
-    {
-        return $this->hasOne(Stagiaire::class);
+    public function demandes(){
+        return $this->hasMany(Demande::class,'user_id');
     }
+     public function files() {
+ 	    return $this->morphMany(File::class, 'fileable'); 
+	}
 
-    // Relation avec les encadrants
-    public function encadrant()
-    {
-        return $this->hasOne(Encadrant::class);
-    }
-
-    public function message()
-    {
-        return $this->hasMany(Message::class);
-    }
 }

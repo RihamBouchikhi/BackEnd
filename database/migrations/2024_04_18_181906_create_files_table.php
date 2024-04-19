@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -7,15 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+
+    public function up(): void
     {
-        Schema::create('administrateur', function (Blueprint $table) {
+        Schema::disableForeignKeyConstraints();
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->softDeletes();
+            $table->string('name');
+            $table->string('url');
+            $table->string('type');
+            $table->morphs('fileable');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('administrateur');
+        Schema::dropIfExists('files');
     }
 };

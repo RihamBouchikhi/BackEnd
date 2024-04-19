@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Person;
 use App\Models\User;
 use App\Models\Encadrant;
 use App\Models\Stagiaire;
@@ -21,11 +22,13 @@ class AuthController extends Controller
 
         $data = $request->validated();
 
-        $user = User::where('email', $data['email'])->first()
-            ??Administrateur::where('email', $data['email'])->first()
-            ?? Encadrant::where('email', $data['email'])->first()
-            ?? Stagiaire::where('email', $data['email'])->first();
+        $user = Person::where('email', $data['email'])->first();
 
+            if (!$user ) {
+            return response()->json([
+                'message' => 'Email is incorrect!'
+            ], 401);
+        }
 //check if the user is alraedy logged
         $logged = DB::table('personal_access_tokens')
             ->where('tokenable_id', '=', $user->id)
@@ -40,9 +43,9 @@ class AuthController extends Controller
                 ])->withCookie($cookie);
             }
 //check if the password is correct        
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+        if (!Hash::check($data['password'], $user->password)) {
             return response()->json([
-                'message' => 'Email or password is incorrect!'
+                'message' => 'password is incorrect!'
             ], 401);
         }
 //create personal access token

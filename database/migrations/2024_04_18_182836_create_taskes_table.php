@@ -7,21 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-    {
-       Schema::disableForeignKeyConstraints();
-        Schema::create('offers', function (Blueprint $table) {
+    {        
+        Schema::disableForeignKeyConstraints();
+        Schema::create('taskes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('sector');
-            $table->string('experience');
-            $table->string('skills');
-            $table->string('deriction');
-            $table->string('duration');
-            $table->string('type');
-            $table->boolean('visibility');
+            $table->date('dueDate');             
+            $table->string('priority');
             $table->string('status');
-            $table->string('ville');
+            $table->foreignId('intern_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offers');
+        Schema::dropIfExists('taskes');
     }
 };

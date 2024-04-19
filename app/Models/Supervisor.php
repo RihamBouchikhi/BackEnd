@@ -9,24 +9,20 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
-class Encadrant extends Authenticatable
+class Supervisor extends Authenticatable
 {
-    protected $table = 'encadrant';
-
     use HasApiTokens, HasFactory, Notifiable;
 
      // Par défaut, le modèle Encadrant hérite de tous les attributs et relations du modèle Utilisateur
     protected $fillable = [
-        'specialite',
+        'person_id',
     ];
 
-    public function projet()
-    {
-        return $this->hasMany(Projet::class);
+     public function person(){
+        return $this->belongsTo(Person::class,'person_id');
+    }
+    public function projects(){
+        return $this->hasMany(Project::class,'supervisor_id');
     }
 
-    public function equipe()
-    {
-        return $this->hasMany(Equipe::class);
-    }
 }

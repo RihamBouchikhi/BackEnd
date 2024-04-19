@@ -6,18 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('taches', function (Blueprint $table) {
+        Schema::create('persons', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->text('description');
-            $table->foreignId('stagiaire_id')->constrained()->on('stagiaire')->onDelete('cascade');
-            $table->foreignId('Projet_id')->constrained()->on('projet')->onDelete('cascade');
+            $table->string('fullName');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('phone');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('role');
             $table->softDeletes();
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taches');
+        Schema::dropIfExists('persons');
     }
 };
