@@ -87,7 +87,7 @@ public function register(RegisterRequest $request) {
 
     // get the authenticated user method
     public function user(Request $request) {
-        return new UserResource($request->user());
+        return  response()->json($this->refactorProfile($request->user()));
     }
 
 }

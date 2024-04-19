@@ -23,9 +23,6 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 //Authentification
 // Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
@@ -40,6 +37,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
 });
 
 Route::apiResource('users', UserController::class);
