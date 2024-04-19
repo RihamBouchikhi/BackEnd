@@ -15,22 +15,31 @@ class FormulaireController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation des données du formulaire
+    
         $validatedData = $request->validate([
             
-            'niveau-etude' => 'required|string',
+            'niveau_etude' => 'required|string',
             'etablissement' => 'required|string',
             'CV' => 'required|file',
-            'demande-stage' => 'required|file',
-            'date-debut' => 'required|date',
-            'date-fin' => 'required|date',
-            'Offrestage_id' => 'required|exists:offre_stages,id',
+            'demande_stage' => 'required|file',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
+            'Offrestage_id' => 'required|integer',
         ]);
 
-        // Stockage des données dans la base de données
-        $formulaire = Formulaire::create($validatedData);
 
-        // Retourner une réponse
+        $formulaire = Formulaire::create([
+            'niveau_etude' => $validatedData['niveau_etude'],
+            'etablissement' => $validatedData['etablissement'],
+            'CV' => $validatedData['CV'],
+            'demande_stage' => $validatedData['demande_stage'],
+            'date_debut' => $validatedData['date_debut'],
+            'date_fin' => $validatedData['date_fin'],
+            'Offrestage_id' => $validatedData['Offrestage_id'],
+        ]);
+        
         return response()->json(['message' => 'Formulaire créé avec succès', 'formulaire' => $formulaire], 201);
     }
 }
+
+

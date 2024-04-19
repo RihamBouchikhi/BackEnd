@@ -13,15 +13,15 @@ class Formulaire extends Model
 
     protected $fillable = [
         
-        'niveau-etude',
+        'niveau_etude',
         'etablissement',
         'CV',
-        'demmande-stage',
-        'date-debut',
-        'date-fin',
+        'demande_stage',
+        'date_debut',
+        'date_fin',
         'Offres_id',
         
-    ];
+    ]; 
 
     public function stagiaire()
     {
@@ -30,7 +30,7 @@ class Formulaire extends Model
 
     public function offres()
     {
-        return $this->belongsTo(OffreStage::class, 'Offres_id');
+        return $this->belongsTo(Offres::class, 'Offres_id');
     } 
     
 }
