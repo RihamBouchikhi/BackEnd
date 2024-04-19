@@ -19,11 +19,11 @@ class User extends Authenticatable
         "establishment",
         "startDate",
         "endDate",
-        "person_id"
+        "profile_id"
     ];
 
-    public function person(){
-        return $this->belongsTo(Person::class,'person_id');
+    public function profile(){
+        return $this->belongsTo(Profile::class,'profile_id');
     }
     public function demandes(){
         return $this->hasMany(Demande::class,'user_id');

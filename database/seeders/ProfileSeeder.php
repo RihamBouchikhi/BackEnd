@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class PersonSeeder extends Seeder
+class profileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class PersonSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('persons')->insert([
+        DB::table('profiles')->insert([
             [
                 'fullName' => 'hassan mhd',
                 'email' => 'hassan@gmail.com',

@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-class Person extends Model
+class Profile extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $fillable = [
         'fullName',
         'phone',
-        'niveau_id',
         'email',
         'password',
-        'role',
-    ];
+        'role'
+        ];
         protected $hidden = [
         'password',
         'remember_token',

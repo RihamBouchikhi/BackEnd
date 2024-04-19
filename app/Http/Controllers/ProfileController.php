@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 
-class PersonController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class PersonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Person $person)
+    public function show(Profile $profile)
     {
         //
     }
@@ -42,7 +42,7 @@ class PersonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Person $person)
+    public function edit(Profile $Profile)
     {
         //
     }
@@ -50,7 +50,7 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Person $person)
+    public function update(Request $request, Profile $profile)
     {
         //
     }
@@ -58,7 +58,7 @@ class PersonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Person $person)
+    public function destroy(Profile $Profile)
     {
         //
     }

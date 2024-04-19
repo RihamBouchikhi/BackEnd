@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
+use App\Models\Profile;
 use App\Models\User;
 use App\Models\Encadrant;
 use App\Models\Stagiaire;
@@ -22,11 +22,17 @@ class AuthController extends Controller
 
         $data = $request->validated();
 
-        $user = Person::where('email', $data['email'])->first();
+        $user = Profile::where('email', $data['email'])->first();
 
             if (!$user ) {
             return response()->json([
-                'message' => 'Email is incorrect!'
+                'message' => "The email address you've entered does not exist. Please verify your email and try again"
+            ], 401);
+        }
+        //check if the password is correct        
+        if (!Hash::check($data['password'], $user->password)) {
+            return response()->json([
+                'message' => "The password you've entered is incorrect. Please check your password and try again."
             ], 401);
         }
 //check if the user is alraedy logged
@@ -42,12 +48,7 @@ class AuthController extends Controller
                 'message' => 'alraedy logged',
                 ])->withCookie($cookie);
             }
-//check if the password is correct        
-        if (!Hash::check($data['password'], $user->password)) {
-            return response()->json([
-                'message' => 'password is incorrect!'
-            ], 401);
-        }
+
 //create personal access token
         $token = $user->createToken('auth_token')->plainTextToken;
         $cookie = cookie('token', $token, 60 * 24); // 1 day
@@ -61,12 +62,10 @@ class AuthController extends Controller
 public function register(RegisterRequest $request) {
         $data = $request->validated();
 
-        $user = User::create([
+        $user = Profile::create([
             'fullName' => $data['fullName'],
             'email' => $data['email'],
-            'city' => $data['city'],
-            'role' => $data['role'],
-            'niveau_id' => $data['niveau_id'],
+            'role' => 'user',
             'password' => Hash::make($data['password']),
         ]);
 

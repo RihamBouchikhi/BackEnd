@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('interns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->string('projetLink');
             $table->softDeletes();

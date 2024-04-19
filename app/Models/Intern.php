@@ -19,13 +19,13 @@ class Intern extends Authenticatable
     // Les propriétés  spécifiques aux stagiaires
     protected $fillable = [
         'project_id',
-        'person_id',
+        'profile_id',
         'projectLink',
 
     ];
 
-      public function person(){
-        return $this->belongsTo(Person::class,'person_id');
+      public function profile(){
+        return $this->belongsTo(Profile::class,'profile_id');
     }
     public function taskes()
     {

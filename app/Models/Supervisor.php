@@ -15,11 +15,11 @@ class Supervisor extends Authenticatable
 
      // Par défaut, le modèle Encadrant hérite de tous les attributs et relations du modèle Utilisateur
     protected $fillable = [
-        'person_id',
+        'profile_id',
     ];
 
-     public function person(){
-        return $this->belongsTo(Person::class,'person_id');
+     public function profile(){
+        return $this->belongsTo(Profile::class,'profile_id');
     }
     public function projects(){
         return $this->hasMany(Project::class,'supervisor_id');

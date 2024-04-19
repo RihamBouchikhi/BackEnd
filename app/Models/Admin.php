@@ -15,9 +15,9 @@ class Admin extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'person_id',    
+        'profile_id',    
     ];
-    public function person(){
-        return $this->belongsTo(Person::class,'person_id');
+    public function profile(){
+        return $this->belongsTo(Profile::class,'profile_id');
     }
 }
