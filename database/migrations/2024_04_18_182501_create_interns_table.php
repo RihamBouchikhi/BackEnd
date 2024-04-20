@@ -13,6 +13,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
             $table->string('projectLink')->nullable();
+            $table->string('academicLevel');
+            $table->string('establishment');    
+            $table->date('startDate');    
+            $table->date('endDate');  
             $table->softDeletes();
             $table->timestamps();
         });

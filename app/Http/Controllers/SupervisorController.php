@@ -9,26 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class SupervisorController extends Controller
 {
-    public function createSupervisorByAdmin(Request $request)
-    {
-        $validatedData = $request->validate([
-            'fullName' => 'required|string',
-            'email' => 'required|email|unique:profiles,email',
-            'password' => 'required|string|min:6',
-        ]);
-    
-        $profile = Profile::create([
-            'fullName' => $validatedData['fullName'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-            'role' => 'Supervisor', 
-        ]);
-
-        $supervisor = Supervisor::create([
-            'profile_id' => $profile->id,
-            ]);
-        return response()->json(['message' => 'Compte d\'Supervisor créé avec succès', 'Supervisor' => $supervisor], 201);
-    }
 
 
     public function updateSupervisor(Request $request, $id)
@@ -79,7 +59,7 @@ class SupervisorController extends Controller
             return response()->json(['message' => 'Supervisor non trouvé'], 404);
         }
 
-        return response()->json(['Supervisor' => $Supervisor], 200);
+        return response()->json(['Supervisor' => $supervisor], 200);
     }
 
 

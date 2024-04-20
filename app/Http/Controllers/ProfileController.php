@@ -21,27 +21,7 @@ class ProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'fullName' => 'required|string',
-            'phone' => 'required|string',
-            'email' => 'required|email|unique:profiles,email',
-            'password' => 'required|string',
 
-        ]);
-
-        $profile = Profile::create([
-            'fullName' => $validatedData['fullName'],
-            'phone' => $validatedData['phone'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']), 
-            
-        ]);
-
-        return response()->json(['profile' => $profile], 201);
-        
-    }
 
     /**
      * Display the specified resource.

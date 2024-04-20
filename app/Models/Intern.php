@@ -21,7 +21,10 @@ class Intern extends Authenticatable
         'project_id',
         'profile_id',
         'projectLink',
-
+        'academicLevel',
+        'establishment',
+        "startDate",
+        'endDate'
     ];
 
       public function profile(){

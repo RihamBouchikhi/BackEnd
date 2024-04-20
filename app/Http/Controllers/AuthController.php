@@ -8,6 +8,8 @@ use App\Models\Supervisor;
 use App\Models\Intern;
 use App\Models\Admin;
 use App\Traits\Refactor;
+use App\Traits\Store;
+use App\Traits\Update;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -19,19 +21,20 @@ use App\Http\Resources\UserResource;
 class AuthController extends Controller
 {
     use Refactor;
+    use Store;
+    use Update;
     // login a user methods
     public function login(LoginRequest $request) {
 
         $data = $request->validated();
 
         $profile= Profile::where('email', $data['email'])->first();
-
             if (!$profile) {
             return response()->json([
                 'message' => "The email address you've entered does not exist. Please verify your email and try again"
             ], 401);
         }
-        //check if the password is correct        
+//check if the password is correct        
         if (!Hash::check($data['password'], $profile->password)) {
             return response()->json([
                 'message' => "The password you've entered is incorrect. Please check your password and try again."
@@ -54,29 +57,24 @@ class AuthController extends Controller
         $cookie = cookie('token', $token, 60 * 24); // 1 day
         return response()->json($this->refactorProfile($profile))->withCookie($cookie);
     }
-  
-//register simple user
-public function register(RegisterRequest $request) {
-        $data = $request->validated();
 
-        $profile= Profile::create([
-            'fullName' => $data['fullName'],
-            'email' => $data['email'],
-            'role' => 'user',
-            'password' => Hash::make($data['password']),
-        ]);
-
+    //store all users 
+    public function store(Request $request) {
+        $profile=$this->storeProfile($request);
         $token = $profile->createToken('auth_token')->plainTextToken;
-
         $cookie = cookie('token', $token, 60 * 24); // 1 day
-
-        return response()->json([
-            'message' => 'Registred successfully',
-        ])->withCookie($cookie);
+        return response()->json($this->refactorProfile($profile))->withCookie($cookie);
     }
 
-
-  // logout a user method
+    public function update(Request $request){
+        $profile = Profile::find($request->id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+        $newProfile =$this->updateProfile($request);
+        return response()->json($this->refactorProfile($newProfile));
+    }
+  // logout 
     public function logout(Request $request) {
         $request->user()->currentAccessToken()->delete();
         $cookie = cookie()->forget('token');

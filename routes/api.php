@@ -32,7 +32,9 @@ use App\Http\Controllers\ProjectController;
 // Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
-Route::post('/register', [AuthController::class, 'register']);
+//Store All profils and users :users admins supervisors interns
+Route::post('/store', [AuthController::class, 'store']);
+Route::post('/update', [AuthController::class, 'update']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -44,8 +46,6 @@ Route::apiResource('users', UserController::class);
 
 //Administrateur
 
-// Route pour créer un compte administrateur
-Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 
 
 // Route pour mettre à jour les informations de l'administrateur
@@ -57,7 +57,6 @@ Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::post('/interns/create', [InternController::class, 'createInternByAdmin']);
 Route::put('/intern/{id}/update', [InternController::class, 'updateIntern']);
 Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
 Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
@@ -65,7 +64,6 @@ Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
 
 //Encadrant 
 
-Route::post('/Supervisors/create', [SupervisorController::class, 'createSupervisorByAdmin']);
 Route::put('/Supervisor/{id}/update', [InternController::class, 'updateSupervisor']);
 Route::get('/Supervisor/{id}/show', [InternController::class, 'showSupervisor']);
 Route::delete('/Supervisor/{id}/delete', [InternController::class, 'deleteSupervisor']);
@@ -85,8 +83,6 @@ Route::apiResource('projets', ProjectController::class);
 
 
 
-//OffreStage
-Route::apiResource('offres', OffresController::class);
 
 
 
@@ -142,7 +138,7 @@ Route::apiResource('avancement',\App\Http\Controllers\AvancementController::clas
 Route::apiResource('equipe',\App\Http\Controllers\EquipeController::class);
 
 //Etablissment
-Route::apiResource('etablissement',\App\Http\Controllers\EtablissementController::class);
+Route::apiResource('establishment',\App\Http\Controllers\establishmentController::class);
 
 //Mdp_token
 Route::apiResource('mdp_token',\App\Http\Controllers\Mdp_tokensController::class);
@@ -182,8 +178,8 @@ Route::apiResource('user',\App\Http\Controllers\UserController::class);
 //Utilisateur
 Route::apiResource('utilisateur',\App\Http\Controllers\UtilisateurController::class);
 
-//Etablissement
-Route::apiResource('etablissement',\App\Http\Controllers\EtablissementController::class);
+//establishment
+Route::apiResource('establishment',\App\Http\Controllers\establishmentController::class);
 
 //UtilisationTechnologie
 Route::apiResource('utilisationTechnologie',\App\Http\Controllers\UtilisationTechnologieController::class);

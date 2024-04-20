@@ -20,19 +20,21 @@ trait Refactor
                     array_push($files, ['name'=>$file->name,'url'=>$file->url,'type'=>$file->type]);
                 }
                 $offer = ["title" => $offerData->title];
-                $user = ["fullName" => $userData->fullName];
+                $user = ["firstName" => $userData->firstName,"lastName" => $userData->lastName];
                 array_push($array,['user'=>$user,'offer'=>$offer,"startDate"=>$demande->startDate,"endDate"=>$demande->endDate,'files'=>$files]);
             }
             foreach($filesData as $file){
                 array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
             }
             $refactored = [
-                "fullName"=>$profile->fullName,
+                "id"=>$profile->id,
+                "firstName"=>$profile->firstName,
+                "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
                 "academicLevel" => $user->academicLevel,
-                "etablissement" => $user->etablissement,
+                "establishment" => $user->establishment,
                 "startDate" => $user->startDate,
                 "endDate" => $user->endDate,
                 "date" => $user->date,
@@ -43,7 +45,9 @@ trait Refactor
         };
         if ($profile->role==='admin'){
             $refactored = [
-                "fullName"=>$profile->fullName,
+                "id"=>$profile->id,
+                "firstName"=>$profile->firstName,
+                "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
@@ -55,20 +59,12 @@ trait Refactor
             $projectsData = $supervisor->projects;
             $projects = [];
             foreach($projectsData as $project){
-                $supervisor = $project->supervisor;
-                $teamMembersData = $project->interns;
-                $projectManager = $project->projectManager;
-                $teamMembers=[];
-                foreach($teamMembersData as $teamMember){
-                    array_push($teamMembers, $teamMember->id);
-                }
-                array_push($projects, ['subject'=>$project->subject,"startDate"=>$project->startDate,
-                "endDate"=>$project->endDate,"status"=>$project->status,"priority"=>$project->priority,
-                'description'=>$project->description,'projectManager'=>$projectManager,
-                'supervisor' => $supervisor->id,'teamMembres'=>$teamMembers]);
+                array_push($projects, $project->id);
             }
             $refactored = [
-                "fullName"=>$profile->fullName,
+                "id"=>$profile->id,
+                "firstName"=>$profile->firstName,
+                "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
@@ -104,11 +100,17 @@ trait Refactor
                 array_push($tasks, ['title' => $task->title, 'description'=>$task->description,'dueDate'=>$task->dueDate,'priority'=>$task->priority,'status'=>$task->status]);
             }
             $refactored = [
-                "fullName"=>$profile->fullName,
+                "id"=>$profile->id,
+                "firstName"=>$profile->firstName,
+                "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
                 "projects"=>$projects,
+                "academicLevel" => $intern->academicLevel,
+                "establishment" => $intern->establishment,
+                "startDate" => $intern->startDate,
+                "endDate" => $intern->endDate,
                 "files"=>$files,
                 "tasks"=>$tasks,
             ];

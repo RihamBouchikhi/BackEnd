@@ -17,28 +17,32 @@ class profileSeeder extends Seeder
         //
         DB::table('profiles')->insert([
             [
-                'fullName' => 'hassan mhd',
+                'firstName' => 'hassan',
+                'lastName' => 'mhd',
                 'email' => 'hassan@gmail.com',
                 'password' => Hash::make('Hassan123?'),
                 'phone' => '0636453567',
                 'role'=>'user',
             ],
             [
-                'fullName' => 'walid zkn',
+                'firstName' => 'walid',
+                'lastName' => 'zkn',
                 'email' => 'walid@gmail.com',
                 'password' => Hash::make('Walid123?'),
                 'phone' => '0636453567',
                 'role'=>'supervisor',
             ],
             [
-                'fullName' => 'riham bck',
+                'firstName' => 'riham',
+                'lastName' => 'rhm',
                 'email' => 'riham@gmail.com',
                 'password' => Hash::make('Riham123?'),
                 'phone' => '0636453567',
                 'role'=>'admin',
             ],
             [
-                'fullName' => 'zeyad idk',
+                'firstName' => 'zyad',
+                'lastName' => 'zyd',
                 'email' => 'zyad@gmail.com',
                 'password' => Hash::make('Zyad123?'),
                 'phone' => '0636453567',
@@ -50,7 +54,7 @@ class profileSeeder extends Seeder
             [  
                 'profile_id' => 1,
                 'academicLevel' => 'bac+2',
-                'etablissement' => 'Ofppt',
+                'establishment' => 'Ofppt',
                 'startDate' => "2024-03-18 18:38:13" ,
                 'endDate' => "2024-04-28 18:38:13",
             ]
@@ -71,6 +75,22 @@ class profileSeeder extends Seeder
             [  
                 'profile_id' => 4,
                 'projectLink' => 'acdjscjvsvdvjbsd',
+                'academicLevel' => 'bac+2',
+                'establishment' => 'Ofppt',
+                'startDate' => "2024-03-18 18:38:13" ,
+                'endDate' => "2024-04-28 18:38:13",
+            ]
+        );
+           DB::table('projects')->insert(
+            [  
+                'subject' => 'gestion stg',
+                'description' => 'description ',
+                'status' => 'In Progress',
+                'priority' => 'High',
+                'supervisor_id' => 1,
+                "intern_id"=>1,
+                'startDate' => "2024-03-18 18:38:13" ,
+                'endDate' => "2024-04-28 18:38:13",
             ]
         );
     }

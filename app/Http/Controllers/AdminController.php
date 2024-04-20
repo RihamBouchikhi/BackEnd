@@ -9,38 +9,15 @@ use App\Models\Profile;
 class AdminController extends Controller
 {
     // Méthode pour créer un compte Admin
-    public function createAdmin()
-    {   
-        $fullName = 'Mohammed Karim';
-        $email = 'dsiadmin123@gmail.com';
-        $password = 'admin56267';
-
-        $profile = Profile::create([
-            'fullName' => $fullName,
-            'email' => $email,
-            'password' => bcrypt($password),
-            'role' => 'admin',
-        ]);
-
-        // Création du compte Admin associé
-        $admin = Admin::create([
-            'profile_id' => $profile->id,
-        ]);
-
-        return response()->json(['message' => 'Compte Admin créé avec succès', 'admin' => $admin], 201);
-    }
-
 
     public function updateAdmin(Request $request, $id)
-    {
-        
+    {  
         $request->validate([
             'fullName' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:10',
             
         ]);
-
-        
+  
         $admin = Admin::findOrFail($id);
         if (!$admin) {
         return response()->json(['message' => 'Admin non trouvé'], 404);

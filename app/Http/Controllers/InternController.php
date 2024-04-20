@@ -21,34 +21,7 @@ class InternController extends Controller
     }
 
         // Méthode pour créer un compte de Intern par l'administrateur
-    
-    public function createInternByAdmin(Request $request)
-    {
 
-        $validatedData = $request->validate([
-                'fullName' => 'required|string',
-                'email' => 'required|email|unique:profiles,email',
-                'password' => 'required|string|min:6',
-                
-        ]);
-    
-        
-        $profile = Profile::create([
-                'fullName' => $validatedData['fullName'],
-                'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password']),
-                'role' => 'Intern', 
-                
-        ]);
-    
-
-        $intern = Intern::create([
-            'profile_id' => $profile->id,
-        ]);
-    
-        return response()->json(['message' => 'Compte de Intern créé avec succès', 'Intern' => $intern], 201);
-    }
-    
 
 
     public function updateIntern(Request $request, $id)
