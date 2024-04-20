@@ -11,31 +11,13 @@ use App\Http\Controllers\InternController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\ProjectController;
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-
-//Authentification
-// Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-// Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class, 'loginAdministrateur']);
-// Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
-// Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
-// Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-
-//Store All profils and users :users admins supervisors interns
+//Store All profils :users admins supervisors interns
 Route::post('/store', [AuthController::class, 'store']);
+//update  All profils :users admins supervisors interns
 Route::post('/update', [AuthController::class, 'update']);
+//Delete  All profils :users admins supervisors interns
 Route::post('/delete', [AuthController::class, 'destroy']);
+//Login All profils :users admins supervisors interns
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -50,24 +32,18 @@ Route::apiResource('users', UserController::class);
 
 
 // Route pour mettre à jour les informations de l'administrateur
-Route::put('/admin/{id}/update', [AdminController::class, 'updateAdmin']);
 Route::get('/admin/{id}/show', [AdminController::class, 'showAdmin']);
-Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 
 
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::put('/intern/{id}/update', [InternController::class, 'updateIntern']);
 Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
-Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
 
 
 //Encadrant 
 
-Route::put('/Supervisor/{id}/update', [InternController::class, 'updateSupervisor']);
 Route::get('/Supervisor/{id}/show', [InternController::class, 'showSupervisor']);
-Route::delete('/Supervisor/{id}/delete', [InternController::class, 'deleteSupervisor']);
 
 
 //OffreStage
