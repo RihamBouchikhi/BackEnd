@@ -14,9 +14,6 @@ class Intern extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable;
 
-    // Par défaut, le modèle Stagiaire hérite de tous les attributs et relations du modèle user
-
-    // Les propriétés  spécifiques aux stagiaires
     protected $fillable = [
         'project_id',
         'profile_id',
@@ -43,5 +40,6 @@ class Intern extends Authenticatable
     public function files() {
  	    return $this->morphMany(File::class, 'fileable'); 
 	}
+
 }
 

@@ -25,7 +25,7 @@ class Project extends Model
         return $this->belongsTo(Intern::class,'intern_id');
     }
     public function interns(){
-        return $this->belongsToMany(Intern::class,'interns_projects', 'intern_id', 'project_id');
+        return $this->belongsToMany(Intern::class);
     }
     public function taskes(){
         return $this->hasMany(Taske::class);
