@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -11,39 +12,20 @@ use App\Http\Controllers\InternController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\ProjectController;
 
-//Store All profils :users admins supervisors interns
-Route::post('/store', [AuthController::class, 'store']);
-//update  All profils :users admins supervisors interns
-Route::post('/update', [AuthController::class, 'update']);
-//Delete  All profils :users admins supervisors interns
-Route::post('/delete', [AuthController::class, 'destroy']);
-//Login All profils :users admins supervisors interns
-Route::post('/login', [AuthController::class, 'login']);
 
+
+//CRUD all profiles Routes
+Route::post('/store', [ProfileController::class, 'store']);
+Route::put('profile/{id}', [ProfileController::class, 'update']);
+Route::delete('profile/{id}', [ProfileController::class, 'destroy']);
+Route::get('profile/{id}',[ProfileController::class, 'show']);
+
+//Auth routes
+Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 });
-
-Route::apiResource('users', UserController::class);
-
-//Administrateur
-
-
-
-// Route pour mettre à jour les informations de l'administrateur
-Route::get('/admin/{id}/show', [AdminController::class, 'showAdmin']);
-
-
-
-
-// Route pour que l'administrateur crée un compte de stagiaire
-Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
-
-
-//Encadrant 
-
-Route::get('/Supervisor/{id}/show', [InternController::class, 'showSupervisor']);
 
 
 //OffreStage

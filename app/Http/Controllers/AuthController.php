@@ -22,10 +22,8 @@ use App\Http\Resources\UserResource;
 class AuthController extends Controller
 {
     use Refactor;
-    use Store;
-    use Delete;
-    use Update;
-    // login a user methods
+
+// login a user methods
     public function login(LoginRequest $request) {
 
         $data = $request->validated();
@@ -59,35 +57,7 @@ class AuthController extends Controller
         $cookie = cookie('token', $token, 60 * 24); // 1 day
         return response()->json($this->refactorProfile($profile))->withCookie($cookie);
     }
-
-    //store all users 
-    public function store(Request $request) {
-        $profile=$this->storeProfile($request);
-        $token = $profile->createToken('auth_token')->plainTextToken;
-        $cookie = cookie('token', $token, 60 * 24); // 1 day
-        return response()->json($this->refactorProfile($profile))->withCookie($cookie);
-    }
-//update profiles
-    public function update(Request $request){
-        $profile = Profile::find($request->id);
-        if (!$profile) {
-            return response()->json(['message' => 'profile non trouvé'], 404);
-        }
-        $newProfile =$this->updateProfile($request);
-        return response()->json($this->refactorProfile($newProfile));
-    }
-//delete profiles
-public function destroy(Request $request){
-   $profile = Profile::find($request->id);
-        if (!$profile) {
-            return response()->json(['message' => 'profile non trouvé'], 404);
-        }
-    $isDeleted =$this->deleteProfile($request->id);
-    if ($isDeleted){       
-        return response()->json(['message' => 'profile deleted succsfully'],200);
-    }
-}
-  // logout 
+// logout 
     public function logout(Request $request) {
         $request->user()->currentAccessToken()->delete();
         $cookie = cookie()->forget('token');
@@ -96,7 +66,7 @@ public function destroy(Request $request){
         ])->withCookie($cookie);
     }
 
-    // get the authenticated user method
+// get the authenticated user method
     public function user(Request $request) {
         return  response()->json($this->refactorProfile($request->user()));
     }

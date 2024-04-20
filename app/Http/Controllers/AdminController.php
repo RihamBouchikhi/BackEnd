@@ -9,17 +9,6 @@ use App\Models\Profile;
 class AdminController extends Controller
 {
 
-    public function showAdmin($id)
-    {
-        
-        $admin = Admin::with('profile')->find($id);
-
-        if (!$admin) {
-            return response()->json(['message' => 'Administrateur non trouvé'], 404);
-        }
-
-        return response()->json(['admin' => $admin], 200);
-    }
 
 
 }
