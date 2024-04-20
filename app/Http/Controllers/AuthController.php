@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Supervisor;
 use App\Models\Intern;
 use App\Models\Admin;
+use App\Traits\Delete;
 use App\Traits\Refactor;
 use App\Traits\Store;
 use App\Traits\Update;
@@ -22,6 +23,7 @@ class AuthController extends Controller
 {
     use Refactor;
     use Store;
+    use Delete;
     use Update;
     // login a user methods
     public function login(LoginRequest $request) {
@@ -65,7 +67,7 @@ class AuthController extends Controller
         $cookie = cookie('token', $token, 60 * 24); // 1 day
         return response()->json($this->refactorProfile($profile))->withCookie($cookie);
     }
-
+//update profiles
     public function update(Request $request){
         $profile = Profile::find($request->id);
         if (!$profile) {
@@ -74,6 +76,17 @@ class AuthController extends Controller
         $newProfile =$this->updateProfile($request);
         return response()->json($this->refactorProfile($newProfile));
     }
+//delete profiles
+public function destroy(Request $request){
+   $profile = Profile::find($request->id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+    $isDeleted =$this->deleteProfile($request->id);
+    if ($isDeleted){       
+        return response()->json(['message' => 'profile deleted succsfully'],200);
+    }
+}
   // logout 
     public function logout(Request $request) {
         $request->user()->currentAccessToken()->delete();

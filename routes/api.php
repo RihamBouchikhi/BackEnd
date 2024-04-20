@@ -35,6 +35,7 @@ use App\Http\Controllers\ProjectController;
 //Store All profils and users :users admins supervisors interns
 Route::post('/store', [AuthController::class, 'store']);
 Route::post('/update', [AuthController::class, 'update']);
+Route::post('/delete', [AuthController::class, 'destroy']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {

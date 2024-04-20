@@ -23,44 +23,6 @@ class InternController extends Controller
         // Méthode pour créer un compte de Intern par l'administrateur
 
 
-
-    public function updateIntern(Request $request, $id)
-    {
-        
-        $request->validate([
-            'fullName' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:10',
-            
-        ]);
-
-
-        $intern = Intern::findOrFail($id);
-        if (!$intern) {
-        return response()->json(['message' => 'stagiaire non trouvé'], 404);
-        }
-
-        $profile = $intern->profile;
-        if (!$profile) {
-            return response()->json(['message' => 'Utilisateur associé non trouvé'], 404);
-        }
-        // Mettre à jour les informations de l'utilisateur
-        $profile->update([
-            'fullName' => $request->fullName,
-            'phone' => $request->phone,
-
-        ]);
-        /*
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars'); 
-            $profile->avatar = $avatarPath;
-            $profile->save();
-        }*/
-
-
-        return response()->json(['message' => 'Informations stagiaire mises à jour avec succès', 'stagiaire' => $profile]);
-    }
-
-
     public function showIntern($id)
     {
         
@@ -71,23 +33,6 @@ class InternController extends Controller
         }
 
         return response()->json(['stagiaire' => $intern], 200);
-    }
-
-
-    public function deleteIntern($id)
-    {
-        $intern = Intern::findOrFail($id);
-
-        if (!$intern) {
-            return response()->json(['message' => 'Stagiaire non trouvé'], 404);
-        }
-
-        
-        $intern->profile->delete();
-
-        $intern->delete();
-
-        return response()->json(['message' => 'Stagiaire supprimé avec succès'], 200);
     }
 
 
