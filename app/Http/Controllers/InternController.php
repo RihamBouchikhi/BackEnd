@@ -32,7 +32,7 @@ class InternController extends Controller
             return response()->json(['message' => 'stagiaire non trouvé'], 404);
         }
 
-        return response()->json(['stagiaire' => $intern], 200);
+        return response()->json(['Intern' => $intern], 200);
     }
 
 

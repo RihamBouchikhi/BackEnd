@@ -9,12 +9,18 @@ class Offer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'titre',
+        'title',
         'description',
-        'domaine',
-        'dure',
-        'admin_id',
-        'projet_id',
+        'sector',
+        'experience',
+        'skills',
+        'deriction',
+        'duration',
+        'type',
+        'visibility',
+        'status',
+        'city',
+
     ];
     
     public function demandes(){

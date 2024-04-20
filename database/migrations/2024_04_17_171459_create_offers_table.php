@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('type');
             $table->boolean('visibility');
             $table->string('status');
-            $table->string('ville');
+            $table->string('city');
             $table->softDeletes();
             $table->timestamps();
         });
