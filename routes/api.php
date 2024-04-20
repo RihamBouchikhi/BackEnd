@@ -24,15 +24,12 @@ use App\Http\Controllers\ProjectController;
 */
 
 
-//Authentification
-// Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-// Route::post('/loginAdministrateur', [\App\Http\Controllers\AuthController::class, 'loginAdministrateur']);
-// Route::post('/loginEncadrant', [\App\Http\Controllers\AuthController::class, 'loginEncadrant']);
-// Route::post('/loginStagiaire', [\App\Http\Controllers\AuthController::class, 'loginStagiaire']);
-// Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+//Store All profils and users :users admins supervisors interns
+//Route::post('/register', [AuthController::class, 'register']);
 
-
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/store', [AuthController::class, 'store']);
+Route::post('/update', [AuthController::class, 'update']);
+Route::post('/delete', [AuthController::class, 'destroy']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -41,11 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::apiResource('users', UserController::class);
-
-//Administrateur
-
-// Route pour créer un compte administrateur
-Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 
 
 // Route pour mettre à jour les informations de l'administrateur
@@ -57,7 +49,6 @@ Route::delete('/admin/{id}/delete', [AdminController::class, 'deleteAdmin']);
 
 
 // Route pour que l'administrateur crée un compte de stagiaire
-Route::post('/interns/create', [InternController::class, 'createInternByAdmin']);
 Route::put('/intern/{id}/update', [InternController::class, 'updateIntern']);
 Route::get('/intern/{id}/show', [InternController::class, 'showIntern']);
 Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
@@ -65,16 +56,18 @@ Route::delete('/intern/{id}/delete', [InternController::class, 'deleteIntern']);
 
 //Encadrant 
 
-Route::post('/Supervisors/create', [SupervisorController::class, 'createSupervisorByAdmin']);
 Route::put('/Supervisor/{id}/update', [InternController::class, 'updateSupervisor']);
 Route::get('/Supervisor/{id}/show', [InternController::class, 'showSupervisor']);
 Route::delete('/Supervisor/{id}/delete', [InternController::class, 'deleteSupervisor']);
 
 
-//OffreStage
-Route::apiResource('offers', OfferController::class);
+//Route::apiResource('offers', OfferController::class);
 
-
+//Offers
+Route::post('/offres', [OfferController::class, 'store']);
+Route::get('/offres/{id}', [OfferController::class, 'show']);
+Route::put('/offres/{id}', [OfferController::class, 'update']);
+Route::delete('/offres/{id}', [OfferController::class, 'destroy']);
 
 
 
@@ -83,175 +76,3 @@ Route::apiResource('offers', OfferController::class);
 Route::apiResource('projets', ProjectController::class);
 
 
-
-
-//OffreStage
-Route::apiResource('offres', OffresController::class);
-
-
-
-
-
-
-// Route pour les opérations CRUD sur l'entité Equipe
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-Route::apiResource('administrateur',\App\Http\Controllers\AdminController::class);
-Route::post('admin/login',[\App\Http\Controllers\AdminController::class, 'login']);
-
-use App\Http\Controllers\MessageController;
-
-Route::post('/messages', [MessageController::class, 'store']);
-Route::get('/messages', [MessageController::class, 'index']);
-
-
-
-//Encadrant
-Route::apiResource('encadrant',\App\Http\Controllers\SupervisorController::class);
-Route::post('encadrant/login',[\App\Http\Controllers\SupervisorController::class, 'login']);
-
-
-//image upload
-Route::post('/images/upload', [ImageController::class, 'upload']);
-Route::get('/images', [ImageController::class, 'index']);
-
-
-
-//Absence
-Route::apiResource('absence',\App\Http\Controllers\AbsenceController::class);
-
-//Attestation
-Route::apiResource('attestation',\App\Http\Controllers\AttestationController::class);
-
-//Avancement
-Route::apiResource('avancement',\App\Http\Controllers\AvancementController::class);
-
-//Equipe
-Route::apiResource('equipe',\App\Http\Controllers\EquipeController::class);
-
-//Etablissment
-Route::apiResource('etablissement',\App\Http\Controllers\EtablissementController::class);
-
-//Mdp_token
-Route::apiResource('mdp_token',\App\Http\Controllers\Mdp_tokensController::class);
-
-//Message
-Route::apiResource('message',\App\Http\Controllers\MessageController::class);
-
-//participation
-Route::apiResource('participation',\App\Http\Controllers\ParticipationController::class);
-
-//Presentation
-Route::apiResource('presentation',\App\Http\Controllers\PresentationController::class);
-
-//Projet
-Route::apiResource('projet',\App\Http\Controllers\ProjectController::class);
-
-//RapportStage
-Route::apiResource('rapportStage',\App\Http\Controllers\RapportStageController::class);
-
-//Reunion
-Route::apiResource('reunion',\App\Http\Controllers\ReunionController::class);
-
-//Stage
-Route::apiResource('stage',\App\Http\Controllers\StageController::class);
-
-//Stagiaire
-Route::apiResource('stagiaire',\App\Http\Controllers\InternController::class);
-Route::post('stagiaire/login',[\App\Http\Controllers\InternController::class, 'login']);
-Route::get('/equipe/{equipeId}/stagiaires',[\App\Http\Controllers\EquipeController::class, 'getStagiairesByEquipe']);
-
-//Technologie
-Route::apiResource('technologie',\App\Http\Controllers\TechnologieController::class);
-
-//User
-Route::apiResource('user',\App\Http\Controllers\UserController::class);
-
-//Utilisateur
-Route::apiResource('utilisateur',\App\Http\Controllers\UtilisateurController::class);
-
-//Etablissement
-Route::apiResource('etablissement',\App\Http\Controllers\EtablissementController::class);
-
-//UtilisationTechnologie
-Route::apiResource('utilisationTechnologie',\App\Http\Controllers\UtilisationTechnologieController::class);
-Route::post('/utilisation-technologie', [UtilisationTechnologieController::class, 'store']);
-*/
-
-
-//UseFull Requests
-
-/*
-//getting stagiaires-with-stage
-Route::get('/stagiaires-with-stage', [\App\Http\Controllers\InternController::class, 'getStagiairesWithStage']);
-
-//updating stagiaires couvertures
-Route::post('/stagiaire/{id}/update-couverture', [\App\Http\Controllers\InternController::class, 'updateCouverture']);
-
-//getting equipes details
-Route::get('equipes/details', [\App\Http\Controllers\EquipeController::class, 'getEquipesDetails']);
-Route::get('equipes/{equipeId}', [\App\Http\Controllers\EquipeController::class, 'getEquipeDetails']);
-//getting an Encadrant equipes
-Route::get('/equipes/details/{encadrant_id}', [\App\Http\Controllers\EquipeController::class, 'getEncadrantEquipesDetails']);
-
-//getting Stagiaires Absences
-Route::get('/stagiaires/absences', [\App\Http\Controllers\InternController::class, 'getAbsenceStagiaires']);
-
-//getting projects details
-Route::get('projet/datails', [\App\Http\Controllers\ProjectController::class, 'getProjetDetails']);
-
-
-//getting the biggedt id from equipe, administrateur, encadrant, stagiaire
-
-
-Route::get('/max-id', function () {
-    $maxId = max(
-        Equipe::max('id'),
-        Stagiaire::max('id'),
-        Encadrant::max('id'),
-        Administrateur::max('id')
-    );
-
-    return response()->json(['max_id' => $maxId]);
-});
-
-
-
-
-
-
-Route::get('stagiaires/{stagiaireId}/projet', [InternController::class, 'getProjetStagiaire']);
-
-Route::get('stagiaire/{stagiaireId}/avancements', [InternController::class, 'getAvancements']);
-
-Route::get('/avancements/{projetId}', [AvancementController::class, 'getAvancementSumByType']);
-
-Route::get('/projet/{projetId}/avancements/this-week', [AvancementController::class,'getAvancementByTypeAndDay']);
-
-Route::get('/projet/{projetId}/avancements/all-time', [AvancementController::class,'getAllTimeAvancement']);
-
-Route::get('projets/details', [\App\Http\Controllers\ProjectController::class, 'getProjetsDetails']);
-
-//getting today absences
-Route::get('absences/aujourdhui', [\App\Http\Controllers\AbsenceController::class, 'getAbsencesAujourdhui']);
-
-//Getting 4 last avancements for a specific projet_id
-Route::get('/projet/{projet_id}/avancements', [AvancementController::class,'getLastFourAvancements']);
-
-//update equipe id for a specific stagiaire
-Route::put('stagiaire/{id}/update-equipe-id', [InternController::class, 'updateEquipeId']);
-
-Route::get('/projet/last-id', [ProjectController::class, 'getLastProjetId']);
-*/
