@@ -11,10 +11,7 @@ use Request;
 
 trait Update
 {
-    public function updateProfile($data)
-    {
-        $profile = Profile::find($data->id);
-      
+    public function updateProfile($data,$profile){      
         $validatedData = $data->validate([
         'email' => 'email|unique:profiles,email',
     ]);

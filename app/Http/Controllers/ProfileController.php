@@ -3,55 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Traits\Delete;
+use App\Traits\Refactor;
+use App\Traits\Store;
+use App\Traits\Update;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $profiles = Profile::all();
-        return response()->json($profiles);
+    use Refactor;
+    use Store;
+    use Delete;
+    use Update;
+//store all users 
+    public function store(Request $request) {
+        $profile=$this->storeProfile($request);
+        $token = $profile->createToken('auth_token')->plainTextToken;
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+        return response()->json($this->refactorProfile($profile))->withCookie($cookie);
+    }
+//update profiles
+    public function update(Request $request, string $id){
+        $profile = Profile::find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+        $newProfile =$this->updateProfile($request,$profile);
+        return response()->json($this->refactorProfile($newProfile));
     }
 
-    
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Profile $profile)
+      public function show(string $id)
     {
-        //
+      $profile = Profile::find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }  
+        return response()->json($this->refactorProfile($profile));
     }
+//delete profiles
+    public function destroy(string $id){
+   $profile = Profile::find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+    $isDeleted =$this->deleteProfile($id);
+    if ($isDeleted){       
+        return response()->json(['message' => 'profile deleted succsfully'],200);
+    }
+}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Profile $Profile)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Profile $profile)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Profile $Profile)
-    {
-        //
-    }
 }

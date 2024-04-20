@@ -12,17 +12,5 @@ class SupervisorController extends Controller
 
 
 
-    public function showSupervisor($id)
-    {
-        
-        $supervisor = Supervisor::with('profile')->find($id);
-
-        if (!$supervisor) {
-            return response()->json(['message' => 'Supervisor non trouvé'], 404);
-        }
-
-        return response()->json(['Supervisor' => $supervisor], 200);
-    }
-
 
 }
