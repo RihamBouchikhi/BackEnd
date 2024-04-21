@@ -36,8 +36,9 @@ Route::get('/offres/{id}', [OfferController::class, 'show']);
 Route::put('/offres/{id}', [OfferController::class, 'update']);
 Route::delete('/offres/{id}', [OfferController::class, 'destroy']);
 
+//Demande
 
-
+Route::post('/demandes/{offre_id}', [DemandeController::class, 'store']);
 
 // Projet
 Route::apiResource('projets', ProjectController::class);
