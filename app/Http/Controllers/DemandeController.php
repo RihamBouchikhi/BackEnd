@@ -3,62 +3,64 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Demande;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class DemandeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, $offre_id)
     {
-        //
-    }
+        
+        $request->validate([
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after:startDate',
+            'cv' => 'required|file|mimes:pdf|max:2048', 
+            'internshipdemand' => 'required|file|mimes:pdf|max:2048', 
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'academicLevel' => 'required',
+            'establishment' => 'required',
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        
+        $user = Auth::user();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        
+        $demande = new Demande();
+        $demande->offer_id = $offre_id;
+        $demande->user_id = $user->id;
+        $demande->startDate = $request->startDate;
+        $demande->endDate = $request->endDate;
+        $demande->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        
+        $profile = $user->profile;
+        $profile->firstName = $request->firstName;
+        $profile->lastName = $request->lastName;
+        $profile->phone = $request->phone;
+        $profile->email = $request->email;
+        $profile->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        
+        $cv = $request->file('cv');
+        $cvUrl = $cv->store('files');
+        $cvFile = new File();
+        $cvFile->name = $cv->getClientOriginalName();
+        $cvFile->url = $cvUrl;
+        $cvFile->type = 'cv';
+        $demande->files()->save($cvFile);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $internshipDemand = $request->file('internshipdemand');
+        $internshipDemandUrl = $internshipDemand->store('files');
+        $internshipDemandFile = new File();
+        $internshipDemandFile->name = $internshipDemand->getClientOriginalName();
+        $internshipDemandFile->url = $internshipDemandUrl;
+        $internshipDemandFile->type = 'internship_demand';
+        $demande->files()->save($internshipDemandFile);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message' => 'Demande créée avec succès'], 201);
     }
 }
