@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
             $table->string('academicLevel');
-            $table->string('etablissement');    
+            $table->string('establishment');    
             $table->date('startDate');    
             $table->date('endDate');    
             $table->timestamps();

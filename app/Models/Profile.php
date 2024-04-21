@@ -10,7 +10,8 @@ class Profile extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $fillable = [ 
-        'fullName',
+        'firstName',
+        'lastName',
         'phone',
         'email',
         'password',
