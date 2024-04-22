@@ -19,16 +19,29 @@ class ProjectController extends Controller
     /** 
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $supervisor_id)
     {
         $request->validate([
-            'sujet' => 'required|string',
-            'status' => 'required|string',
+            'subject' => 'required|string',
             'description' => 'required|string',
-            'encadrant_id' => 'required|exists:encadrant,id',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            'status' => 'required|string',
+            'priority' => 'required|string',
+            'projectManager' => 'required|exists:interns,id',
         ]);
 
-        $project = Project::create($request->all());
+        $project = Project::create([
+            'subject' => $request->subject,
+            'description' => $request->description,
+            'startDate' => $request->startDate,
+            'endDate' => $request->endDate,
+            'status' => $request->status,
+            'priority' => $request->priority,
+            'supervisor_id' => $supervisor_id, 
+            'projectManager' => $request->projectManager,
+        ]);
+
         return response()->json($project, 201);
     }
 

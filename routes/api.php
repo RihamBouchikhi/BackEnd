@@ -41,6 +41,7 @@ Route::delete('/offres/{id}', [OfferController::class, 'destroy']);
 Route::post('/demandes/{offre_id}', [DemandeController::class, 'store']);
 
 // Projet
-Route::apiResource('projets', ProjectController::class);
+
+Route::post('/projects/{supervisorId}', [ProjectController::class, 'store']);
 
 
