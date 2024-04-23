@@ -62,6 +62,7 @@ class ProjectController extends Controller
   }
 
 
+    /*
     //Assign interns to the specified project.
 
     public function assignInterns(Request $request, $id)
@@ -76,7 +77,7 @@ class ProjectController extends Controller
         $project->interns()->sync($request->input('interns'));
     
         return response()->json($project->fresh('interns'));
-    }
+    }*/
 
 
 
