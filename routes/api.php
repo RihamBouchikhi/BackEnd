@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\taskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OfferController;
@@ -12,10 +13,7 @@ use App\Http\Controllers\ProjectController;
 Route::get('/{data}', [ProfileController::class, 'index']);
 
 //CRUD all profiles Routes
-Route::POST('/profile', [ProfileController::class, 'store']);
-Route::PUT('profile/{id}', [ProfileController::class, 'update']);
-Route::DELETE('profile/{id}', [ProfileController::class, 'destroy']);
-Route::GET('profile/{id}',[ProfileController::class, 'show']);
+Route::apiResource('profile', ProfileController::class);
 
 //Auth routes
 Route::POST('/login', [AuthController::class, 'login']);
@@ -28,21 +26,13 @@ Route::middleware('auth:sanctum')->group(function () {
 //Route::apiResource('offers', OfferController::class);
 
 //Offers
-Route::post('/offres', [OfferController::class, 'store']);
-Route::get('/offres/{id}', [OfferController::class, 'show']);
-Route::put('/offres/{id}', [OfferController::class, 'update']);
-Route::delete('/offres/{id}', [OfferController::class, 'destroy']);
+Route::apiResource('offres', OfferController::class);
 
 //Demande
-
-Route::post('/demandes/{offre_id}', [DemandeController::class, 'store']);
+Route::apiResource('demandes', DemandeController::class);
 
 // Projet
-
-Route::post('/projects', [ProjectController::class, 'store']);
-Route::get('/projects/{id}', [ProjectController::class, 'show']);
-Route::put('/projects/{id}', [ProjectController::class, 'update']);
-Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
-
-Route::post('/projects/{id}/assign-interns', [ProjectController::class, 'assignInterns']);
+Route::apiResource('projects', ProjectController::class);
+//tasks
+Route::apiResource('tasks', taskController::class);
 
