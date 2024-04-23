@@ -7,7 +7,6 @@ use App\Models\Offer;
 
 
 class OfferController extends Controller
-class OfferController extends Controller
 {
     public function index()
     {
