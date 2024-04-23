@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Traits\Delete;
+use App\Traits\Get;
 use App\Traits\Refactor;
 use App\Traits\Store;
 use App\Traits\Update;
@@ -11,8 +12,12 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    use Refactor, Store, Delete, Update;
+    use Refactor, Store, Delete, Update,Get;
 //store all users 
+    public function index($role){
+        return response()->json($this->GetAll($role));
+    }
+
     public function store(Request $request) {
         $profile=$this->storeProfile($request);
         $token = $profile->createToken('auth_token')->plainTextToken;
@@ -43,7 +48,7 @@ class ProfileController extends Controller
         if (!$profile) {
             return response()->json(['message' => 'profile non trouvé'], 404);
         }
-    $isDeleted =$this->deleteProfile($id);
+    $isDeleted =$this->deleteProfile($profile);
     if ($isDeleted){       
         return response()->json(['message' => 'profile deleted succsfully'],200);
     }

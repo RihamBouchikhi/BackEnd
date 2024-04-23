@@ -48,6 +48,14 @@ class profileSeeder extends Seeder
                 'phone' => '0636453567',
                 'role'=>'intern',
             ],
+            [
+                'firstName' => 'hassan2',
+                'lastName' => 'mhd',
+                'email' => 'hassan2@gmail.com',
+                'password' => Hash::make('Hassan123?'),
+                'phone' => '0636453567',
+                'role'=>'intern',
+            ],
             ]
         );
         DB::table('users')->insert(
@@ -81,17 +89,16 @@ class profileSeeder extends Seeder
                 'endDate' => "2024-04-28 18:38:13",
             ]
         );
-           DB::table('projects')->insert(
+             DB::table('interns')->insert(
             [  
-                'subject' => 'gestion stg',
-                'description' => 'description ',
-                'status' => 'In Progress',
-                'priority' => 'High',
-                'supervisor_id' => 1,
-                "intern_id"=>1,
+                'profile_id' => 5,
+                'projectLink' => 'acdjscjvsvdvjbsd',
+                'academicLevel' => 'bac+2',
+                'establishment' => 'Ofppt',
                 'startDate' => "2024-03-18 18:38:13" ,
                 'endDate' => "2024-04-28 18:38:13",
             ]
         );
+         
     }
 }

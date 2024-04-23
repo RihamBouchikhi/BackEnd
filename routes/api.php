@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -7,6 +8,8 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProjectController;
 
 
+//get all data projects , admins , tasks ,supervisors NB data must be pluriel
+Route::get('/{data}', [ProfileController::class, 'index']);
 
 //CRUD all profiles Routes
 Route::POST('/profile', [ProfileController::class, 'store']);
@@ -36,7 +39,10 @@ Route::post('/demandes/{offre_id}', [DemandeController::class, 'store']);
 
 // Projet
 
-Route::post('/projects/{supervisorId}', [ProjectController::class, 'store']);
+Route::post('/projects', [ProjectController::class, 'store']);
+Route::get('/projects/{id}', [ProjectController::class, 'show']);
+Route::put('/projects/{id}', [ProjectController::class, 'update']);
+Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
 
 Route::post('/projects/{id}/assign-interns', [ProjectController::class, 'assignInterns']);
 

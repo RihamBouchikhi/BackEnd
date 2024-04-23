@@ -3,74 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Traits\Delete;
+use App\Traits\Refactor;
+use App\Traits\Store;
+use App\Traits\Update;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use Refactor,Store,Update,Delete;
     public function index()
     {
         $projects = Project::all();
-        return response()->json($projects);
+        $refactoredProjects = [];
+        foreach($projects as $project){
+            array_push($refactoredProjects, $this->refactoProject($project));
+        }
+        return response()->json($refactoredProjects);
     }
 
-    /** 
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request, $supervisor_id)
+    public function store(Request $request)
     {
-        $request->validate([
-            'subject' => 'required|string',
-            'description' => 'required|string',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date',
-            'status' => 'required|string',
-            'priority' => 'required|string',
-            'projectManager' => 'required|exists:interns,id',
-        ]);
-
-        $project = Project::create([
-            'subject' => $request->subject,
-            'description' => $request->description,
-            'startDate' => $request->startDate,
-            'endDate' => $request->endDate,
-            'status' => $request->status,
-            'priority' => $request->priority,
-            'supervisor_id' => $supervisor_id, 
-            'projectManager' => $request->projectManager,
-        ]);
-
-        return response()->json($project, 201);
+        $project = $this->storeProjejct($request);
+        if (!$project) {
+            return response()->json(['message' => "error ,Try Again"], 404);
+        }        
+        return response()->json($this->refactoProject($project) );
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $project = Project::findOrFail($id);
-        return response()->json($project);
+        $project = Project::find($id);
+         if (!$project) {
+            return response()->json(['message' => "undefined project"], 404);
+        }
+        return response()->json($this->refactoProject($project) );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        
+        $project = Project::find($id);
+          if (!$project) {
+            return response()->json(['message' => "cannot update undefined project!!"], 404);
+        }
+        $updated = $this->updateProject($request,$project);
+        return response()->json($this->refactoProject($updated) );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $project = Project::findOrFail($id);
-        $project->delete();
-        return response()->json('', 204);
-    }
+        $project = Project::find($id);
+          if (!$project) {
+            return response()->json(['message' => "cannot delete undefined project!!"], 404);
+        }
+        $isDeleted = $this->deleteProject($project);
+        if ($isDeleted){       
+        return response()->json(['message' => 'project deleted succsfully'],200);
+    }  
+  }
 
 
     //Assign interns to the specified project.

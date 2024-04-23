@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {        
         Schema::disableForeignKeyConstraints();
-        Schema::create('taskes', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
             $table->date('dueDate');             
             $table->string('priority');
             $table->string('status');
-            $table->foreignId('intern_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('intern_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taskes');
+        Schema::dropIfExists('tasks');
     }
 };

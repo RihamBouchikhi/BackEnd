@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipe', function (Blueprint $table) {
+        Schema::create('intern_project', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_equipe') ;
-            $table->foreignId('Projet_id')->references('id')->on('projet')->onDelete('cascade');
-            $table->foreignId('encadrant_id')->references('id')->on('encadrant')->onDelete('cascade');
-            $table->softDeletes();
+            $table->foreignId('intern_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('project_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('equipe');
+        Schema::dropIfExists('interns_projects');
     }
 };

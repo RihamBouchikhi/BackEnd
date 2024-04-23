@@ -4,10 +4,11 @@ namespace App\Traits;
 use App\Models\Admin;
 use App\Models\Intern;
 use App\Models\Profile;
+use App\Models\Project;
 use App\Models\Supervisor;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Validation\Rules\Password;
-use Request;
 
 trait Store
 {
@@ -75,5 +76,43 @@ trait Store
         }
         return $profile;
     }
-
+    public function storeProjejct($request){
+        $validatedProject = $request->validate([
+            'subject' => 'required|string',
+            'description' => 'required|string',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            'status' => 'required|string',
+            'priority' => 'required|string',
+            'supervisor_id' => 'required|exists:supervisors,id',
+            'projectManager' => 'required|exists:interns,id',
+            'tasks' => 'array',
+            'teamMembers' => 'array|exists:interns,id',
+        ]);
+            $project = new Project;
+            $project->subject = $validatedProject['subject'];
+            $project->description = $validatedProject['description'];
+            $project->startDate = $validatedProject['startDate'];
+            $project->endDate = $validatedProject['endDate'];
+            $project->status = $validatedProject['status'];
+            $project->priority = $validatedProject['priority'];
+            $project->supervisor_id = $validatedProject['supervisor_id'];
+            $project->intern_id = $validatedProject['projectManager']; 
+            $project->save();
+    foreach ($validatedProject['teamMembers'] as $teamMemberId) {
+        $project->interns()->attach($teamMemberId);
+    }
+    foreach ($validatedProject['tasks'] as $taskData) {
+        $task = new Task;
+        $task->title = $taskData['title'];
+        $task->description = $taskData['description'];
+        $task->dueDate = $taskData['dueDate'];
+        $task->priority = $taskData['priority'];
+        $task->status = $taskData['status'];
+        $task->intern_id = $taskData['intern_id']; 
+        $task->project_id = $project->id; 
+        $task->save();
+    }
+    return $project;
+    }
 }

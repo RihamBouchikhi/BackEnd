@@ -28,14 +28,14 @@ class Intern extends Authenticatable
         return $this->belongsTo(Profile::class,'profile_id');
     }
       public function projects(){
-        return $this->belongsToMany(Project::class,'interns_projects', 'intern_id', 'project_id');
+        return $this->belongsToMany(Project::class);
     }
     public function managedBy(){
         return $this->belongsTo(Project::class);
     }
     public function tasks()
     {
-        return $this->hasMany(Taske::class,'intern_id');
+        return $this->hasMany(Task::class);
     }
     public function files() {
  	    return $this->morphMany(File::class, 'fileable'); 

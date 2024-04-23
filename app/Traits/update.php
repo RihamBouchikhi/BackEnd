@@ -13,8 +13,8 @@ trait Update
 {
     public function updateProfile($data,$profile){      
         $validatedData = $data->validate([
-        'email' => 'email|unique:profiles,email',
-    ]);
+                'email' => 'email|unique:profiles,email',
+                ]);
         $updateData = array_filter([
             'firstName' => $data['firstName'] ?? null,
             'lastName' => $data['lastName'] ?? null,
@@ -44,5 +44,33 @@ trait Update
             $intern->update($updateData);
         }
         return $profile;
+    }
+
+    public function updateProject($data,$project){
+        $validatedProject = $data->validate([
+            'subject' => 'required|string',
+            'description' => 'required|string',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            'status' => 'required|string',
+            'priority' => 'required|string',
+            'supervisor_id' => 'required|exists:supervisors,id',
+            'projectManager' => 'required|exists:interns,id',
+            'teamMembers' => 'array',
+        ]);
+        $project->subject = $validatedProject['subject'];
+        $project->description = $validatedProject['description'];
+        $project->startDate = $validatedProject['startDate'];
+        $project->endDate = $validatedProject['endDate'];
+        $project->status = $validatedProject['status'];
+        $project->priority = $validatedProject['priority'];
+        $project->supervisor_id = $validatedProject['supervisor_id']; // replace with appropriate supervisor ID
+        $project->intern_id = $validatedProject['projectManager']; // replace with appropriate supervisor ID
+        $project->save();
+        if ($data->has('teamMembers')){
+            $project->interns()->detach();
+            $project->interns()->attach($validatedProject['teamMembers']);
+        }
+        return $project;
     }
 }

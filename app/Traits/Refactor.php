@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+use App\Models\Project;
 
 trait Refactor
 {
@@ -77,17 +78,7 @@ trait Refactor
             $projectsData = $intern->projects;
             $projects = [];
             foreach($projectsData as $project){
-                $supervisor = $project->supervisor;
-                $teamMembersData = $project->interns;
-                $projectManager = $project->projectManager;
-                $teamMembers=[];
-                foreach($teamMembersData as $teamMember){
-                    array_push($teamMembers, $teamMember->id);
-                }
-                array_push($projects, ['subject'=>$project->subject,"startDate"=>$project->startDate,
-                "endDate"=>$project->endDate,"status"=>$project->status,"priority"=>$project->priority,
-                'description'=>$project->description,'projectManager'=>$projectManager,
-                'supervisor' => $supervisor->id,'teamMembres'=>$teamMembers]);
+                array_push($projects,$this->refactoProject($project));
             }
             $filesData = $intern->files;
             $files = [];
@@ -97,7 +88,7 @@ trait Refactor
             $tasksData = $intern->tasks;
             $tasks = [];
             foreach($tasksData as $task){
-                array_push($tasks, ['title' => $task->title, 'description'=>$task->description,'dueDate'=>$task->dueDate,'priority'=>$task->priority,'status'=>$task->status]);
+                array_push($tasks,$this->refactorTask($task));
             }
             $refactored = [
                 "id"=>$profile->id,
@@ -117,5 +108,43 @@ trait Refactor
             return $refactored;
         }
        
+  }
+    public function refactoProject($project){
+        $supervisor = $project->supervisor;
+        $projectManager = $project->projectManager;
+        $teamMembersData = $project->interns;
+        $teamMembers=[];
+        foreach($teamMembersData as $teamMember){
+            array_push($teamMembers, $teamMember->id);
+          }
+        $tasksData = $project->tasks;
+        $tasks = [];
+        foreach($tasksData as $task){
+            array_push($tasks,$this->refactorTask($task));
+            }
+        return ['id'=>$project->id,'subject'=>$project->subject,"startDate"=>$project->startDate,
+            "endDate"=>$project->endDate,"status"=>$project->status,"priority"=>$project->priority,
+            'description'=>$project->description,'projectManager'=>$projectManager->id,
+            'supervisor' => $supervisor->id,'teamMembers'=>$teamMembers,'tasks'=>$tasks];
+                
+  }
+  public function refactorTask($task){
+        $intern = $task->intern;
+        $profile = $intern->profile;
+        return [
+                "id"=> $task->id,
+                "project"=> $task->project->subject,
+                "title"=>$task->title,
+                'description'=>$task->description,
+                'dueDate'=>$task->dueDate,
+                'priority'=>$task->priority,
+                'status'=>$task->status,
+                'assignee'=>[
+                        "id"=>$intern->id,
+                        "firstName"=>$profile->firstName,
+                        "lastName"=>$profile->lastName,
+                        "email"=>$profile->email
+                    ]
+            ];
   }
 }
