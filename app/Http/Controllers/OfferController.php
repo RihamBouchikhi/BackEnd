@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Offer;
 use App\Models\Project;
 
-class OffreController extends Controller
+class OfferController extends Controller
 {
     public function index()
     {
