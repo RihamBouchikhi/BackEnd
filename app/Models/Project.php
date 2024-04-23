@@ -14,7 +14,7 @@ class Project extends Model
         "startDate","endDate",
         'status',
         'priority',
-        'supervisor_id',
+        'supervisor_id', 
         "projectManager"
     ];
 

@@ -59,15 +59,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'sujet' => 'required|string',
-            'status' => 'required|string',
-            'description' => 'required|string',
-        ]);
-
-        $project = Project::findOrFail($id);
-        $project->update($request->all());
-        return response()->json($project, 200);
+        
     }
 
     /**
@@ -79,4 +71,28 @@ class ProjectController extends Controller
         $project->delete();
         return response()->json('', 204);
     }
+
+
+    //Assign interns to the specified project.
+
+    public function assignInterns(Request $request, $id)
+    {
+        $project = Project::findOrFail($id);
+    
+        $request->validate([
+            'interns' => 'array',
+            'interns.*' => 'exists:interns,id',
+        ]);
+    
+        $project->interns()->sync($request->input('interns'));
+    
+        return response()->json($project->fresh('interns'));
+    }
+
+
+
+
+
+
+
 }
