@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Intern;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -28,9 +29,14 @@ class ProjectController extends Controller
             'endDate' => 'required|date',
             'status' => 'required|string',
             'priority' => 'required|string',
-            'projectManager' => 'required|exists:interns,id',
+            'projectManager' => 'required|exists:interns,id', 
+            'interns' => 'array', 
+            'interns.*' => 'exists:interns,id', 
         ]);
-
+    
+    
+        $intern = Intern::findOrFail($request->projectManager);
+    
         $project = Project::create([
             'subject' => $request->subject,
             'description' => $request->description,
@@ -39,8 +45,13 @@ class ProjectController extends Controller
             'status' => $request->status,
             'priority' => $request->priority,
             'supervisor_id' => $supervisor_id, 
-            'projectManager' => $request->projectManager,
+            'projectManager' => $intern->id, 
         ]);
+    
+        // Associe le projet nouvellement créé avec les stagiaires (y compris le PM)
+
+        $project->interns()->attach(array_merge([$intern->id], $request->interns));
+    
 
         return response()->json($project, 201);
     }
@@ -73,6 +84,7 @@ class ProjectController extends Controller
     }
 
 
+    /*
     //Assign interns to the specified project.
 
     public function assignInterns(Request $request, $id)
@@ -87,7 +99,7 @@ class ProjectController extends Controller
         $project->interns()->sync($request->input('interns'));
     
         return response()->json($project->fresh('interns'));
-    }
+    }*/
 
 
 
