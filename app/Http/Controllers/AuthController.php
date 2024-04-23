@@ -3,20 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
-use App\Models\User;
-use App\Models\Supervisor;
-use App\Models\Intern;
-use App\Models\Admin;
-use App\Traits\Delete;
+
 use App\Traits\Refactor;
-use App\Traits\Store;
-use App\Traits\Update;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserResource;
 
 
 class AuthController extends Controller

@@ -11,10 +11,7 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    use Refactor;
-    use Store;
-    use Delete;
-    use Update;
+    use Refactor, Store, Delete, Update;
 //store all users 
     public function store(Request $request) {
         $profile=$this->storeProfile($request);

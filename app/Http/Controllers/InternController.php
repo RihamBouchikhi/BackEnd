@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Intern;
-use App\Models\Profile;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Project;
-use Carbon\Carbon;
+
 
 class InternController extends Controller
 {
