@@ -15,16 +15,16 @@ use App\Http\Controllers\ProjectController;
 
 
 //CRUD all profiles Routes
-Route::post('/store', [ProfileController::class, 'store']);
-Route::put('profile/{id}', [ProfileController::class, 'update']);
-Route::delete('profile/{id}', [ProfileController::class, 'destroy']);
-Route::get('profile/{id}',[ProfileController::class, 'show']);
+Route::POST('/profile', [ProfileController::class, 'store']);
+Route::PUT('profile/{id}', [ProfileController::class, 'update']);
+Route::DELETE('profile/{id}', [ProfileController::class, 'destroy']);
+Route::GET('profile/{id}',[ProfileController::class, 'show']);
 
 //Auth routes
-Route::post('/login', [AuthController::class, 'login']);
+Route::POST('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
+    Route::POST('/logout', [AuthController::class, 'logout']);
+    Route::GET('/user', [AuthController::class, 'user']);
 });
 
 
