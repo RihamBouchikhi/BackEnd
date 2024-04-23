@@ -38,5 +38,9 @@ Route::post('/demandes/{offre_id}', [DemandeController::class, 'store']);
 
 Route::post('/projects/{supervisorId}', [ProjectController::class, 'store']);
 
-Route::post('/projects/{id}/assign-interns', [ProjectController::class, 'assignInterns']);
+
+
+
+
+//Route::post('/projects/{id}/assign-interns', [ProjectController::class, 'assignInterns']);
 
