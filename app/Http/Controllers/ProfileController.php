@@ -32,7 +32,7 @@ class ProfileController extends Controller
       public function show(string $id)
     {
       $profile = Profile::find($id);
-        if (!$profile) {
+        if (!$profile) { 
             return response()->json(['message' => 'profile non trouvé'], 404);
         }  
         return response()->json($this->refactorProfile($profile));
