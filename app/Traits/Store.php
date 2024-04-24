@@ -118,9 +118,9 @@ trait Store
     public function storeTask($request){
         $validatedData = $request->validate([
         'title' => 'required|max:255',
-        'description' => 'required',
-        'dueDate' => 'required|date',
-        'priority' => 'required|in:Low,Medium,High',
+        'description' => 'string',
+        'dueDate' => 'date',
+        'priority' => 'required|in:Low,Medium,High,None',
         'status' => 'required|in:To Do,Done,In Progress',
         'intern_id' => 'required|exists:interns,id',
         'project_id' => 'required|exists:projects,id',
