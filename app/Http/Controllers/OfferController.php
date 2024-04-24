@@ -17,66 +17,26 @@ class OfferController
     {
         // Création de l'offre de stage
         $offre = $this->storeOffer($request);
-        return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);
+        return response()->json($this->refactorOffer($offre));
     }
-
-    public function show($id)
-    {
-        $offre = Offer::find($id);
-
-        if (!$offre) {
-            return response()->json(['message' => 'Offre de stage non trouvée'], 404);
-        }
-
-        return response()->json($this->refactorOffer( $offre));
-    }
-
-
-    
-    
+ 
     public function update(Request $request, $id)
     {
-        
-        $offre = Offer::find($id);
-
-        if (!$offre) {
-            return response()->json(['message' => 'Offre non trouvée'], 404);
+        $offer= Offer::find($id);
+        if (!$offer) {
+            return response()->json(['message' => 'cannot update undefined offer!'], 404);
         }
-
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'sector' => 'required|string|max:100',
-            'experience' => 'required|string',
-            'skills' => 'required|string',
-            'direction' => 'required|string', 
-            'duration' => 'required|string', 
-            'type' => 'required|string', 
-            'visibility' => 'required|boolean', 
-            'status' => 'required|string',
-            'city' => 'required|string',
-            
-        ]);
-
-        
-        $offre->update($validatedData);
-
-        return response()->json(['message' => 'Offre de stage mise à jour avec succès', 'offre' => $offre]);
+        $updatedOffer=$this->updateOffer($request,$offer);
+        return response()->json($this->refactorOffer($updatedOffer));
     }
-
-
 
     public function destroy($id)
     {
-        $offre = Offer::find($id);
-
-        if (!$offre) {
-            return response()->json(['message' => 'Offre non trouvée'], 404);
+        $offer = Offer::find($id);
+        if (!$offer) {
+            return response()->json(['message' => 'Ocannot delete undefined offer!'], 404);
         }
-
-        
-        $offre->delete();
-
+        $offer->delete();
         return response()->json(['message' => 'Offre de stage supprimée avec succès']);
     }
 }

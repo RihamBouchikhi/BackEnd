@@ -15,9 +15,9 @@ return new class extends Migration
             $table->text('description');
             $table->string('sector');
             $table->string('experience');
-            $table->string('skills');
+            $table->string('skills')->nullable();
             $table->string('direction');
-            $table->string('duration');
+            $table->integer('duration');
             $table->string('type');
             $table->string('visibility');
             $table->string('status');

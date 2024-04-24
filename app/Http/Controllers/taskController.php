@@ -20,14 +20,6 @@ class taskController
         }
         return response()->json($this->refactorTask($task));
     }
-    public function show($id)
-    {
-        $task = Task::find($id);
-        if (!$task) {
-            return response()->json(['message' => "undefined task"], 404);
-        }
-        return response()->json($this->refactorTask($task));
-    }
 
     public function update(Request $request, $id)
     {

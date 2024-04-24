@@ -21,14 +21,6 @@ class ProjectController
         }        
         return response()->json($this->refactoProject($project) );
     }
-    public function show($id)
-    {
-        $project = Project::find($id);
-         if (!$project) {
-            return response()->json(['message' => "undefined project"], 404);
-        }
-        return response()->json($this->refactoProject($project) );
-    }
 
     public function update(Request $request, $id)
     {

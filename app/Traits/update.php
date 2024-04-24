@@ -80,7 +80,6 @@ trait Update
         $this->updateProjectStatus($task->project_id);
         return $task;
     }
-
     public function updateProjectStatus($project_id){
         $project = Project::find($project_id);
         $todoCount = $project->tasks()->where('status', 'To Do')->count();
@@ -96,5 +95,10 @@ trait Update
         }
 
         $project->save();
+    }
+
+    public function updateOffer($request,$offer){
+        $offer->update($request);
+        return $offer;
     }
 }
