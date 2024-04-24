@@ -68,9 +68,9 @@ trait Update
 
     public function updateTask($request,$task){
         $validatedData = $request->validate([
-        'title' => 'max:255',
-        'description' => '',
-        'dueDate' => 'date',
+        'title' => 'nullable|max:255',
+        'description' => 'nullable|text',
+        'dueDate' => 'nullable|date',
         'priority' => 'in:Low,Medium,High,None',
         'status' => 'in:To Do,Done,In Progress',
         'intern_id' => 'nullable|exists:interns,id',

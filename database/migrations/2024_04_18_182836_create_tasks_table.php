@@ -12,8 +12,8 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->date('dueDate');             
+            $table->text('description')->nullable();
+            $table->date('dueDate')->nullable();             
             $table->string('priority');
             $table->string('status');
             $table->foreignId('intern_id')->nullable()->constrained()->nullOnDelete();

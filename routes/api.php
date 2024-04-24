@@ -15,7 +15,7 @@ Route::get('/data/{data}', [Controller::class, 'index']);
 Route::get('/data/{data}/{id}', [Controller::class, 'show']);
 
 //CRUD all profiles Routes
-Route::apiResource('profile', ProfileController::class);
+Route::apiResource('profiles', ProfileController::class);
 Route::POST('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
