@@ -10,14 +10,11 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class ProfileController
 {
-    use Refactor, Store, Delete, Update,Get;
-//store all users 
-    public function index($role){
-        return response()->json($this->GetAll($role));
-    }
-
+    use Refactor, Store, Delete, Update;
+    
+    //store all users 
     public function store(Request $request) {
         $profile=$this->storeProfile($request);
         $token = $profile->createToken('auth_token')->plainTextToken;

@@ -9,7 +9,7 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class ProjectController extends Controller
+class ProjectController 
 {
     use Refactor,Store,Update,Delete;
 
@@ -51,29 +51,4 @@ class ProjectController extends Controller
         return response()->json(['message' => 'project deleted succsfully'],200);
     }  
   }
-
-
-    /*
-    //Assign interns to the specified project.
-
-    public function assignInterns(Request $request, $id)
-    {
-        $project = Project::findOrFail($id);
-    
-        $request->validate([
-            'interns' => 'array',
-            'interns.*' => 'exists:interns,id',
-        ]);
-    
-        $project->interns()->sync($request->input('interns'));
-    
-        return response()->json($project->fresh('interns'));
-    }*/
-
-
-
-
-
-
-
 }

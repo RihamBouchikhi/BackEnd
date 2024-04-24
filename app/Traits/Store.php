@@ -13,8 +13,7 @@ use Illuminate\Validation\Rules\Password;
 trait Store
 {
     use Update;
-    public function storeProfile($request)
-    {
+    public function storeProfile($request) {
         $validatedProfile = $request->validate([
             'firstName' => 'required|string',
             'lastName' => 'required|string',
@@ -114,7 +113,6 @@ trait Store
             $task->project_id = $project->id; 
             $task->save();
         }
-        $this->updateProjectStatus($project->id);
         return $project;
     }
     public function storeTask($request){

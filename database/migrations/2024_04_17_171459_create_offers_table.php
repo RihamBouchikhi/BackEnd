@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('sector');
             $table->string('experience');
             $table->string('skills');
-            $table->string('deriction');
+            $table->string('direction');
             $table->string('duration');
             $table->string('type');
-            $table->boolean('visibility');
+            $table->string('visibility');
             $table->string('status');
             $table->string('city');
             $table->softDeletes();

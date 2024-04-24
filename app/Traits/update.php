@@ -57,21 +57,13 @@ trait Update
             'status' => 'string',
             'priority' => 'string',
             'supervisor_id' => 'exists:supervisors,id',
-            'projectManager' => 'exists:interns,id',
-            'teamMembers' => 'array',
+            'intern_id' => 'exists:interns,id',
+            'teamMembers' => 'array|exists:interns,id',
         ]);
-        $project->subject = $validatedProject['subject'];
-        $project->description = $validatedProject['description'];
-        $project->startDate = $validatedProject['startDate'];
-        $project->endDate = $validatedProject['endDate'];
-        $project->status = $validatedProject['status'];
-        $project->priority = $validatedProject['priority'];
-        $project->supervisor_id = $validatedProject['supervisor_id']; // replace with appropriate supervisor ID
-        $project->intern_id = $validatedProject['projectManager']; // replace with appropriate supervisor ID
-        $project->save();
+        $project->update($validatedProject);
         if ($data->has('teamMembers')){
             $project->interns()->detach();
-            $project->interns()->attach($validatedProject['teamMembers']);
+            $project->interns()->attach($data['teamMembers']);
         }
         return $project;
     }
@@ -83,7 +75,7 @@ trait Update
         'dueDate' => 'date',
         'priority' => 'in:Low,Medium,High',
         'status' => 'in:To Do,Done,In Progress',
-        'intern_id' => 'exists:interns,id',
+        'intern_id' => 'nullable|exists:interns,id',
         'project_id' => 'exists:projects,id',
     ]);
         $task->update($validatedData);

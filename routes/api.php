@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\DemandeController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\DemandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\taskController;
 use Illuminate\Support\Facades\Route;
@@ -9,8 +10,9 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProjectController;
 
 
-//get all data projects , admins , tasks ,supervisors NB data must be pluriel
-Route::get('/{data}', [ProfileController::class, 'index']);
+//get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
+Route::get('/{data}', [Controller::class, 'index']);
+Route::get('/{data}/{id}', [Controller::class, 'show']);
 
 //CRUD all profiles Routes
 Route::apiResource('profile', ProfileController::class);
@@ -28,8 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
 //Offers
 Route::apiResource('offres', OfferController::class);
 
-//Demande
-Route::apiResource('demandes', DemandeController::class);
+//demand
+Route::apiResource('demands', DemandController::class);
 
 // Projet
 Route::apiResource('projects', ProjectController::class);

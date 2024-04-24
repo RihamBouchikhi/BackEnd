@@ -21,13 +21,10 @@ class User extends Authenticatable
     ];
 
     public function profile(){
-        return $this->belongsTo(Profile::class,'profile_id');
+        return $this->belongsTo(Profile::class);
     }
-    public function demandes(){
-        return $this->hasMany(Demande::class,'user_id');
+    public function demands(){
+        return $this->hasMany(Demand::class);
     }
-     public function files() {
- 	    return $this->morphMany(File::class, 'fileable'); 
-	}
 
 }

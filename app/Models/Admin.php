@@ -18,6 +18,6 @@ class Admin extends Authenticatable
         'profile_id',    
     ];
     public function profile(){
-        return $this->belongsTo(Profile::class,'profile_id');
+        return $this->belongsTo(Profile::class);
     }
 }

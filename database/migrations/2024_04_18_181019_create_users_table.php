@@ -14,8 +14,6 @@ return new class extends Migration
             $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
             $table->string('academicLevel');
             $table->string('establishment');    
-            $table->date('startDate');    
-            $table->date('endDate');    
             $table->timestamps();
             
         });

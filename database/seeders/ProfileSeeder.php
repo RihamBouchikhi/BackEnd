@@ -63,8 +63,6 @@ class profileSeeder extends Seeder
                 'profile_id' => 1,
                 'academicLevel' => 'bac+2',
                 'establishment' => 'Ofppt',
-                'startDate' => "2024-03-18 18:38:13" ,
-                'endDate' => "2024-04-28 18:38:13",
             ]
         );
              DB::table('supervisors')->insert(

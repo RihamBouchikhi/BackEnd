@@ -19,10 +19,10 @@ class Supervisor extends Authenticatable
     ];
 
      public function profile(){
-        return $this->belongsTo(Profile::class,'profile_id');
+        return $this->belongsTo(Profile::class);
     }
     public function projects(){
-        return $this->hasMany(Project::class,'supervisor_id');
+        return $this->hasMany(Project::class);
     }
 
 }

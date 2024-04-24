@@ -9,7 +9,7 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class taskController extends Controller
+class taskController 
 {
     use Store, Refactor,Update,Delete;
     public function store(Request $request)

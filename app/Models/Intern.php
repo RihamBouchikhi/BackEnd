@@ -25,7 +25,7 @@ class Intern extends Authenticatable
     ];
 
       public function profile(){
-        return $this->belongsTo(Profile::class,'profile_id');
+        return $this->belongsTo(Profile::class);
     }
       public function projects(){
         return $this->belongsToMany(Project::class);
@@ -37,9 +37,7 @@ class Intern extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
-    public function files() {
- 	    return $this->morphMany(File::class, 'fileable'); 
-	}
+
 
 }
 

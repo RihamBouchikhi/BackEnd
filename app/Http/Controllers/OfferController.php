@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\Delete;
+use App\Traits\Refactor;
+use App\Traits\Store;
+use App\Traits\Update;
 use Illuminate\Http\Request;
 use App\Models\Offer;
 
 
-class OfferController extends Controller
+class OfferController
 {
-    public function index()
-    {
-        $offres = Offer::all();
-        return response()->json($offres);
-    }
-
+    use Refactor, Store,Update,Delete;
     public function store(Request $request)
     {
-        
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'sector' => 'required|string|max:100',
             'experience' => 'required|string',
             'skills' => 'required|string', 
-            'deriction' => 'required|string', 
+            'direction' => 'required|string', 
             'duration' => 'required|string', 
             'type' => 'required|string', 
             'visibility' => 'required|boolean',
@@ -31,14 +29,10 @@ class OfferController extends Controller
             'city' => 'required|string',
             
         ]);
-
         // Création de l'offre de stage
         $offre = Offer::create($validatedData);
-
         return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);
     }
-
-
 
     public function show($id)
     {
@@ -48,7 +42,7 @@ class OfferController extends Controller
             return response()->json(['message' => 'Offre de stage non trouvée'], 404);
         }
 
-        return response()->json($offre);
+        return response()->json($this->refactorOffer( $offre));
     }
 
 
@@ -69,7 +63,7 @@ class OfferController extends Controller
             'sector' => 'required|string|max:100',
             'experience' => 'required|string',
             'skills' => 'required|string',
-            'deriction' => 'required|string', 
+            'direction' => 'required|string', 
             'duration' => 'required|string', 
             'type' => 'required|string', 
             'visibility' => 'required|boolean', 

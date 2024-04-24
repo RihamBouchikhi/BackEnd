@@ -1,34 +1,26 @@
 <?php
 
 namespace App\Traits;
-use App\Models\Project;
 
 trait Refactor
 {
     public function refactorProfile($profile){
+        $filesData = $profile->files;
+        $files = [];
+        foreach($filesData as $file){
+            array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
+        }
         if ($profile->role==='user'){
             $user = $profile->user;
-            $demandesData = $user->demandes;
-            $filesData = $user->files;
-            $demandes = [];
-            $files = [];
-            foreach($demandesData as $demande){
-                $offerData = $demande->offer;
-                $userData = $demande->user;
-                $filesArray = $demande->files;
-                $files = [];
-                foreach ($filesArray as $file) {
-                    array_push($files, ['name'=>$file->name,'url'=>$file->url,'type'=>$file->type]);
-                }
-                $offer = ["title" => $offerData->title];
-                $user = ["firstName" => $userData->firstName,"lastName" => $userData->lastName];
-                array_push($array,['user'=>$user,'offer'=>$offer,"startDate"=>$demande->startDate,"endDate"=>$demande->endDate,'files'=>$files]);
+            $demandsData = $user->demands;
+            $demands = [];
+            foreach($demandsData as $demand){
+                array_push($demands,$demand->id);
             }
-            foreach($filesData as $file){
-                array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
-            }
+            
             $refactored = [
-                "id"=>$profile->id,
+                "id"=>$user->id,
+                "profile_id"=>$profile->id,
                 "firstName"=>$profile->firstName,
                 "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
@@ -36,22 +28,22 @@ trait Refactor
                 "role"=>$profile->role,
                 "academicLevel" => $user->academicLevel,
                 "establishment" => $user->establishment,
-                "startDate" => $user->startDate,
-                "endDate" => $user->endDate,
-                "date" => $user->date,
-                "demandes"=>$demandes,
+                "demands"=>$demands,
                 "files"=>$files
             ];
         return $refactored;
         };
         if ($profile->role==='admin'){
+            $admin = $profile->admin;
             $refactored = [
-                "id"=>$profile->id,
+                "id"=>$admin->id,
+                "profile_id"=>$profile->id,
                 "firstName"=>$profile->firstName,
                 "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
+                "files"=>$files,
             ];
             return $refactored;
         } ;
@@ -63,13 +55,15 @@ trait Refactor
                 array_push($projects, $project->id);
             }
             $refactored = [
-                "id"=>$profile->id,
+                "id"=>$supervisor->id,
+                "profile_id"=>$profile->id,
                 "firstName"=>$profile->firstName,
                 "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
                 "email"=>$profile->email,
                 "role"=>$profile->role,
-                "projects"=>$projects
+                "projects"=>$projects,
+                "files"=>$files
             ];
             return $refactored;
         };
@@ -80,18 +74,14 @@ trait Refactor
             foreach($projectsData as $project){
                 array_push($projects,$project->id);
             }
-            $filesData = $intern->files;
-            $files = [];
-            foreach($filesData as $file){
-                array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
-            }
             $tasksData = $intern->tasks;
             $tasks = [];
             foreach($tasksData as $task){
                 array_push($tasks,$this->refactorTask($task));
             }
             $refactored = [
-                "id"=>$profile->id,
+                "id"=>$intern->id,
+                "profile_id"=>$profile->id,
                 "firstName"=>$profile->firstName,
                 "lastName"=>$profile->lastName,
                 "phone"=>$profile->phone,
@@ -121,15 +111,35 @@ trait Refactor
         foreach($tasksData as $task){
             array_push($tasks,$this->refactorTask($task));
             }
-        return ['id'=>$project->id,'subject'=>$project->subject,"startDate"=>$project->startDate,
-            "endDate"=>$project->endDate,"status"=>$project->status,"priority"=>$project->priority,
-            'description'=>$project->description,'projectManager'=>$projectManager->id,
-            'supervisor' => $supervisor->id,'teamMembers'=>$teamMembers,'tasks'=>$tasks];
+        return [
+            'id'=>$project->id,
+            'subject'=>$project->subject,
+            "startDate"=>$project->startDate,
+            "endDate"=>$project->endDate,
+            "created_at"=>$project->created_at->format('y-m-d'),
+            "updated_at"=>$project->updated_at->format('y-m-d'),
+            "status"=>$project->status,
+            "priority"=>$project->priority,
+            'description'=>$project->description,
+            'projectManager'=>$projectManager->id,
+            'supervisor' => $supervisor->id,
+            'teamMembers'=>$teamMembers,'tasks'=>$tasks];
                 
     }
     public function refactorTask($task){
             $intern = $task->intern;
-            $profile = $intern->profile;
+            if(!$intern){
+                $intern = 'None';
+            }else{
+                $profile = $intern->profile;
+                $intern = [
+                "id" => $intern->id,
+                "profile_id" => $profile->id,
+                "firstName" => $profile->firstName,
+                "lastName" => $profile->lastName,
+                "email" => $profile->email
+            ];
+            }
             return [
                     "id"=> $task->id,
                     "project"=> $task->project_id,
@@ -138,12 +148,49 @@ trait Refactor
                     'dueDate'=>$task->dueDate,
                     'priority'=>$task->priority,
                     'status'=>$task->status,
-                    'assignee'=>[
-                            "id"=>$intern->id,
-                            "firstName"=>$profile->firstName,
-                            "lastName"=>$profile->lastName,
-                            "email"=>$profile->email
-                        ]
+                    'assignee'=>$intern
                 ];
+    }
+    public function refactorOffer($offer){
+        $demandsData = $offer->demands;
+        $demands = [];
+        foreach($demandsData as $demand){
+            array_push($demands,$demand->id);
+        }
+        return [
+            "id"=> $offer->id,
+            "title"=>$offer->title,
+            'description'=>$offer->description,
+            "sector"=> $offer->sector,
+            'experience'=>$offer->experience,
+            'skills'=>$offer->skills,
+            'direction'=>$offer->direction,
+            'duration'=>$offer->duration,
+            'type'=>$offer->type,
+            'visibility'=>$offer->visibility,
+            'status'=>$offer->status,
+            'city'=>$offer->city,
+            'publicationDate'=>$offer->created_at->format('Y-m-d'),
+            'demands'=>$demands
+            ];
+    }
+    public function refactorDemand($demand){
+        $offerData = $demand->offer;
+        $profile = $demand->user->profile;
+        $user = $this->refactorProfile($profile);
+        $offer = $this->refactorOffer($offerData);
+        $filesData = $demand->files;
+        $files = [];
+         foreach($filesData as $file){
+                array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
+            }
+        return [
+            "id"=> $demand->id,
+            "offer"=> $offer,
+            "user"=> $user,
+            "startDate"=>$demand->startDate,
+            "endDate"=>$demand->endDate,
+            "files"=>$files
+        ];
     }
 }

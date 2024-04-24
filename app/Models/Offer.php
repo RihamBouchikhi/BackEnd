@@ -14,17 +14,16 @@ class Offer extends Model
         'sector',
         'experience',
         'skills',
-        'deriction',
+        'direction',
         'duration',
         'type',
         'visibility',
         'status',
         'city',
-
     ];
     
-    public function demandes(){
-        return $this->hasMany(Demande::class,'offer_id');
+    public function demands(){
+        return $this->hasMany(Demand::class);
     }
 
 }

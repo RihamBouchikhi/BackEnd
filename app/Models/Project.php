@@ -19,7 +19,7 @@ class Project extends Model
     ];
 
     public function supervisor(){
-        return $this->belongsTo(Supervisor::class,'supervisor_id');
+        return $this->belongsTo(Supervisor::class);
     }
     public function projectManager(){
         return $this->belongsTo(Intern::class,'intern_id');

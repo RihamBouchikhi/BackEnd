@@ -15,9 +15,12 @@ trait Delete
             return true;
         }
     }
-    public function deleteTask($task){  
-    if($task->delete()){ 
-            return true;
+    public function deleteTask($task){
+        $project_id = $task->project_id;
+        if($task->delete()){ 
+            $this->updateProjectStatus($project_id);
+                return true;
+            }
         }
-    }
+
 }
