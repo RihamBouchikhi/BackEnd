@@ -85,7 +85,7 @@ trait Store
             'status' => 'required|in:Not Started,Completed,In Progress',
             'priority' => 'required|string',
             'supervisor_id' => 'required|exists:supervisors,id',
-            'projectManager' => 'required|exists:interns,id',
+            'projectManager' => 'nullable|exists:interns,id',
             'tasks' => 'array',
             'teamMembers' => 'array|exists:interns,id',
         ]);
