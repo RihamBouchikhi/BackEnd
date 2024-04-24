@@ -78,7 +78,7 @@ trait Refactor
             $projectsData = $intern->projects;
             $projects = [];
             foreach($projectsData as $project){
-                array_push($projects,$this->refactoProject($project));
+                array_push($projects,$project->id);
             }
             $filesData = $intern->files;
             $files = [];
@@ -107,8 +107,7 @@ trait Refactor
             ];
             return $refactored;
         }
-       
-  }
+    }
     public function refactoProject($project){
         $supervisor = $project->supervisor;
         $projectManager = $project->projectManager;
@@ -127,24 +126,24 @@ trait Refactor
             'description'=>$project->description,'projectManager'=>$projectManager->id,
             'supervisor' => $supervisor->id,'teamMembers'=>$teamMembers,'tasks'=>$tasks];
                 
-  }
-  public function refactorTask($task){
-        $intern = $task->intern;
-        $profile = $intern->profile;
-        return [
-                "id"=> $task->id,
-                "project"=> $task->project->subject,
-                "title"=>$task->title,
-                'description'=>$task->description,
-                'dueDate'=>$task->dueDate,
-                'priority'=>$task->priority,
-                'status'=>$task->status,
-                'assignee'=>[
-                        "id"=>$intern->id,
-                        "firstName"=>$profile->firstName,
-                        "lastName"=>$profile->lastName,
-                        "email"=>$profile->email
-                    ]
-            ];
-  }
+    }
+    public function refactorTask($task){
+            $intern = $task->intern;
+            $profile = $intern->profile;
+            return [
+                    "id"=> $task->id,
+                    "project"=> $task->project_id,
+                    "title"=>$task->title,
+                    'description'=>$task->description,
+                    'dueDate'=>$task->dueDate,
+                    'priority'=>$task->priority,
+                    'status'=>$task->status,
+                    'assignee'=>[
+                            "id"=>$intern->id,
+                            "firstName"=>$profile->firstName,
+                            "lastName"=>$profile->lastName,
+                            "email"=>$profile->email
+                        ]
+                ];
+    }
 }

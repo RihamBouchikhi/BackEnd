@@ -15,11 +15,11 @@ class Task extends Model
         'priority',
         'status',
         'intern_id',
-        'projet_id',
+        'project_id',
     ];
 
     public function intern(){
-        return $this->belongsTo(Intern::class,'intern_id');
+        return $this->belongsTo(Intern::class);
     }
 
     public function project(){

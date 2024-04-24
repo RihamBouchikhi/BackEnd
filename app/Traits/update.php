@@ -4,7 +4,9 @@ namespace App\Traits;
 use App\Models\Admin;
 use App\Models\Intern;
 use App\Models\Profile;
+use App\Models\Project;
 use App\Models\Supervisor;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Validation\Rules\Password;
 use Request;
@@ -48,14 +50,14 @@ trait Update
 
     public function updateProject($data,$project){
         $validatedProject = $data->validate([
-            'subject' => 'required|string',
-            'description' => 'required|string',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date',
-            'status' => 'required|string',
-            'priority' => 'required|string',
-            'supervisor_id' => 'required|exists:supervisors,id',
-            'projectManager' => 'required|exists:interns,id',
+            'subject' => 'string',
+            'description' => 'string',
+            'startDate' => 'date',
+            'endDate' => 'date',
+            'status' => 'string',
+            'priority' => 'string',
+            'supervisor_id' => 'exists:supervisors,id',
+            'projectManager' => 'exists:interns,id',
             'teamMembers' => 'array',
         ]);
         $project->subject = $validatedProject['subject'];
@@ -72,5 +74,37 @@ trait Update
             $project->interns()->attach($validatedProject['teamMembers']);
         }
         return $project;
+    }
+
+    public function updateTask($request,$task){
+        $validatedData = $request->validate([
+        'title' => 'max:255',
+        'description' => '',
+        'dueDate' => 'date',
+        'priority' => 'in:Low,Medium,High',
+        'status' => 'in:To Do,Done,In Progress',
+        'intern_id' => 'exists:interns,id',
+        'project_id' => 'exists:projects,id',
+    ]);
+        $task->update($validatedData);
+        $this->updateProjectStatus($task->project_id);
+        return $task;
+    }
+
+    public function updateProjectStatus($project_id){
+        $project = Project::find($project_id);
+        $todoCount = $project->tasks()->where('status', 'To Do')->count();
+        $progressCount = $project->tasks()->where('status', 'In Progress')->count();
+        $doneCount = $project->tasks()->where('status', 'Done')->count();
+
+        if ($doneCount > 0 && $todoCount == 0 && $progressCount == 0) {
+            $project->status = "Completed";
+        } elseif ($progressCount > 0 || $doneCount > 0) {
+            $project->status = "In Progress";
+        } else {
+            $project->status = "Not Started";
+        }
+
+        $project->save();
     }
 }

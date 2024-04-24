@@ -15,4 +15,9 @@ trait Delete
             return true;
         }
     }
+    public function deleteTask($task){  
+    if($task->delete()){ 
+            return true;
+        }
+    }
 }

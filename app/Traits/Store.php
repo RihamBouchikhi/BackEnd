@@ -12,6 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 trait Store
 {
+    use Update;
     public function storeProfile($request)
     {
         $validatedProfile = $request->validate([
@@ -82,7 +83,7 @@ trait Store
             'description' => 'required|string',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'status' => 'required|string',
+            'status' => 'required|in:Not Started,Completed,In Progress',
             'priority' => 'required|string',
             'supervisor_id' => 'required|exists:supervisors,id',
             'projectManager' => 'required|exists:interns,id',
@@ -99,20 +100,43 @@ trait Store
             $project->supervisor_id = $validatedProject['supervisor_id'];
             $project->intern_id = $validatedProject['projectManager']; 
             $project->save();
-    foreach ($validatedProject['teamMembers'] as $teamMemberId) {
-        $project->interns()->attach($teamMemberId);
+        foreach ($validatedProject['teamMembers'] as $teamMemberId) {
+            $project->interns()->attach($teamMemberId);
+        }
+        foreach ($request->tasks  as $taskData) {
+            $task = new Task;
+            $task->title = $taskData['title'];
+            $task->description = $taskData['description'];
+            $task->dueDate = $taskData['dueDate'];
+            $task->priority = $taskData['priority'];
+            $task->status = $taskData['status'];
+            $task->intern_id = $taskData['intern_id']; 
+            $task->project_id = $project->id; 
+            $task->save();
+        }
+        $this->updateProjectStatus($project->id);
+        return $project;
     }
-    foreach ($validatedProject['tasks'] as $taskData) {
+    public function storeTask($request){
+        $validatedData = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'dueDate' => 'required|date',
+        'priority' => 'required|in:Low,Medium,High',
+        'status' => 'required|in:To Do,Done,In Progress',
+        'intern_id' => 'required|exists:interns,id',
+        'project_id' => 'required|exists:projects,id',
+    ]);
         $task = new Task;
-        $task->title = $taskData['title'];
-        $task->description = $taskData['description'];
-        $task->dueDate = $taskData['dueDate'];
-        $task->priority = $taskData['priority'];
-        $task->status = $taskData['status'];
-        $task->intern_id = $taskData['intern_id']; 
-        $task->project_id = $project->id; 
+        $task->title = $validatedData['title'];
+        $task->description = $validatedData['description'];
+        $task->dueDate = $validatedData['dueDate'];
+        $task->priority = $validatedData['priority'];
+        $task->status = $validatedData['status'];
+        $task->intern_id = $validatedData['intern_id']; 
+        $task->project_id = $validatedData['project_id']; 
         $task->save();
-    }
-    return $project;
+        $this->updateProjectStatus($task->project_id);
+        return $task;
     }
 }

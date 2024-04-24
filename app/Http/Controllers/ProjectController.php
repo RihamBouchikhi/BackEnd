@@ -12,15 +12,6 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
     use Refactor,Store,Update,Delete;
-    public function index()
-    {
-        $projects = Project::all();
-        $refactoredProjects = [];
-        foreach($projects as $project){
-            array_push($refactoredProjects, $this->refactoProject($project));
-        }
-        return response()->json($refactoredProjects);
-    }
 
     public function store(Request $request)
     {
