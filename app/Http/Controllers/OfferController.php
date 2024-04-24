@@ -15,22 +15,8 @@ class OfferController
     use Refactor, Store,Update,Delete;
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'sector' => 'required|string|max:100',
-            'experience' => 'required|string',
-            'skills' => 'required|string', 
-            'direction' => 'required|string', 
-            'duration' => 'required|string', 
-            'type' => 'required|string', 
-            'visibility' => 'required|boolean',
-            'status' => 'required|string',
-            'city' => 'required|string',
-            
-        ]);
         // Création de l'offre de stage
-        $offre = Offer::create($validatedData);
+        $offre = $this->storeOffer($request);
         return response()->json(['message' => 'Offre de stage créée avec succès', 'offre' => $offre], 201);
     }
 

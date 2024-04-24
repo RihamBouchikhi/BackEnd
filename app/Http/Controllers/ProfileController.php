@@ -17,6 +17,10 @@ class ProfileController
     //store all users 
     public function store(Request $request) {
         $profile=$this->storeProfile($request);
+        return response()->json($this->refactorProfile($profile));
+    }
+    public function register(Request $request){
+        $profile = $this->storeUser($request);
         $token = $profile->createToken('auth_token')->plainTextToken;
         $cookie = cookie('token', $token, 60 * 24); // 1 day
         return response()->json($this->refactorProfile($profile))->withCookie($cookie);

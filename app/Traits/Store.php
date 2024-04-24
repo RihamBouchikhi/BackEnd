@@ -3,6 +3,7 @@
 namespace App\Traits;
 use App\Models\Admin;
 use App\Models\Intern;
+use App\Models\Offer;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Supervisor;
@@ -24,7 +25,8 @@ trait Store
                 'string',
                 Password::min(8)->mixedCase()->numbers()->symbols(),
                 'confirmed',
-            ]
+            ],
+            'role'=>'required|in:admin,supervisor,intern'
         ]);
             $profile = new Profile;
             $profile->firstName = $validatedProfile['firstName'];
@@ -34,21 +36,6 @@ trait Store
             $profile->password = bcrypt($validatedProfile['password']);
             $profile->role = $request->role;
             $profile->save();
-        if ($request->role == 'user') {
-            $validatedUser = $request->validate([
-                'academicLevel' => 'required|string',
-                'establishment' => 'required|string',
-                'startDate' => 'required',
-                'endDate' => 'required',
-            ]);
-            $user = new User;
-            $user->profile_id = $profile->id;
-            $user->academicLevel = $validatedUser['academicLevel'];
-            $user->establishment = $validatedUser['establishment'];
-            $user->startDate = $validatedUser['startDate'];
-            $user->endDate = $validatedUser['endDate'];
-            $user->save();
-        }
         if ($request->role == 'admin') {
            $admin = new Admin;
             $admin->profile_id = $profile->id;
@@ -75,6 +62,41 @@ trait Store
             $intern->save();
         }
         return $profile;
+    }
+    public function storeUser($request){
+         $validatedData = $request->validate([
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'phone' => 'required|string|max:255',
+            'email' => 'required|email|unique:profiles,email|max:255',
+            'password' => [
+                'required',
+                'string',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed',
+            ],
+            'academicLevel' => 'required|string',
+                'establishment' => 'required|string',
+                'startDate' => 'required|date',
+                'endDate' => 'required|date',
+                'role'=>'required|in:admin'
+        ]);
+            $profile = new Profile;
+            $profile->firstName = $validatedData['firstName'];
+            $profile->lastName = $validatedData['lastName'];
+            $profile->email = $validatedData['email'];
+            $profile->phone = $validatedData['phone'];
+            $profile->password = bcrypt($validatedData['password']);
+            $profile->role = $validatedData['role'];
+            $profile->save();
+           
+            $user = new User;
+            $user->profile_id = $profile->id;
+            $user->academicLevel = $validatedData['academicLevel'];
+            $user->establishment = $validatedData['establishment'];
+            $user->startDate = $validatedData['startDate'];
+            $user->endDate = $validatedData['endDate'];
+            $user->save();
     }
     public function storeProject($request){
         $validatedProject = $request->validate([
@@ -136,5 +158,37 @@ trait Store
         $task->save();
         $this->updateProjectStatus($task->project_id);
         return $task;
+    }
+    public function storeOffer($request){
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'sector' => 'required|max:255',
+        'experience' => 'required|in:Expert,Intermediate,Beginner',
+        'skills' => 'nullable',
+        'duration' => 'numeric|min:1|max:24',
+        'direction' => 'required|string',
+        'visibility'=>'required|in:Visible,Hidden',
+        'status'=>'required|in:',
+        'city'=>'required|string',
+        'type'=>'required|in:Remote,Onsite,Hybrid',
+    ]);
+    // Create a new offer with the validated data
+        $offer = new Offer;
+        $offer->title = $validatedData['title'];
+        $offer->description = $validatedData['description'];
+        $offer->sector = $validatedData['sector'];
+        $offer->experience = $validatedData['experience'];
+        $offer->skills = $validatedData['skills'];
+        $offer->duration = $validatedData['duration'];
+        $offer->direction = $validatedData['direction'];
+        $offer->visibility = $validatedData['visibility'];
+        $offer->status = $validatedData['status'];
+        $offer->city = $validatedData['city'];
+        $offer->type = $validatedData['type'];
+        $offer->save();
+
+        return $offer;
     }
 }

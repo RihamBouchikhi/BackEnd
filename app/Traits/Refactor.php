@@ -115,15 +115,14 @@ trait Refactor
             'subject'=>$project->subject,
             "startDate"=>$project->startDate,
             "endDate"=>$project->endDate,
-            "created_at"=>$project->created_at->format('y-m-d H:i:s'),
-            "updated_at"=>$project->updated_at->format('y-m-d H:i:s'),
+            "created_at"=>$project->created_at,
+            "updated_at"=>$project->updated_at,
             "status"=>$project->status,
             "priority"=>$project->priority,
             'description'=>$project->description,
             'projectManager'=>!$projectManager?null:$projectManager->id,
             'supervisor' => $supervisor->id,
             'teamMembers'=>$teamMembers,'tasks'=>$tasks];
-                
     }
     public function refactorTask($task){
             $intern = $task->intern;
@@ -169,7 +168,7 @@ trait Refactor
             'visibility'=>$offer->visibility,
             'status'=>$offer->status,
             'city'=>$offer->city,
-            'publicationDate'=>$offer->created_at->format('y-m-d H:i:s'),
+            'publicationDate'=>$offer->created_at,
             'demands'=>$demands
             ];
     }
