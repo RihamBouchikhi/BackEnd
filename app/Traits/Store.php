@@ -76,16 +76,16 @@ trait Store
         }
         return $profile;
     }
-    public function storeProjejct($request){
+    public function storeProject($request){
         $validatedProject = $request->validate([
             'subject' => 'required|string',
             'description' => 'required|string',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
             'status' => 'required|in:Not Started,Completed,In Progress',
-            'priority' => 'required|string',
+            'priority' => 'required|in:Low,Medium,High,None',
             'supervisor_id' => 'required|exists:supervisors,id',
-            'projectManager' => 'nullable|exists:interns,id',
+            'intern_id' => 'nullable|exists:interns,id',
             'tasks' => 'array',
             'teamMembers' => 'array|exists:interns,id',
         ]);
@@ -97,7 +97,7 @@ trait Store
             $project->status = $validatedProject['status'];
             $project->priority = $validatedProject['priority'];
             $project->supervisor_id = $validatedProject['supervisor_id'];
-            $project->intern_id = $validatedProject['projectManager']; 
+            $project->intern_id = $validatedProject['intern_id']; 
             $project->save();
         foreach ($validatedProject['teamMembers'] as $teamMemberId) {
             $project->interns()->attach($teamMemberId);
@@ -118,11 +118,11 @@ trait Store
     public function storeTask($request){
         $validatedData = $request->validate([
         'title' => 'required|max:255',
-        'description' => 'string',
-        'dueDate' => 'date',
+        'description' => 'nullable|string',
+        'dueDate' => 'nullable|date',
         'priority' => 'required|in:Low,Medium,High,None',
         'status' => 'required|in:To Do,Done,In Progress',
-        'intern_id' => 'required|exists:interns,id',
+        'intern_id' => 'nullable|exists:interns,id',
         'project_id' => 'required|exists:projects,id',
     ]);
         $task = new Task;

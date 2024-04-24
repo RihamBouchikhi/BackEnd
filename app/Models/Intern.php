@@ -31,7 +31,7 @@ class Intern extends Authenticatable
         return $this->belongsToMany(Project::class);
     }
     public function managedBy(){
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Project::class);
     }
     public function tasks()
     {

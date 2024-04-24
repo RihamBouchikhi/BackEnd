@@ -46,9 +46,9 @@ trait Update
             'startDate' => 'date',
             'endDate' => 'date',
             'status' => 'string',
-            'priority' => 'string',
+            'priority' => 'in:Low,Medium,High,None',
             'supervisor_id' => 'exists:supervisors,id',
-            'intern_id' => 'exists:interns,id',
+            'intern_id' => 'nullable|exists:interns,id',
             'teamMembers' => 'array|exists:interns,id',
         ]);
         $project->update($validatedProject);
@@ -64,7 +64,7 @@ trait Update
         'title' => 'max:255',
         'description' => '',
         'dueDate' => 'date',
-        'priority' => 'in:Low,Medium,High',
+        'priority' => 'in:Low,Medium,High,None',
         'status' => 'in:To Do,Done,In Progress',
         'intern_id' => 'nullable|exists:interns,id',
         'project_id' => 'exists:projects,id',

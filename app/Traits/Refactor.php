@@ -115,8 +115,8 @@ trait Refactor
             'subject'=>$project->subject,
             "startDate"=>$project->startDate,
             "endDate"=>$project->endDate,
-            "created_at"=>$project->created_at->format('y-m-d'),
-            "updated_at"=>$project->updated_at->format('y-m-d'),
+            "created_at"=>$project->created_at->format('y-m-d H:i:s'),
+            "updated_at"=>$project->updated_at->format('y-m-d H:i:s'),
             "status"=>$project->status,
             "priority"=>$project->priority,
             'description'=>$project->description,
@@ -169,7 +169,7 @@ trait Refactor
             'visibility'=>$offer->visibility,
             'status'=>$offer->status,
             'city'=>$offer->city,
-            'publicationDate'=>$offer->created_at->format('Y-m-d'),
+            'publicationDate'=>$offer->created_at->format('y-m-d H:i:s'),
             'demands'=>$demands
             ];
     }

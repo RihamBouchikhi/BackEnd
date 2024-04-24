@@ -15,7 +15,7 @@ class Project extends Model
         'status',
         'priority',
         'supervisor_id', 
-        "projectManager"
+        "intern_id"
     ];
 
     public function supervisor(){
