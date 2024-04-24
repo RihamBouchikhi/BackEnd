@@ -40,6 +40,7 @@ trait Update
     }
 
     public function updateProject($data,$project){
+        $tasks=$project->tasks;
         $validatedProject = $data->validate([
             'subject' => 'string',
             'description' => 'string',
@@ -53,6 +54,12 @@ trait Update
         ]);
         $project->update($validatedProject);
         if ($data->has('teamMembers')){
+            foreach($tasks as $task){
+                if(!in_array($task->intern_id ,$data['teamMembers'])){
+                    $task->intern_id = null;
+                    $task->save();
+                }  
+            }
             $project->interns()->detach();
             $project->interns()->attach($data['teamMembers']);
         }
