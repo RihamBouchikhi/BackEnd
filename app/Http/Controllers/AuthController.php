@@ -7,6 +7,7 @@ use App\Models\Profile;
 use App\Traits\Refactor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginRequest;
@@ -48,7 +49,7 @@ class AuthController extends Controller
 //create personal access token
         $token = $profile->createToken('auth_token')->plainTextToken;
         $cookie = cookie('token', $token, 60 * 24); // 1 day
-        return response()->json($this->refactorProfile($profile))->withCookie($cookie);
+        return response()->json(['data'=>$this->refactorProfile($profile),'token'=>$token])->withCookie($cookie);
     }
 // logout 
     public function logout(Request $request) {
@@ -61,7 +62,9 @@ class AuthController extends Controller
 
 // get the authenticated user method
     public function user(Request $request) {
-        return  response()->json($this->refactorProfile($request->user()));
+
+        $user = Auth::user();
+        return  response()->json($user);
     }
 
 }

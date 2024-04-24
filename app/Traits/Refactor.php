@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Traits;
 
 trait Refactor
@@ -121,7 +120,7 @@ trait Refactor
             "status"=>$project->status,
             "priority"=>$project->priority,
             'description'=>$project->description,
-            'projectManager'=>$projectManager->id,
+            'projectManager'=>!$projectManager?null:$projectManager->id,
             'supervisor' => $supervisor->id,
             'teamMembers'=>$teamMembers,'tasks'=>$tasks];
                 
@@ -133,12 +132,12 @@ trait Refactor
             }else{
                 $profile = $intern->profile;
                 $intern = [
-                "id" => $intern->id,
-                "profile_id" => $profile->id,
-                "firstName" => $profile->firstName,
-                "lastName" => $profile->lastName,
-                "email" => $profile->email
-            ];
+                    "id" => $intern->id,
+                    "profile_id" => $profile->id,
+                    "firstName" => $profile->firstName,
+                    "lastName" => $profile->lastName,
+                    "email" => $profile->email
+                ];
             }
             return [
                     "id"=> $task->id,

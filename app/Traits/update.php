@@ -1,30 +1,21 @@
 <?php
 
 namespace App\Traits;
-use App\Models\Admin;
-use App\Models\Intern;
-use App\Models\Profile;
 use App\Models\Project;
-use App\Models\Supervisor;
-use App\Models\Task;
-use App\Models\User;
-use Illuminate\Validation\Rules\Password;
-use Request;
+
 
 trait Update
 {
     public function updateProfile($data,$profile){      
         $validatedData = $data->validate([
                 'email' => 'email|unique:profiles,email',
+                'firstName' => 'string',
+                'lastName' =>  'string',
+                'phone' =>      'string',
+                'password' =>   'string'
                 ]);
-        $updateData = array_filter([
-            'firstName' => $data['firstName'] ?? null,
-            'lastName' => $data['lastName'] ?? null,
-            'email' => $validatedData['email'] ?? null,
-            'phone' => $data['phone'] ?? null,
-            'password' => isset($data['password']) ? bcrypt($data['password']) : null,
-        ]);
-        $profile->update($updateData);
+     
+        $profile->update($validatedData);
         if ($data->role=='user') {
             $user = $profile->user;
              $updateData = array_filter([

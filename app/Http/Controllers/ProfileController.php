@@ -31,8 +31,7 @@ class ProfileController
         return response()->json($this->refactorProfile($newProfile));
     }
 
-      public function show(string $id)
-    {
+    public function show(string $id){
       $profile = Profile::find($id);
         if (!$profile) { 
             return response()->json(['message' => 'profile non trouvé'], 404);
@@ -41,7 +40,7 @@ class ProfileController
     }
 //delete profiles
     public function destroy(string $id){
-   $profile = Profile::find($id);
+    $profile = Profile::find($id);
         if (!$profile) {
             return response()->json(['message' => 'profile non trouvé'], 404);
         }

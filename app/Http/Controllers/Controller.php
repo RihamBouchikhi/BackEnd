@@ -8,9 +8,9 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
-class Controller extends BaseController
+class Controller 
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Get;
+    use Get;
     public function index($data){
         return $this->GetAll($data);
     }
