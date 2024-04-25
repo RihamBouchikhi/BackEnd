@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 use App\Models\Project;
+use Illuminate\Validation\Rules\Password;
 
 
 trait Update
@@ -9,11 +10,15 @@ trait Update
     public function updateProfile($data,$profile){      
         $validatedData = $data->validate([
                 'email' => 'email|unique:profiles,email',
-                'firstName' => 'string',
-                'lastName' =>  'string',
-                'phone' =>      'string',
-                'password' =>   'string'
-                ]);
+                'firstName' =>'string',
+                'lastName' =>'string',
+                'phone' =>'string',
+                'password' => [
+                        'string',
+                        Password::min(8)->mixedCase()->numbers()->symbols(),
+                        'confirmed',
+                    ],                
+        ]);
      
         $profile->update($validatedData);
         if ($data->role=='user') {
@@ -98,7 +103,30 @@ trait Update
     }
 
     public function updateOffer($request,$offer){
-        $offer->update($request);
+           $updateData = array_filter([
+                "title"=>   $request['title'] ?? null,
+                "description"=>   $request['description'] ?? null,
+                'sector'=> $request['sector'] ?? null,
+                'experience'=> $request['experience'] ?? null,
+                'skills'=>  $request['skills'] ?? null,
+                'duration'=>  $request['duration'] ?? null,
+                'direction'=>  $request['direction'] ?? null,
+                'visibility'=>  $request['visibility'] ?? null,
+                'status'=> $request['status'] ?? null,
+                'city'=>  $request['city'] ?? null,
+                'type'=> $request['type'] ?? null,
+            ]);
+        $offer->update($updateData);
         return $offer;
+    }
+    public function updateDemand($request,$demand){
+         $updateData = array_filter([
+                "user_id"=>   $request['user_id'] ?? null,
+                "offer_id"=>   $request['offer_id'] ?? null,
+                'startDate'=> $request['startDate'] ?? null,
+                'endDate'=> $request['endDate'] ?? null,
+            ]);
+        $demand->update($updateData);
+        return $demand;
     }
 }

@@ -28,7 +28,7 @@ Route::apiResource('profiles', ProfileController::class);
 //Route::apiResource('offers', OfferController::class);
 
 //Offers
-Route::apiResource('offres', OfferController::class);
+Route::apiResource('offers', OfferController::class);
 
 //demand
 Route::apiResource('demands', DemandController::class);

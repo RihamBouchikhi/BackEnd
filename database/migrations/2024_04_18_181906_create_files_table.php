@@ -12,7 +12,6 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('url');
             $table->string('type');
             $table->morphs('fileable');

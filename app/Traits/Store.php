@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 use App\Models\Admin;
+use App\Models\Demand;
 use App\Models\Intern;
 use App\Models\Offer;
 use App\Models\Profile;
@@ -77,9 +78,7 @@ trait Store
             ],
             'academicLevel' => 'required|string',
                 'establishment' => 'required|string',
-                'startDate' => 'required|date',
-                'endDate' => 'required|date',
-                'role'=>'required|in:admin'
+                'role'=>'required|in:user'
         ]);
             $profile = new Profile;
             $profile->firstName = $validatedData['firstName'];
@@ -94,8 +93,6 @@ trait Store
             $user->profile_id = $profile->id;
             $user->academicLevel = $validatedData['academicLevel'];
             $user->establishment = $validatedData['establishment'];
-            $user->startDate = $validatedData['startDate'];
-            $user->endDate = $validatedData['endDate'];
             $user->save();
     }
     public function storeProject($request){
@@ -170,7 +167,7 @@ trait Store
         'duration' => 'numeric|min:1|max:24',
         'direction' => 'required|string',
         'visibility'=>'required|in:Visible,Hidden',
-        'status'=>'required|in:',
+        'status'=>'required|in:Normal,Urgent',
         'city'=>'required|string',
         'type'=>'required|in:Remote,Onsite,Hybrid',
     ]);
@@ -190,5 +187,28 @@ trait Store
         $offer->save();
 
         return $offer;
+    }
+    public function storeDemand($request){
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'offer_id' => 'required|exists:offers,id',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            "files"=>"array"
+        ]);
+        $demande = new Demand;
+        $demande->offer_id = $validatedData['offer_id'];
+        $demande->user_id = $validatedData['user_id'];
+        $demande->startDate = $validatedData['startDate'];
+        $demande->endDate = $validatedData['endDate'];
+        $demande->save();
+        // If files are provided, store them
+        if (isset($validatedData['files'])) {
+            foreach ($validatedData['files'] as $file) {
+                $demande->files()->create( ['url' => $file['url'],'type' => $file['type']]);
+            }
+        }
+
+    return $demande;
     }
 }
