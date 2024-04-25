@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 use App\Models\Project;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 
@@ -63,6 +64,32 @@ trait Update
         }
         return response()->json($this->refactorProfile($profile));
     }
+
+    public function updateProfilePassword($request,$profile){
+    $validatedData = $request->validate([
+                    'currentPassword' => [
+                            'required',
+                            Password::min(8)->mixedCase()->numbers()->symbols(),
+                        ]  ,
+                    'password' => [
+                            'string',
+                            'required',
+                            Password::min(8)->mixedCase()->numbers()->symbols(),
+                            'confirmed',
+                        ]   
+                    ]);
+
+    if (Hash::check($validatedData['currentPassword'], $profile->password)) {
+        if (Hash::check($validatedData['password'], $profile->password)) {
+                return response()->json(['message' => 'Please enter a new password '], 200); 
+            }
+        $hashedPassword = Hash::make($validatedData['password']);
+        $profile->password = $hashedPassword;
+        $profile->save();
+        return response()->json(['message' => ' Password updated successfully'], 200); 
+    }
+    return response()->json(['message' => 'Incorrect current password'], 400);
+}
     public function updateProject($data,$project){
         $tasks=$project->tasks;
         $validatedProject = $data->validate([

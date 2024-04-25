@@ -10,8 +10,8 @@ use App\Models\Project;
 use App\Models\Supervisor;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
-use Storage;
 
 trait Store
 {
@@ -204,7 +204,8 @@ trait Store
         $demande->endDate = $validatedData['endDate'];
         $demande->save();
         // If files are provided, store them
-        if ($request->hasFile('files')) {
+         // If files are provided, store them
+    if ($request->hasFile('files')) {
         foreach ($request->file('files') as $file) {
             $path = $file->store('public/files'); // Store the file in the public/files directory
             $url = Storage::url($path); // Get the URL of the stored file

@@ -24,6 +24,7 @@ Route::get('/{data}/{id}', [Controller::class, 'show']);
 
 //CRUD all profiles Routes
 Route::apiResource('profiles', ProfileController::class);
+Route::post('profiles/{id}/password', [ProfileController::class,'updatePassword']);
 
 //Route::apiResource('offers', OfferController::class);
 

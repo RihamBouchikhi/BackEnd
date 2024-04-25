@@ -47,4 +47,13 @@ class ProfileController
     }
 }
 
+    public function updatePassword(Request $request,$id){
+    $profile = Profile::find($id);
+         if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+        $isUpdated =$this->updateProfilePassword($request,$profile);
+        return $isUpdated;
+
+    }   
 }
