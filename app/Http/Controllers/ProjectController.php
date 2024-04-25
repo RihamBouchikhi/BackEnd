@@ -15,7 +15,7 @@ class ProjectController
 
     public function store(Request $request)
     {
-        $project = $this->storeProjejct($request);
+        $project = $this->storeProject($request);
         if (!$project) {
             return response()->json(['message' => "error ,Try Again"], 404);
         }        

@@ -32,7 +32,7 @@ class ProfileController
             return response()->json(['message' => 'profile non trouvé'], 404);
         }
         $newProfile =$this->updateProfile($request,$profile);
-        return response()->json($this->refactorProfile($newProfile));
+        return $newProfile;
     }
 
 //delete profiles

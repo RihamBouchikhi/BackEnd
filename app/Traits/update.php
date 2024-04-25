@@ -7,20 +7,40 @@ use Illuminate\Validation\Rules\Password;
 
 trait Update
 {
-    public function updateProfile($data,$profile){      
-        $validatedData = $data->validate([
-                'email' => 'email|unique:profiles,email',
-                'firstName' =>'string',
-                'lastName' =>'string',
-                'phone' =>'string',
-                'password' => [
-                        'string',
-                        Password::min(8)->mixedCase()->numbers()->symbols(),
-                        'confirmed',
-                    ],                
-        ]);
-     
+    use Refactor;
+    public function updateProfile($data,$profile){
+            $validatedData = $data->validate([
+                    'email' => 'email',
+                    'firstName' =>'string',
+                    'lastName' =>'string',
+                    'phone' =>'string',
+                    'password' => [
+                            'string',
+                            Password::min(8)->mixedCase()->numbers()->symbols(),
+                            'confirmed',
+                        ],    
+                        "files"=>'array'            
+                    ]); 
+                    if ($profile->email!==$data['email']){
+            $validatedData = $data->validate([
+                        'email' => 'email|unique:profiles,email',
+                        'firstName' =>'string',
+                        'lastName' =>'string',
+                        'phone' =>'string',
+                        "files"=>'array',            
+                        'password' => [
+                            'string',
+                            Password::min(8)->mixedCase()->numbers()->symbols(),
+                            'confirmed',
+                        ],                
+            ]);
+        }   
         $profile->update($validatedData);
+         if (isset($validatedData['files'])) {
+            foreach ($validatedData['files'] as $file) {
+                $profile->files()->create( ['url' => $file['url'],'type' => $file['type']]);
+            }
+        }
         if ($data->role=='user') {
             $user = $profile->user;
              $updateData = array_filter([
@@ -41,9 +61,8 @@ trait Update
         ]);
             $intern->update($updateData);
         }
-        return $profile;
+        return response()->json($this->refactorProfile($profile));
     }
-
     public function updateProject($data,$project){
         $tasks=$project->tasks;
         $validatedProject = $data->validate([
@@ -101,7 +120,6 @@ trait Update
 
         $project->save();
     }
-
     public function updateOffer($request,$offer){
            $updateData = array_filter([
                 "title"=>   $request['title'] ?? null,

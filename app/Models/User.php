@@ -11,7 +11,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
     protected $fillable = [
         "academicLevel",
         "establishment",
@@ -19,12 +18,10 @@ class User extends Authenticatable
         "endDate",
         "profile_id"
     ];
-
     public function profile(){
         return $this->belongsTo(Profile::class);
     }
     public function demands(){
         return $this->hasMany(Demand::class);
     }
-
 }
