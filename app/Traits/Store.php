@@ -10,7 +10,6 @@ use App\Models\Project;
 use App\Models\Supervisor;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 trait Store
@@ -78,16 +77,15 @@ trait Store
                 'confirmed',
             ],
             'academicLevel' => 'required|string',
-                'establishment' => 'required|string',
-                'role'=>'required|in:user'
-        ]);
+                'establishment' => 'required|string'
+                    ]);
             $profile = new Profile;
             $profile->firstName = $validatedData['firstName'];
             $profile->lastName = $validatedData['lastName'];
             $profile->email = $validatedData['email'];
             $profile->phone = $validatedData['phone'];
             $profile->password = bcrypt($validatedData['password']);
-            $profile->role = $validatedData['role'];
+            $profile->role = 'user';
             $profile->save();
            
             $user = new User;
@@ -195,7 +193,7 @@ trait Store
             'offer_id' => 'required|exists:offers,id',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            //'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf,txt|max:2048', // Validate each file
+            //'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf|max:2048', // Validate each file
         ]);
         $demande = new Demand;
         $demande->offer_id = $validatedData['offer_id'];
@@ -214,4 +212,41 @@ trait Store
 
     return $demande;
     }
+
+    public function storeFile($request , $id){
+    $request->validate([
+        'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf|max:2048', // Validate each file
+    ]);
+    $profile = Profile::find($id);
+    $demand = Demand::find($id);
+    if (!$profile||!$demand){
+        return response()->json(['message'=>'cannot store files for undefined data'],400) ;
+    }
+    $fileTypes = ['cv', 'avatar','demandeStage'];
+    foreach(  $fileTypes as $fileType ){
+        if ($request->hasFile($fileType)) {
+            $files = $request->file($fileType);
+            $name =$files->getClientOriginalName();
+            $unique = uniqid(); // Generate a unique ID
+            if ($fileType==='avatar' &&$profile ){
+                $profile->files()->create(
+                    ['url' =>'/'.$fileType.'/'.$unique.$name,
+                        'type' => $fileType]
+                    );
+                    $path = $profile->files->where('type','=','avatar')->first()->url;
+                    $files->move(public_path('/'.$fileType),$unique.$name);
+                return response()->json(['message'=>'avatar stored successfully','path'=>$path],200) ;
+            }else {  
+                $demand->files()->create(
+                    ['url' =>'/'.$fileType.'/'.$unique.$name,
+                    'type' => $fileType]
+                    );
+                    $files->move(public_path('/'.$fileType),$unique.$name);
+            }
+        }
+    }
+    return response()->json(['message'=>'files stored successfully'],200) ;
+
+
+}
 }

@@ -81,7 +81,7 @@ trait Update
 
     if (Hash::check($validatedData['currentPassword'], $profile->password)) {
         if (Hash::check($validatedData['password'], $profile->password)) {
-                return response()->json(['message' => 'Please enter a new password '], 200); 
+                return response()->json(['message' => 'Please enter a new password '], 400); 
             }
         $hashedPassword = Hash::make($validatedData['password']);
         $profile->password = $hashedPassword;

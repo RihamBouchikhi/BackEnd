@@ -134,9 +134,9 @@ trait Get
             }
         } 
         elseif ($data === 'demands') {
-            $demand = Demand::with('files')->find($id);
+            $demand = Demand::find($id);
             if ($demand){
-                $results= $demand;
+                $results= $this->refactorDemand($demand);
             }
         }    
         elseif ($data === 'offers') {

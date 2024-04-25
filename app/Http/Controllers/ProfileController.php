@@ -56,4 +56,7 @@ class ProfileController
         return $isUpdated;
 
     }   
+     public function setFile(Request $request,$id){
+       return  $this->storeFile($request,$id);
+    }
 }

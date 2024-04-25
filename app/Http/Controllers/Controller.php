@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Get;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use App\Traits\Store;
+use Illuminate\Http\Client\Request;
 
 class Controller 
 {
-    use Get;
+    use Get,Store;
     public function index($data){
         return $this->GetAll($data);
     }
@@ -18,4 +16,5 @@ class Controller
         return $this->GetByDataId($data,$id);
     }
     
+   
 }
