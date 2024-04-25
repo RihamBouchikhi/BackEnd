@@ -63,8 +63,7 @@ class AuthController extends Controller
 // get the authenticated user method
     public function user(Request $request) {
         $user = Auth::user();
-        $cookie = cookie();
-        return  response()->json($this->refactorProfile($user))->withCookie($cookie);;
+        return response()->json($this->refactorProfile($user));
     }
 
 }
