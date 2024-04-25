@@ -195,7 +195,7 @@ trait Store
             'offer_id' => 'required|exists:offers,id',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf,txt|max:2048', // Validate each file
+            //'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf,txt|max:2048', // Validate each file
         ]);
         $demande = new Demand;
         $demande->offer_id = $validatedData['offer_id'];
@@ -204,14 +204,13 @@ trait Store
         $demande->endDate = $validatedData['endDate'];
         $demande->save();
         // If files are provided, store them
-         // If files are provided, store them
-    if ($request->hasFile('files')) {
-        foreach ($request->file('files') as $file) {
-            $path = $file->store('public/files'); // Store the file in the public/files directory
-            $url = Storage::url($path); // Get the URL of the stored file
-            $demande->files()->create(['url' => $url, 'type' => $file->getClientOriginalExtension()]);
-        }
-    }
+    // if ($request->hasFile('files')) {
+    //     foreach ($request->file('files') as $file) {
+    //         $path = $file->store('public/files'); // Store the file in the public/files directory
+    //         $url = Storage::url($path); // Get the URL of the stored file
+    //         $demande->files()->create(['url' => $url, 'type' => $file->getClientOriginalExtension()]);
+    //     }
+    // }
 
     return $demande;
     }
