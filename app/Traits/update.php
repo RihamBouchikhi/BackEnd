@@ -54,12 +54,12 @@ trait Update
         }
         if ($data->role=='intern') {
             $intern = $profile->intern;
-             $updateData = array_filter([
-            'academicLevel' => $data['academicLevel'] ?? null,
-            'establishment' => $data['establishment'] ?? null,
-            'startDate' => $data['startDate'] ?? null,
-            'endDate' => $data['endDate'] ?? null,
-        ]);
+            $updateData = array_filter([
+                'academicLevel' => $data['academicLevel'] ?? null,
+                'establishment' => $data['establishment'] ?? null,
+                'startDate' => $data['startDate'] ?? null,
+                'endDate' => $data['endDate'] ?? null,
+            ]);
             $intern->update($updateData);
         }
         return response()->json($this->refactorProfile($profile));

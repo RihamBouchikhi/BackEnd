@@ -205,44 +205,43 @@ trait Store
     return $demande;
     }
 
-    public function storeFile($request, $id)
-    {
-        $profile = Profile::find($id);
-        $demand = Demand::find($id);
-        $intern = Intern::find($id);
-        if (!$profile || !$demand||!$intern) {
+    public function storeFile($request, $id){
+        $profile=Profile::find($id);
+        $demand=Demand::find($id);
+        $intern=Intern::find($id);
+        if (!$profile&&!$demand&&!$intern) {
             return response()->json(['message' => 'cannot store files for undefined data'], 400);
         }
         $fileTypes = ['cv', 'avatar', 'demandeStage', 'atestation'];
         foreach ($fileTypes as $fileType) {
             if ($request->hasFile($fileType)) {
+                $files = $request->file($fileType);
+                    $name =$files->getClientOriginalName();
+                    $unique = uniqid();
                 if ($fileType === 'avatar' && $profile) {
-                    $this->storOneFile($request, $profile, $fileType);
-                } else {
-                    $this->storOneFile($request, $demand, $fileType);
+                    $request->validate([
+                    $fileType => 'file|mimes:jpg,jpeg,png|max:5120',    
+                ]);
+                $profile->files()->create(
+                        ['url' =>'/'.$fileType.'/'.$unique.$name,
+                            'type' => $fileType]
+                        );
+                        $files->move(public_path('/'.$fileType),$unique.$name);
+                        $this->deletOldFiles($profile, $fileType);
+                } elseif($demand) {
+                    $request->validate([
+                        $fileType => 'file|mimes:doc,docx,pdf|max:5120',    
+                    ]);
+                    $demand->files()->create(
+                        ['url' =>'/'.$fileType.'/'.$unique.$name,
+                            'type' => $fileType]
+                        );
+                $this->deletOldFiles($demand, $fileType);
+                $files->move(public_path('/'.$fileType),$unique.$name);
                 }
             }
         }
         return response()->json(['message' => 'files stored successfully'], 200);
     }
-    public function storOneFile($request,$element,$fileType){
-        $files = $request->file($fileType);
-        $name =$files->getClientOriginalName();
-        $unique = uniqid();
-        if ($fileType==='avatar'){
-            $request->validate([
-                    $fileType => 'file|mimes:jpg,jpeg,png|max:2048', // Validate each file
-                ]);
-        }else{
-             $request->validate([
-                $fileType => 'file|mimes:doc,docx,pdf|max:2048', // Validate each file
-            ]);
-        }   
-        $element->files()->create(
-            ['url' =>'/'.$fileType.'/'.$unique.$name,
-                'type' => $fileType]
-            );
-        $files->move(public_path('/'.$fileType),$unique.$name);
-        $this->deletOldFiles($element, $fileType);
-    }
+    
 }
