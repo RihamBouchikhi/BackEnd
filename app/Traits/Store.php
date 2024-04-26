@@ -222,22 +222,27 @@ trait Store
                     $request->validate([
                     $fileType => 'file|mimes:jpg,jpeg,png|max:5120',    
                 ]);
+                    if ($profile->files->count() > 0) {
+                        $this->deletOldFiles($profile, $fileType);
+                    }
                 $profile->files()->create(
                         ['url' =>'/'.$fileType.'/'.$unique.$name,
                             'type' => $fileType]
                         );
                         $files->move(public_path('/'.$fileType),$unique.$name);
-                        $this->deletOldFiles($profile, $fileType);
                 } elseif($demand) {
                     $request->validate([
                         $fileType => 'file|mimes:doc,docx,pdf|max:5120',    
                     ]);
-                    $demand->files()->create(
+                        if ($demand->files->count()>0){
+                            $this->deletOldFiles($demand, $fileType);
+                        }
+                        $demand->files()->create(
                         ['url' =>'/'.$fileType.'/'.$unique.$name,
                             'type' => $fileType]
                         );
-                $this->deletOldFiles($demand, $fileType);
-                $files->move(public_path('/'.$fileType),$unique.$name);
+                        
+                        $files->move(public_path('/'.$fileType),$unique.$name);
                 }
             }
         }
