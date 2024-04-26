@@ -37,7 +37,9 @@ class Intern extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
-
+    public function files() {
+ 	    return $this->morphMany(File::class, 'fileable'); 
+	}
 
 }
 

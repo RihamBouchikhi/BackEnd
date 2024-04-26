@@ -14,7 +14,7 @@ use Illuminate\Validation\Rules\Password;
 
 trait Store
 {
-    use Update;
+    use Update,Delete;
     public function storeProfile($request) {
         $validatedProfile = $request->validate([
             'firstName' => 'required|string',
@@ -193,7 +193,6 @@ trait Store
             'offer_id' => 'required|exists:offers,id',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            //'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf|max:2048', // Validate each file
         ]);
         $demande = new Demand;
         $demande->offer_id = $validatedData['offer_id'];
@@ -201,52 +200,49 @@ trait Store
         $demande->startDate = $validatedData['startDate'];
         $demande->endDate = $validatedData['endDate'];
         $demande->save();
-        // If files are provided, store them
-    // if ($request->hasFile('files')) {
-    //     foreach ($request->file('files') as $file) {
-    //         $path = $file->store('public/files'); // Store the file in the public/files directory
-    //         $url = Storage::url($path); // Get the URL of the stored file
-    //         $demande->files()->create(['url' => $url, 'type' => $file->getClientOriginalExtension()]);
-    //     }
-    // }
-
+    
     return $demande;
     }
 
-    public function storeFile($request , $id){
-    $request->validate([
-        'files.*' => 'file|mimes:jpg,jpeg,png,doc,docx,pdf|max:2048', // Validate each file
-    ]);
-    $profile = Profile::find($id);
-    $demand = Demand::find($id);
-    if (!$profile||!$demand){
-        return response()->json(['message'=>'cannot store files for undefined data'],400) ;
-    }
-    $fileTypes = ['cv', 'avatar','demandeStage'];
-    foreach(  $fileTypes as $fileType ){
-        if ($request->hasFile($fileType)) {
-            $files = $request->file($fileType);
-            $name =$files->getClientOriginalName();
-            $unique = uniqid(); // Generate a unique ID
-            if ($fileType==='avatar' &&$profile ){
-                $profile->files()->create(
-                    ['url' =>'/'.$fileType.'/'.$unique.$name,
-                        'type' => $fileType]
-                    );
-                    $path = $profile->files->where('type','=','avatar')->first()->url;
-                    $files->move(public_path('/'.$fileType),$unique.$name);
-                return response()->json(['message'=>'avatar stored successfully','path'=>$path],200) ;
-            }else {  
-                $demand->files()->create(
-                    ['url' =>'/'.$fileType.'/'.$unique.$name,
-                    'type' => $fileType]
-                    );
-                    $files->move(public_path('/'.$fileType),$unique.$name);
+    public function storeFile($request, $id)
+    {
+        $profile = Profile::find($id);
+        $demand = Demand::find($id);
+        $intern = Intern::find($id);
+        if (!$profile || !$demand||!$intern) {
+            return response()->json(['message' => 'cannot store files for undefined data'], 400);
+        }
+        $fileTypes = ['cv', 'avatar', 'demandeStage', 'atestation'];
+        foreach ($fileTypes as $fileType) {
+            if ($request->hasFile($fileType)) {
+                if ($fileType === 'avatar' && $profile) {
+                    $this->storOneFile($request, $profile, $fileType);
+                } else {
+                    $this->storOneFile($request, $demand, $fileType);
+                }
             }
         }
+        return response()->json(['message' => 'files stored successfully'], 200);
     }
-    return response()->json(['message'=>'files stored successfully'],200) ;
 
-
-}
+    public function storOneFile($request,$element,$fileType){
+        $files = $request->file($fileType);
+        $name =$files->getClientOriginalName();
+        $unique = uniqid();
+        if ($fileType==='avatar'){
+            $request->validate([
+                    $fileType => 'file|mimes:jpg,jpeg,png|max:2048', // Validate each file
+                ]);
+        }else{
+             $request->validate([
+                $fileType => 'file|mimes:doc,docx,pdf|max:2048', // Validate each file
+            ]);
+        }   
+        $element->files()->create(
+            ['url' =>'/'.$fileType.'/'.$unique.$name,
+                'type' => $fileType]
+            );
+        $files->move(public_path('/'.$fileType),$unique.$name);
+        $this->deletOldFiles($element, $fileType);
+    }
 }

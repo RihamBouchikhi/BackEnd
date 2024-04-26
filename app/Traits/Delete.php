@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+use App\Models\File;
 
 trait Delete
 {
@@ -22,5 +23,13 @@ trait Delete
                 return true;
             }
         }
-
+           public function deletOldFiles($element,$fileType){
+        $oldAvatar = $element->files->where('type','=',$fileType)->first();
+        if ($oldAvatar){
+            File::find($oldAvatar->id)->delete();
+        }
+        if ($oldAvatar&&\File::exists(public_path($oldAvatar->url))){
+                \File::delete(public_path($oldAvatar->url));
+        }
+    }
 }

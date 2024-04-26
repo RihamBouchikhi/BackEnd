@@ -7,7 +7,7 @@ trait Refactor
         $filesData = $profile->files;
         $files = [];
         foreach($filesData as $file){
-            array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
+            array_push($files, ['url'=>asset($file->url),'type'=>$file->type]);
         }
         if ($profile->role==='user'){
             $user = $profile->user;
@@ -180,7 +180,7 @@ trait Refactor
         $filesData = $demand->files;
         $files = [];
          foreach($filesData as $file){
-                array_push($files, ['name' => $file->name, 'url'=>$file->url,'type'=>$file->type]);
+                array_push($files, ['url'=>asset($file->url),'type'=>$file->type]);
             }
         return [
             "id"=> $demand->id,

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     use HasFactory;
-    protected $fillable=['fileable_id','fileable_type','name','url','type'];
+    protected $fillable=['fileable_id','fileable_type','url','type'];
     public function fileable() { 
-		return $this->morphTo(); 
-	}
+		  return $this->morphTo(); 
+	  }
 }

@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/register', [ProfileController::class,'register']);
 Route::POST('/login', [AuthController::class, 'login']);
 
+Route::middleware('auth:sanctum')->group(function () {
 
 //get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
 Route::get('/{data}', [Controller::class, 'index']);
@@ -40,3 +41,4 @@ Route::apiResource('projects', ProjectController::class);
 //tasks
 Route::apiResource('tasks', taskController::class);
 
+});
