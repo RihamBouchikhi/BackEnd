@@ -93,6 +93,7 @@ trait Store
             $user->academicLevel = $validatedData['academicLevel'];
             $user->establishment = $validatedData['establishment'];
             $user->save();
+        return $profile;
     }
     public function storeProject($request){
         $validatedProject = $request->validate([
@@ -136,7 +137,7 @@ trait Store
     public function storeTask($request){
         $validatedData = $request->validate([
         'title' => 'required|max:255',
-        'description' => 'nullable|text',
+        'description' => 'nullable|string',
         'dueDate' => 'nullable|date',
         'priority' => 'required|in:Low,Medium,High,None',
         'status' => 'required|in:To Do,Done,In Progress',
@@ -224,7 +225,6 @@ trait Store
         }
         return response()->json(['message' => 'files stored successfully'], 200);
     }
-
     public function storOneFile($request,$element,$fileType){
         $files = $request->file($fileType);
         $name =$files->getClientOriginalName();

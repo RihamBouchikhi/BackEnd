@@ -120,7 +120,7 @@ trait Update
     public function updateTask($request,$task){
         $validatedData = $request->validate([
         'title' => 'nullable|max:255',
-        'description' => 'nullable|text',
+        'description' => 'nullable|string',
         'dueDate' => 'nullable|date',
         'priority' => 'in:Low,Medium,High,None',
         'status' => 'in:To Do,Done,In Progress',

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Traits\Delete;
-use App\Traits\Get;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Traits\Refactor;
 use App\Traits\Store;
 use App\Traits\Update;
