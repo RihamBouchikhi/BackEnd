@@ -19,8 +19,7 @@ trait Update
                             'string',
                             Password::min(8)->mixedCase()->numbers()->symbols(),
                             'confirmed',
-                        ],    
-                        "files"=>'array'            
+                        ]
                     ]); 
                     if ($profile->email!==$data['email']){
             $validatedData = $data->validate([
@@ -28,7 +27,6 @@ trait Update
                         'firstName' =>'string',
                         'lastName' =>'string',
                         'phone' =>'string',
-                        "files"=>'array',            
                         'password' => [
                             'string',
                             Password::min(8)->mixedCase()->numbers()->symbols(),
@@ -37,30 +35,20 @@ trait Update
             ]);
         }   
         $profile->update($validatedData);
-         if (isset($validatedData['files'])) {
-            foreach ($validatedData['files'] as $file) {
-                $profile->files()->create( ['url' => $file['url'],'type' => $file['type']]);
-            }
-        }
-        if ($data->role=='user') {
-            $user = $profile->user;
-             $updateData = array_filter([
+
+        $otherData = array_filter([
             'academicLevel' => $data['academicLevel'] ?? null,
             'establishment' => $data['establishment'] ?? null,
             'startDate' => $data['startDate'] ?? null,
             'endDate' => $data['endDate'] ?? null,
         ]);
-            $user->update($updateData);
+        if ($profile->role=='user') {
+            $user = $profile->user;
+            $user->update($otherData);
         }
-        if ($data->role=='intern') {
+        if ($profile->role=='intern') {
             $intern = $profile->intern;
-            $updateData = array_filter([
-                'academicLevel' => $data['academicLevel'] ?? null,
-                'establishment' => $data['establishment'] ?? null,
-                'startDate' => $data['startDate'] ?? null,
-                'endDate' => $data['endDate'] ?? null,
-            ]);
-            $intern->update($updateData);
+            $intern->update($otherData);
         }
         return response()->json($this->refactorProfile($profile));
     }

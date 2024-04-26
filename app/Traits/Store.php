@@ -77,7 +77,7 @@ trait Store
                 'confirmed',
             ],
             'academicLevel' => 'required|string',
-                'establishment' => 'required|string'
+            'establishment' => 'required|string'
                     ]);
             $profile = new Profile;
             $profile->firstName = $validatedData['firstName'];
@@ -220,29 +220,28 @@ trait Store
                     $unique = uniqid();
                 if ($fileType === 'avatar' && $profile) {
                     $request->validate([
-                    $fileType => 'file|mimes:jpg,jpeg,png|max:5120',    
-                ]);
+                        $fileType => 'file|mimes:jpg,jpeg,png|max:5120',    
+                    ]);
                     if ($profile->files->count() > 0) {
                         $this->deletOldFiles($profile, $fileType);
                     }
-                $profile->files()->create(
+                    $profile->files()->create(
                         ['url' =>'/'.$fileType.'/'.$unique.$name,
                             'type' => $fileType]
                         );
-                        $files->move(public_path('/'.$fileType),$unique.$name);
+                    $files->move(public_path('/'.$fileType),$unique.$name);
                 } elseif($demand) {
                     $request->validate([
                         $fileType => 'file|mimes:doc,docx,pdf|max:5120',    
                     ]);
-                        if ($demand->files->count()>0){
-                            $this->deletOldFiles($demand, $fileType);
-                        }
-                        $demand->files()->create(
-                        ['url' =>'/'.$fileType.'/'.$unique.$name,
-                            'type' => $fileType]
-                        );
-                        
-                        $files->move(public_path('/'.$fileType),$unique.$name);
+                    if ($demand->files->count()>0){
+                        $this->deletOldFiles($demand, $fileType);
+                    }
+                    $demand->files()->create(
+                    ['url' =>'/'.$fileType.'/'.$unique.$name,
+                        'type' => $fileType]
+                    );    
+                    $files->move(public_path('/'.$fileType),$unique.$name);
                 }
             }
         }

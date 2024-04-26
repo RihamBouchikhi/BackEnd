@@ -4,19 +4,17 @@ namespace App\Traits;
 trait Refactor
 {
     public function refactorProfile($profile){
-        $filesData = $profile->files;
-        $files = [];
-        foreach($filesData as $file){
-            array_push($files, ['url'=>asset($file->url),'type'=>$file->type]);
+        $avatar = $profile->files->where('type','=','avatar')->first();
+        if($avatar){
+            $files[] = ['url'=>asset($avatar->url),'type'=>'avatar'];
         }
         if ($profile->role==='user'){
             $user = $profile->user;
             $demandsData = $user->demands;
             $demands = [];
             foreach($demandsData as $demand){
-                array_push($demands,$demand->id);
-            }
-            
+                $demands[]=$demand->id;
+            } 
             $refactored = [
                 "id"=>$user->id,
                 "profile_id"=>$profile->id,
@@ -28,7 +26,7 @@ trait Refactor
                 "academicLevel" => $user->academicLevel,
                 "establishment" => $user->establishment,
                 "demands"=>$demands,
-                "files"=>$files
+                "files"=>$files??[]
             ];
         return $refactored;
         };
@@ -42,7 +40,7 @@ trait Refactor
                 "email"=>$profile->email,
                 "phone"=>$profile->phone,
                 "role"=>$profile->role,
-                "files"=>$files,
+                "files"=>$files??[],
             ];
             return $refactored;
         } ;
@@ -62,21 +60,25 @@ trait Refactor
                 "phone"=>$profile->phone,
                 "role"=>$profile->role,
                 "projects"=>$projects,
-                "files"=>$files
+                "files"=>$files??[]
             ];
             return $refactored;
         };
         if($profile->role==='intern'){
             $intern = $profile->intern;
             $projectsData = $intern->projects;
+            $attestation = $profile->files->where('type','=','attestation')->first();
+            if($attestation){
+                $files[] = array_push($files, ['url'=>asset($attestation->url),'type'=>'attestation']);
+            }
             $projects = [];
             foreach($projectsData as $project){
-                array_push($projects,$project->id);
+                $projects[]=$project->id;
             }
             $tasksData = $intern->tasks;
             $tasks = [];
             foreach($tasksData as $task){
-                array_push($tasks,$this->refactorTask($task));
+                $tasks[]=$this->refactorTask($task);
             }
             $refactored = [
                 "id"=>$intern->id,
@@ -91,7 +93,7 @@ trait Refactor
                 "establishment" => $intern->establishment,
                 "startDate" => $intern->startDate,
                 "endDate" => $intern->endDate,
-                "files"=>$files,
+                "files"=>$files??[],
                 "tasks"=>$tasks,
             ];
             return $refactored;
