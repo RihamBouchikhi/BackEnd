@@ -215,37 +215,41 @@ trait Store
         $fileTypes = ['cv', 'avatar', 'demandeStage', 'atestation'];
         foreach ($fileTypes as $fileType) {
             if ($request->hasFile($fileType)) {
-                $files = $request->file($fileType);
-                    $name =$files->getClientOriginalName();
-                    $unique = uniqid();
                 if ($fileType === 'avatar' && $profile) {
-                    $request->validate([
-                        $fileType => 'file|mimes:jpg,jpeg,png|max:5120',    
-                    ]);
-                    if ($profile->files->count() > 0) {
-                        $this->deletOldFiles($profile, $fileType);
-                    }
-                    $profile->files()->create(
-                        ['url' =>'/'.$fileType.'/'.$unique.$name,
-                            'type' => $fileType]
-                        );
-                    $files->move(public_path('/'.$fileType),$unique.$name);
+                    $this->storeOneFile($request,$profile,$fileType);
                 } elseif($demand) {
-                    $request->validate([
-                        $fileType => 'file|mimes:doc,docx,pdf|max:5120',    
-                    ]);
-                    if ($demand->files->count()>0){
-                        $this->deletOldFiles($demand, $fileType);
-                    }
-                    $demand->files()->create(
-                    ['url' =>'/'.$fileType.'/'.$unique.$name,
-                        'type' => $fileType]
-                    );    
-                    $files->move(public_path('/'.$fileType),$unique.$name);
+                    $this->storeOneFile($request,$demand,$fileType);
                 }
             }
         }
         return response()->json(['message' => 'files stored successfully'], 200);
     }
     
+    public function storeOneFile($request,$element,$fileType){
+          $files = $request->file($fileType);
+          $name =$files->getClientOriginalName();
+          $unique = uniqid();
+        if ($fileType === 'avatar' ) {
+            if ($files == null){
+                $this->deletOldFiles($element, $fileType);
+                return;
+            }
+            $request->validate([
+                $fileType => 'file|mimes:jpg,jpeg,png|max:5120',
+            ]);
+        } else {
+            $request->validate([
+                $fileType => 'file|mimes:doc,docx,pdf|max:5120',
+            ]);
+        }
+        if ($element->files->count()>0){
+                $this->deletOldFiles($element, $fileType);
+        }
+         $element->files()->create(
+                    ['url' =>'/'.$fileType.'/'.$unique.$name,
+                        'type' => $fileType]
+        );
+        $files->move(public_path('/'.$fileType),$unique.$name);
+
+    }
 }

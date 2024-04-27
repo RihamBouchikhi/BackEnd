@@ -3,12 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>menStage</title>
+        <title>Gestion stage</title>
     </head>
     <body class="antialiased">
-         <script>
-            window.location.href = "http://localhost:5173";
-        </script>
+         <p>"Gestion stage"</p>
+         <a href="<?php echo e(env('FRONTEND_URL')); ?>">"<?php echo e(env('FRONTEND_URL')); ?>"</a>
     </body>
 </html>
 <?php /**PATH C:\Users\Pro\Desktop\gestSTG\BackEnd\resources\views/welcome.blade.php ENDPATH**/ ?>
