@@ -20,7 +20,7 @@ Route::POST('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     
-Route::get('/generateAttestation/{id}', [AttestationController::class,'generatAttestation']);
+Route::get('/generateAttestation/{id}/{attestation}', [AttestationController::class,'generatAttestation']);
 //get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
 Route::get('/{data}', [Controller::class, 'index']);
 Route::get('/{data}/{id}', [Controller::class, 'show']);

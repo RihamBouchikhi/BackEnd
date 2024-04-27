@@ -20,4 +20,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 //Auth routes
-Route::get('/showView/{id}', [AttestationController::class,'showView']);
+Route::get('/showView/{id}/{attestation}', [AttestationController::class,'showView']);

@@ -220,6 +220,11 @@ trait Store
                 } elseif($demand) {
                     $this->storeOneFile($request,$demand,$fileType);
                 }
+            }else{
+                if ($fileType === 'avatar' && $profile) {
+                    $this->deletOldFiles($profile, $fileType);
+                    return;
+                }
             }
         }
         return response()->json(['message' => 'files stored successfully'], 200);
@@ -230,10 +235,6 @@ trait Store
           $name =$files->getClientOriginalName();
           $unique = uniqid();
         if ($fileType === 'avatar' ) {
-            if ($files == null){
-                $this->deletOldFiles($element, $fileType);
-                return;
-            }
             $request->validate([
                 $fileType => 'file|mimes:jpg,jpeg,png|max:5120',
             ]);
