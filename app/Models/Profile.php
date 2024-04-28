@@ -43,4 +43,11 @@ class Profile extends Model
     public function files() {
  	    return $this->morphMany(File::class, 'fileable'); 
 	}
+     protected static function boot()
+    {
+        parent::boot();
+            static::deleting(function ($profile) {
+                $profile->files()->delete();          
+            });
+    }
 }

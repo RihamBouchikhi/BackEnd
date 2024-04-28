@@ -54,7 +54,7 @@ trait Update
     }
 
     public function updateProfilePassword($request,$profile){
-    $validatedData = $request->validate([
+        $validatedData = $request->validate([
                     'currentPassword' => [
                             'required',
                             Password::min(8)->mixedCase()->numbers()->symbols(),
@@ -66,7 +66,6 @@ trait Update
                             'confirmed',
                         ]   
                     ]);
-
     if (Hash::check($validatedData['currentPassword'], $profile->password)) {
         if (Hash::check($validatedData['password'], $profile->password)) {
                 return response()->json(['message' => 'Please enter a new password '], 400); 
@@ -89,7 +88,7 @@ trait Update
             'priority' => 'in:Low,Medium,High,None',
             'supervisor_id' => 'exists:supervisors,id',
             'intern_id' => 'nullable|exists:interns,id',
-            'teamMembers' => 'array|exists:interns,id',
+            'teamMembers.*' => 'exists:interns,id',
         ]);
         $project->update($validatedProject);
         if ($data->has('teamMembers')){

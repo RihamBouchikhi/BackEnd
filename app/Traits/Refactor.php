@@ -1,18 +1,15 @@
 <?php
 namespace App\Traits;
-
+use App\Traits\Get;
 trait Refactor
 {
     public function refactorProfile($profile){
-        $avatar = $profile->files->where('type','=','avatar')->first();
-        if($avatar){
-            $files[] = ['url'=>asset($avatar->url),'type'=>'avatar'];
-        }
+        $files = $this->getElementFiles($profile);
         if ($profile->role==='user'){
             $user = $profile->user;
             $demandsData = $user->demands;
-            $demands = [];
-            foreach($demandsData as $demand){
+            $demands = [];          
+             foreach($demandsData as $demand){
                 $demands[]=$demand->id;
             } 
             $refactored = [
@@ -26,7 +23,7 @@ trait Refactor
                 "academicLevel" => $user->academicLevel,
                 "establishment" => $user->establishment,
                 "demands"=>$demands,
-                "files"=>$files??[]
+                "files"=>$files
             ];
         return $refactored;
         };
@@ -69,7 +66,7 @@ trait Refactor
             $projectsData = $intern->projects;
             $attestation = $profile->files->where('type','=','attestation')->first();
             if($attestation){
-                $files[] = array_push($files, ['url'=>asset($attestation->url),'type'=>'attestation']);
+                $files[] =['url'=>asset($attestation->url),'type'=>'attestation'];
             }
             $projects = [];
             foreach($projectsData as $project){
@@ -179,18 +176,21 @@ trait Refactor
         $profile = $demand->user->profile;
         $user = $this->refactorProfile($profile);
         $offer = $this->refactorOffer($offerData);
-        $filesData = $demand->files;
-        $files = [];
-         foreach($filesData as $file){
-                array_push($files, ['url'=>asset($file->url),'type'=>$file->type]);
-            }
         return [
             "id"=> $demand->id,
-            "offer"=> $offer,
-            "user"=> $user,
             "startDate"=>$demand->startDate,
             "endDate"=>$demand->endDate,
-            "files"=>$files
+            "motivationLetter"=>$demand->motivationLetter,
+            "user"=> $user,
+            "offer"=> $offer,
+            "files"=>$this->getElementFiles($demand)
         ];
+    }
+    public function getElementFiles($element){
+        $files = $element->files;
+        foreach($files as $file){
+            $Allfiles[] = ['url' => asset($file->url),'type'=>$file->type];
+        }
+        return $Allfiles??[];
     }
 }

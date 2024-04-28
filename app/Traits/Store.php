@@ -189,43 +189,36 @@ trait Store
         return $offer;
     }
     public function storeDemand($request){
-        $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'offer_id' => 'required|exists:offers,id',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date',
-        ]);
         $demande = new Demand;
-        $demande->offer_id = $validatedData['offer_id'];
-        $demande->user_id = $validatedData['user_id'];
-        $demande->startDate = $validatedData['startDate'];
-        $demande->endDate = $validatedData['endDate'];
+        $demande->offer_id = $request->input('offer_id');
+        $demande->user_id = $request->input('user_id');
+        $demande->startDate = $request->input('startDate');
+        $demande->endDate =  $request->input('endDate');
+        $demande->motivationLetter =  $request->input('motivationLetter');
         $demande->save();
-    
-    return $demande;
+        $profile=$demande->user->profile;
+        if ($request->hasFile('cv')&&$profile) {
+            $this->storeOneFile($request, $profile, 'cv');            
+        }
+        if ($request->hasFile('demandeStage')&&$demande) {
+            $this->storeOneFile($request, $demande, 'demandeStage');            
+        }
+        return response()->json($this->refactorDemand($demande));
     }
 
     public function storeFile($request, $id){
         $profile=Profile::find($id);
-        $demand=Demand::find($id);
         $intern=Intern::find($id);
-        if (!$profile&&!$demand&&!$intern) {
+        if (!$profile&&!$intern) {
             return response()->json(['message' => 'cannot store files for undefined data'], 400);
         }
-        $fileTypes = ['cv', 'avatar', 'demandeStage', 'atestation'];
-        foreach ($fileTypes as $fileType) {
-            if ($request->hasFile($fileType)) {
-                if ($fileType === 'avatar' && $profile) {
-                    $this->storeOneFile($request,$profile,$fileType);
-                } elseif($demand) {
-                    $this->storeOneFile($request,$demand,$fileType);
-                }
+            if ($request->hasFile('avatar')&& $profile) {
+                    $this->storeOneFile($request,$profile,'avatar');
             }else{
-                if ($fileType === 'avatar' && $profile) {
-                    $this->deletOldFiles($profile, $fileType);
+                if (!$request->hasFile('avatar')&& $profile) {
+                    $this->deletOldFiles($profile, 'avatar');
                     return;
-                }
-            }
+                }   
         }
         return response()->json(['message' => 'files stored successfully'], 200);
     }
@@ -234,7 +227,7 @@ trait Store
           $files = $request->file($fileType);
           $name =$files->getClientOriginalName();
           $unique = uniqid();
-        if ($fileType === 'avatar' ) {
+        if ($fileType === 'avatar') {
             $request->validate([
                 $fileType => 'file|mimes:jpg,jpeg,png|max:5120',
             ]);
@@ -244,7 +237,7 @@ trait Store
             ]);
         }
         if ($element->files->count()>0){
-                $this->deletOldFiles($element, $fileType);
+            $this->deletOldFiles($element, $fileType);
         }
          $element->files()->create(
                     ['url' =>'/'.$fileType.'/'.$unique.$name,

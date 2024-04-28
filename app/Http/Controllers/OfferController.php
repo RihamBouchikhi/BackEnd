@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Delete;
+use App\Traits\Get;
 use App\Traits\Refactor;
 use App\Traits\Store;
 use App\Traits\Update;
@@ -12,7 +13,17 @@ use App\Models\Offer;
 
 class OfferController
 {
-    use Refactor, Store,Update,Delete;
+    use Refactor, Store,Update,Delete,Get;
+
+
+    public function index(){
+        return $this->GetAll('offers');
+    }    
+
+    public function show($id){
+        return $this->GetByDataId('offers',$id);
+    }
+
     public function store(Request $request)
     {
         // Création de l'offre de stage

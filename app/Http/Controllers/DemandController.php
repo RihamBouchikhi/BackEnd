@@ -15,7 +15,7 @@ class DemandController
     {
         // Création de l'offre de stage
         $demand = $this->storeDemand($request);
-        return response()->json($this->refactorDemand($demand));
+        return $demand;
     }
  
     public function update(Request $request, $id)
