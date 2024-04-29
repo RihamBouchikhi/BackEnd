@@ -10,7 +10,7 @@ trait Refactor
             $demandsData = $user->demands;
             $demands = [];          
              foreach($demandsData as $demand){
-                $demands[]=$demand->id;
+                $demands[]=['id'=>$demand->id,"offer_id"=>$demand->offer_id];
             } 
             $refactored = [
                 "id"=>$user->id,

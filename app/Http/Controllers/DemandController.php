@@ -27,7 +27,12 @@ class DemandController
         $updatedDemand=$this->updateDemand($request,$demand);
         return response()->json($this->refactorDemand($updatedDemand));
     }
-
+    public function accepteDemand($id ,$traitement){
+        $demand=Demand::find($id);
+        if($traitement==='accepte'){
+           return $this->storeAcceptedIntern($demand);
+        }
+    }
     public function destroy($id)
     {
         $demand = demand::find($id);

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('startDate');
             $table->date('endDate');
+            $table->string('status')->nullable();
             $table->text('motivationLetter')->nullable();
             $table->softDeletes();
             $table->timestamps();

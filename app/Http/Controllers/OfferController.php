@@ -14,10 +14,12 @@ use App\Models\Offer;
 class OfferController
 {
     use Refactor, Store,Update,Delete,Get;
-
-
     public function index(){
-        return $this->GetAll('offers');
+        $offers = Offer::where("visibility",'=','Visible')->get();
+        foreach ($offers as $offer) {
+            $all[] = $this->refactorOffer($offer);
+        }            
+        return response()->json($all);
     }    
 
     public function show($id){

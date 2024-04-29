@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" >
 </head>
 <body>
-      <header class="container py-3 d-flex justify-content-between align-items-center bg-light">
+  <header class="container py-3 d-flex justify-content-between align-items-center bg-light">
     <div class="d-flex justify-content-center">
        <img src="your_company_logo.png" alt="Company Logo" class="img-fluid" style="max-width: 150px;"> 
     </div>
@@ -33,8 +33,8 @@
                ont été prodigués en vue d'exercer le métier de Developpement.</p>
             <p>Cette attestation est délivrée à la demande du stagiaire pour servir et valoir ce que de droit.</p>
               <div class=' mt-5 w-full d-flex justify-content-start gap-3'>
-                 <p class="text-end">Fait le {{date('d-m-y')}}</p>
-                 <p class="text-end">A Rabat</p>
+                 <p class="text-end">Fait le {{date('d-m-y')}} A .......</p>
+                 <p class="text-end"></p>
               </div>
                   <div class="col-md-6">
                     <p class="text-end">Monsieur Bahae-Eddin Halim</p>

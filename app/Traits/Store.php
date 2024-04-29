@@ -205,7 +205,25 @@ trait Store
         }
         return response()->json($this->refactorDemand($demande));
     }
+    public function storeAcceptedIntern($demand){
+        $user = $demand->user;
+        $offer = $demand->offer;
+        $profile = $user->profile;
+        $demand->status = 'Accepted';
+        $demand->save();
+       // dd($user);
+        $intern = new Intern;
+        $intern->profile_id = $profile->id;
+        $intern->academicLevel = $user['academicLevel'];
+        $intern->establishment = $user['establishment'];
+        $intern->endDate = $demand['endDate'];
+        $intern->startDate = $demand['startDate'];
+        $intern->speciality = $offer['title'];
+        $user->delete();
 
+        $intern->save();
+        return response()->json($this->refactorDemand($demand)) ;
+    }
     public function storeFile($request, $id){
         $profile=Profile::find($id);
         $intern=Intern::find($id);
@@ -221,8 +239,7 @@ trait Store
                 }   
         }
         return response()->json(['message' => 'files stored successfully'], 200);
-    }
-    
+    }  
     public function storeOneFile($request,$element,$fileType){
           $files = $request->file($fileType);
           $name =$files->getClientOriginalName();
