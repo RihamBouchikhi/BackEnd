@@ -221,7 +221,14 @@ trait Store
         $intern->speciality = $offer['title'];
         $user->delete();
 
+        $profile->role = 'intern';
+        $profile->save();
+        
         $intern->save();
+
+        $demand->intern_id = $intern->id;
+        $demand->save();
+        
         return response()->json($this->refactorDemand($demand)) ;
     }
     public function storeFile($request, $id){

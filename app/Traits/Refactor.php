@@ -173,15 +173,19 @@ trait Refactor
     }
     public function refactorDemand($demand){
         $offerData = $demand->offer;
-        $profile = $demand->user->profile;
-        $user = $this->refactorProfile($profile);
+        if ($demand->status==='Accepted'){
+            $profile = $demand->intern->profile;
+        }else{
+            $profile = $demand->user->profile;
+        }
         $offer = $this->refactorOffer($offerData);
         return [
             "id"=> $demand->id,
             "startDate"=>$demand->startDate,
             "endDate"=>$demand->endDate,
             "motivationLetter"=>$demand->motivationLetter,
-            "user"=> $user,
+            "status"=>$demand->status,
+            "owner"=> $this->refactorProfile($profile),
             "offer"=> $offer,
             "files"=>$this->getElementFiles($demand)
         ];

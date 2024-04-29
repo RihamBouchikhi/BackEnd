@@ -19,6 +19,9 @@ class Demand extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function intern(){
+        return $this->belongsTo(Intern::class);
+    }
     public function offer(){
         return $this->belongsTo(Offer::class);
     }

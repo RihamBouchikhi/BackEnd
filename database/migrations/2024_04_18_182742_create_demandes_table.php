@@ -12,7 +12,8 @@ return new class extends Migration
         Schema::create('demands', function (Blueprint $table) {
             $table->id();
             $table->foreignId('offer_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('intern_id')->nullable()->constrained()->nullOnDelete();
             $table->date('startDate');
             $table->date('endDate');
             $table->string('status')->nullable();

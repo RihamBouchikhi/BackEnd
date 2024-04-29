@@ -29,6 +29,12 @@ class DemandController
     }
     public function accepteDemand($id ,$traitement){
         $demand=Demand::find($id);
+        if (!$demand) {
+            return response()->json(['message' => 'cannot '.$traitement.' undefined demand!'], 404);
+        }
+         if ($demand->status === 'Accepted') {
+            return response()->json(['message' => 'demand alraedy accepted'], 404);
+        }
         if($traitement==='accepte'){
            return $this->storeAcceptedIntern($demand);
         }
