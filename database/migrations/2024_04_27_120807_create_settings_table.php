@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('linkedin')->nullable();
             $table->string('maps')->nullable();
             $table->string('location')->nullable();
-            $table->string('AboutDescription')->nullable();
+            $table->text('aboutDescription')->nullable();
             $table->timestamps();
         });
     }

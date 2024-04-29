@@ -190,6 +190,25 @@ trait Refactor
             "files"=>$this->getElementFiles($demand)
         ];
     }
+    public function refactorSettings($setting){
+        $files = $this->getElementFiles($setting);
+        return [
+           "appName"=> $setting->appName, 
+           "companyName"=> $setting->companyName, 
+           'email'=> $setting->email ,
+            "phone"=>$setting->phone ,
+           "facebook"=> $setting->facebook ,
+            "instagram"=>$setting->instagram,
+           "twitter"=> $setting->twitter,
+           "youtube"=> $setting->youtube,
+           "linkedin"=> $setting->linkedin,
+           "maps"=> $setting->maps,
+            "location"=>$setting->location,
+            "aboutDescription"=>$setting->aboutDescription,
+            "files"=>$files
+        ];
+    }
+
     public function getElementFiles($element){
         $files = $element->files;
         foreach($files as $file){

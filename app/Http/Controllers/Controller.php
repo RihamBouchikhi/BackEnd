@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Get;
+use App\Models\Setting;
+
 use App\Traits\Store;
 use Illuminate\Http\Client\Request;
 
@@ -16,5 +18,6 @@ class Controller
         return $this->GetByDataId($data,$id);
     }
     
+  
    
 }

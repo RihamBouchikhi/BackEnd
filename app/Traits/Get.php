@@ -7,6 +7,7 @@ use App\Models\Intern;
 use App\Models\Offer;
 use App\Models\Profile;
 use App\Models\Project;
+use App\Models\Setting;
 use App\Models\Supervisor;
 use App\Models\Task;
 use App\Models\User;
@@ -14,76 +15,76 @@ trait Get
 {
     use Refactor;
     public function GetAll($data){
-        $all = [];
         if ($data === 'admins') {
             $admins = Admin::all();
             foreach ($admins as $admin) {
                 $profile = $admin->profile;
-                array_push($all, $this->refactorProfile($profile));
+                $all[]= $this->refactorProfile($profile);
             }
-            return response()->json($all);
         }
         elseif ($data === 'supervisors') {
             $supervisors = Supervisor::all();
             foreach ($supervisors as $supervisor) {
                 $profile = $supervisor->profile;
-                array_push($all, $this->refactorProfile($profile));
+                $all[]= $this->refactorProfile($profile);
             }
-            return response()->json($all);
         }
         elseif ($data === 'interns') {
             $interns = Intern::all();
             foreach ($interns as $intern) {
                 $profile = $intern->profile;
-                array_push($all, $this->refactorProfile($profile));
+                $all[]= $this->refactorProfile($profile);
             }
-            return response()->json($all);
         }
         elseif ($data === 'users') {
             $users = User::all();
             foreach ($users as $user) {
                 $profile = $user->profile;
-                array_push($all, $this->refactorProfile($profile));
+                $all[]= $this->refactorProfile($profile);
             }
-            return response()->json($all);
         }
         elseif ($data === 'profiles') {
             $profiles = Profile::all();
             foreach ($profiles as $profile) {
-                array_push($all, $this->refactorProfile($profile));
+                $all[]= $this->refactorProfile($profile);
             }
-            return response()->json($all);
         }
         elseif ($data === 'projects') {
             $projects = Project::all();
             foreach ($projects as $project) {
-                array_push($all, $this->refactoProject($project));
+                $all[]= $this->refactoProject($project);
             }
-            return response()->json($all);
         }
         elseif ($data === 'tasks') {
             $tasks = Task::all();
             foreach ($tasks as $task) {
-                array_push($all, $this->refactorTask($task));
-            }            
-            return response()->json($all);
+                $all[]= $this->refactorTask($task);
+        }            
         }
         elseif ($data === 'offers') {
             $offers = Offer::all();
             foreach ($offers as $offer) {
-                array_push($all, $this->refactorOffer($offer));
-            }            
-            return response()->json($all);
+                $all[]= $this->refactorOffer($offer);
+          }            
         }
         elseif ($data === 'demands') {
             $demands = Demand::all();
             foreach ($demands as $demand) {
-                array_push($all, $this->refactorDemand($demand));
+                $all[]= $this->refactorDemand($demand);
             }            
+            
+        }elseif($data === 'settings'){
+            $settings = Setting::first();
+            if($settings){
+                $all= $this->refactorSettings($settings);
+            }
+        }
+
+        if(isset($all) ){
             return response()->json($all);
         }
         else{
-            return response()->json(['message' => 'Looking for undefined api'], 404);
+            return response()->json(['message' => 'Looking for undefined data'], 404);
         }
     }
     public function GetByDataId($data,$id){

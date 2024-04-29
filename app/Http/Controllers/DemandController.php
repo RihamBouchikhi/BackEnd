@@ -16,7 +16,6 @@ class DemandController
         $demand = $this->storeDemand($request);
         return $demand;
     }
- 
     public function update(Request $request, $id){
         $demand= Demand::find($id);
         if (!$demand) {
@@ -30,14 +29,14 @@ class DemandController
         if (!$demand) {
             return response()->json(['message' => 'cannot '.$traitement.' undefined demand!'], 404);
         }
-        if ($demand->status === 'Accepted'&&$traitement==='accepte') {
-            return response()->json(['message' => 'demand alraedy accepted'], 404);
+        if ($demand->status === 'Approuved'&&$traitement==='approuve') {
+            return response()->json(['message' => 'demand alraedy Approuved'], 404);
         }
-        if($traitement==='accepte'){
+        if($traitement==='approuve'){
            return $this->storeAcceptedIntern($demand);
         }
-        if($traitement==='refuse'){
-            $demand->status='Refused';
+        if($traitement==='reject'){
+            $demand->status='Rejected';
             $demand->save();
             return $this->refactorDemand($demand);
         }

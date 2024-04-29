@@ -7,6 +7,7 @@ use App\Models\Intern;
 use App\Models\Offer;
 use App\Models\Profile;
 use App\Models\Project;
+use App\Models\Setting;
 use App\Models\Supervisor;
 use App\Models\Task;
 use App\Models\User;
@@ -209,9 +210,8 @@ trait Store
         $user = $demand->user;
         $offer = $demand->offer;
         $profile = $user->profile;
-        $demand->status = 'Accepted';
+        $demand->status = 'Approuved';
         $demand->save();
-       // dd($user);
         $intern = new Intern;
         $intern->profile_id = $profile->id;
         $intern->academicLevel = $user['academicLevel'];
@@ -219,6 +219,7 @@ trait Store
         $intern->endDate = $demand['endDate'];
         $intern->startDate = $demand['startDate'];
         $intern->speciality = $offer['title'];
+
         $user->delete();
 
         $profile->role = 'intern';
@@ -245,15 +246,15 @@ trait Store
                     return;
                 }   
         }
-        return response()->json(['message' => 'files stored successfully'], 200);
+        return response()->json(['message' => 'avatar changed successfully'], 200);
     }  
     public function storeOneFile($request,$element,$fileType){
           $files = $request->file($fileType);
           $name =$files->getClientOriginalName();
           $unique = uniqid();
-        if ($fileType === 'avatar') {
+        if (in_array($fileType ,['avatar',"appLogo"]) ) {
             $request->validate([
-                $fileType => 'file|mimes:jpg,jpeg,png|max:5120',
+                $fileType => 'file|mimes:jpg,jpeg,png,svg|max:5120',
             ]);
         } else {
             $request->validate([
@@ -268,6 +269,29 @@ trait Store
                         'type' => $fileType]
         );
         $files->move(public_path('/'.$fileType),$unique.$name);
+    }
 
+    public function storAppSettings($request){
+        $setting = Setting::first();
+        if (!$setting){
+            $setting = new Setting;
+        }
+        $setting->appName = $request->input('appName');
+        $setting->companyName = $request->input('companyName');
+        $setting->email = $request->input('email');
+        $setting->phone =  $request->input('phone');
+        $setting->facebook =  $request->input('facebook');
+        $setting->instagram =  $request->input('instagram');
+        $setting->twitter =  $request->input('twitter');
+        $setting->youtube =  $request->input('youtube');
+        $setting->linkedin =  $request->input('linkedin');
+        $setting->maps =  $request->input('maps');
+        $setting->location =  $request->input('location');
+        $setting->aboutDescription =  $request->input('aboutDescription');
+        $setting->save();
+        if($request->hasFile('appLogo')){
+            $this->storeOneFile($request,$setting,'appLogo');
+        }
+        return $this->refactorSettings($setting) ;
     }
 }

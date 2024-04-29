@@ -24,15 +24,4 @@ class User extends Authenticatable
     public function demands(){
         return $this->hasMany(Demand::class);
     }
-    public function files() {
- 	    return $this->morphMany(File::class, 'fileable'); 
-	}
-     protected static function boot()
-    {
-        parent::boot();
-            static::deleting(function ($user) {
-                $user->files()->delete();          
-            });
-
-    }
 }
