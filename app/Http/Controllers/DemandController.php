@@ -11,15 +11,13 @@ use Illuminate\Http\Request;
 class DemandController 
 {
     use Refactor, Store,Update;
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         // Création de l'offre de stage
         $demand = $this->storeDemand($request);
         return $demand;
     }
  
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $demand= Demand::find($id);
         if (!$demand) {
             return response()->json(['message' => 'cannot update undefined demand!'], 404);
@@ -32,15 +30,19 @@ class DemandController
         if (!$demand) {
             return response()->json(['message' => 'cannot '.$traitement.' undefined demand!'], 404);
         }
-         if ($demand->status === 'Accepted') {
+        if ($demand->status === 'Accepted'&&$traitement==='accepte') {
             return response()->json(['message' => 'demand alraedy accepted'], 404);
         }
         if($traitement==='accepte'){
            return $this->storeAcceptedIntern($demand);
         }
+        if($traitement==='refuse'){
+            $demand->status='Refused';
+            $demand->save();
+            return $this->refactorDemand($demand);
+        }
     }
-    public function destroy($id)
-    {
+    public function destroy($id){
         $demand = demand::find($id);
         if (!$demand) {
             return response()->json(['message' => 'Ocannot delete undefined demand!'], 404);

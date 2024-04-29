@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('intern_id')->nullable()->constrained()->nullOnDelete();
             $table->date('startDate');
             $table->date('endDate');
-            $table->string('status')->nullable();
+            $table->string('status')->default('Pending');
             $table->text('motivationLetter')->nullable();
             $table->softDeletes();
             $table->timestamps();
