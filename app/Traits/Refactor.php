@@ -173,7 +173,7 @@ trait Refactor
     }
     public function refactorDemand($demand){
         $offerData = $demand->offer;
-        if ($demand->status==='Accepted'){
+        if ($demand->status==='Approved'){
             $profile = $demand->intern->profile;
         }else{
             $profile = $demand->user->profile;

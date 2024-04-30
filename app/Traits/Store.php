@@ -38,7 +38,7 @@ trait Store
             $profile->password = bcrypt($validatedProfile['password']);
             $profile->role = $request->role;
             $profile->save();
-        if ($request->role == 'admin') {
+        if ( in_array($request->role,['admin','super-admin']) ) {
            $admin = new Admin;
             $admin->profile_id = $profile->id;
             $admin->save();
@@ -86,7 +86,7 @@ trait Store
             $profile->email = $validatedData['email'];
             $profile->phone = $validatedData['phone'];
             $profile->password = bcrypt($validatedData['password']);
-            $profile->role = 'user';
+            $profile->assignRole('user');
             $profile->save();
            
             $user = new User;
@@ -216,9 +216,10 @@ trait Store
     }
     public function storeAcceptedIntern($demand){
         $user = $demand->user;
+        $demands = $user->demands;
         $offer = $demand->offer;
         $profile = $user->profile;
-        $demand->status = 'Approuved';
+        $demand->status = 'Approved';
         $demand->save();
         $intern = new Intern;
         $intern->profile_id = $profile->id;
@@ -230,13 +231,17 @@ trait Store
 
         $user->delete();
 
-        $profile->role = 'intern';
-        $profile->save();
-        
-        $intern->save();
+        $profile->removeRole('user'); 
+        $profile->assignRole('intern'); 
 
+        $intern->save();
         $demand->intern_id = $intern->id;
-        $demand->save();
+        $demand -> save();
+        foreach($demands as $otherDemand){
+            if($otherDemand->id !==$demand->id ){
+                $otherDemand->delete();
+            }
+        } 
         
         return response()->json($this->refactorDemand($demand)) ;
     }

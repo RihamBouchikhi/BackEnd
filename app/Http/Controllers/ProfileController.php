@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     use Refactor, Store, Delete, Update;
         public function __construct(){
-        $this->middleware('role:admin')->only('store');
+        $this->middleware('role:admin|supervisor')->only('store');
     }
     //store all users 
     public function store(Request $request) {
@@ -50,7 +50,7 @@ class ProfileController extends Controller
 }
 
     public function updatePassword(Request $request,$id){
-    $profile = Profile::find($id);
+        $profile = Profile::find($id);
          if (!$profile) {
             return response()->json(['message' => 'profile non trouvé'], 404);
         }
@@ -68,6 +68,6 @@ class ProfileController extends Controller
             return response()->json(['message' => 'avatar deleted succcefully'], 200);
         } 
         $this->storeOneFile($request,$profile,'avatar');
-        return response()->json(['message' => 'avatar changed successfully'], 200);
+        return response()->json(['message' => 'new avatar added succcefully'], 200);
     }
 }

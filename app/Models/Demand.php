@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Delete;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,7 +32,8 @@ class Demand extends Model
     protected static function boot(){
     parent::boot();
         static::deleting(function ($profile) {
-            $profile->files()->delete();          
+            $profile->files()->delete();
+            $profile->deletOldFiles($profile,'demandeStage');         
         });
     }
 }

@@ -33,16 +33,16 @@ class DemandController extends Controller
         if (!$demand) {
             return response()->json(['message' => 'cannot '.$traitement.' undefined demand!'], 404);
         }
-        if ($demand->status === 'Approuved'&&$traitement==='approuve') {
-            return response()->json(['message' => 'demand alraedy Approuved'], 404);
+        if ($demand->status === 'Approved'&&$traitement==='approve') {
+            return response()->json(['message' => 'demand alraedy Approved'], 404);
         }
-        if($traitement==='approuve'){
-           return $this->storeAcceptedIntern($demand);
+        if($traitement==='approve'){
+           return response()->json($this->storeAcceptedIntern($demand) );
         }
         if($traitement==='reject'){
             $demand->status='Rejected';
             $demand->save();
-            return $this->refactorDemand($demand);
+            return response()->json($this->refactorDemand($demand));
         }
     }
     public function destroy($id){
@@ -50,6 +50,7 @@ class DemandController extends Controller
         if (!$demand) {
             return response()->json(['message' => 'Ocannot delete undefined demand!'], 404);
         }
+        $this->deletOldFiles($demand,'demandeStage');
         $demand->delete();
         return response()->json(['message' => 'Offre de stage supprimée avec succès']);
     }

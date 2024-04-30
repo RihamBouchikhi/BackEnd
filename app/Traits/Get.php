@@ -15,6 +15,7 @@ trait Get
 {
     use Refactor;
     public function GetAll($data){
+        $all = [];
         if ($data === 'admins') {
             $admins = Admin::all();
             foreach ($admins as $admin) {
@@ -84,7 +85,7 @@ trait Get
             return response()->json($all);
         }
         else{
-            return response()->json(['message' => 'Looking for undefined data'], 404);
+            return response()->json($all, 200);
         }
     }
     public function GetByDataId($data,$id){
