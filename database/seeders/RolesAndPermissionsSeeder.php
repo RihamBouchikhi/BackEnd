@@ -13,25 +13,28 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Permission::create(['name' => 'gerer prejects']);
         
-        Permission::create(['name' => 'gerer tasks']);
-
-        Permission::create(['name' => 'gerer offers']);
-
-        Permission::create(['name' => 'gerer demandes']);
-
-        Permission::create(['name' => 'gerer users']);
+        Permission::create(['name' => 'prejects.*']);
+        Permission::create(['name' => 'prejects.update']);
         
-        Permission::create(['name' => 'gerer admins']);
+        Permission::create(['name' => 'tasks']);
 
-        Role::create(['name' => 'supervisor'])->givePermissionTo(['gerer prejects','gerer tasks']);
+        Permission::create(['name' => 'offers']);
 
-        Role::create(['name' => 'admin'])->givePermissionTo(['gerer offers','gerer demandes','gerer users']);
+        Permission::create(['name' => 'demands.*']);
+        Permission::create(['guard_name' => 'web','name' => 'demands.create']);
         
-        Role::create(['name' => 'intern'])->givePermissionTo(['gerer tasks','gerer prejects']);
+        Permission::create(['name' => 'users']);
+        
+        Permission::create(['name' => 'admins']);
 
-        Role::create(['name' => 'user']);
+        Role::create(['name' => 'supervisor'])->givePermissionTo(['prejects.*','tasks']);
+
+        Role::create(['name' => 'admin'])->givePermissionTo(['offers','demands.*','users']);
+        
+        Role::create(['name' => 'intern'])->givePermissionTo(['tasks','prejects.update']);
+
+        Role::create(['guard_name' => 'web','name' => 'user'])->givePermissionTo(['demands.create']);
         
         Role::create(['name' => 'super-admin'])->givePermissionTo(Permission::all());
     }

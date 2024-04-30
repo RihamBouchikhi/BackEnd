@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,14 +15,14 @@ class ProfileSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('profiles')->insert([
+        $profiles = [
             [
                 'firstName' => 'hassan',
                 'lastName' => 'mhd',
                 'email' => 'hassan@gmail.com',
                 'password' => Hash::make('Hassan123?'),
                 'phone' => '0636453567',
-                'role'=>'user',
+                'role' => 'user',
             ],
             [
                 'firstName' => 'walid',
@@ -29,7 +30,7 @@ class ProfileSeeder extends Seeder
                 'email' => 'walid@gmail.com',
                 'password' => Hash::make('Walid123?'),
                 'phone' => '0636453567',
-                'role'=>'supervisor',
+                'role' => 'supervisor',
             ],
             [
                 'firstName' => 'riham',
@@ -37,7 +38,7 @@ class ProfileSeeder extends Seeder
                 'email' => 'riham@gmail.com',
                 'password' => Hash::make('Riham123?'),
                 'phone' => '0636453567',
-                'role'=>'admin',
+                'role' => 'admin',
             ],
             [
                 'firstName' => 'zyad',
@@ -45,7 +46,7 @@ class ProfileSeeder extends Seeder
                 'email' => 'zyad@gmail.com',
                 'password' => Hash::make('Zyad123?'),
                 'phone' => '0636453567',
-                'role'=>'intern',
+                'role' => 'intern',
             ],
             [
                 'firstName' => 'hassan2',
@@ -53,10 +54,27 @@ class ProfileSeeder extends Seeder
                 'email' => 'hassan2@gmail.com',
                 'password' => Hash::make('Hassan123?'),
                 'phone' => '0636453567',
-                'role'=>'intern',
+                'role' => 'intern',
             ],
-            ]
-        );
+                 [
+                'firstName' => 'Bahae Eddin',
+                'lastName' => ' Halim',
+                'email' => 'bahae@gmail.com',
+                'password' => Hash::make('Bahae123?'),
+                'phone' => '0636453567',
+                'role' => 'super-admin',
+            ],
+        ];
+        foreach ($profiles as $profileData) {
+    $profile = new Profile;
+    $profile->firstName = $profileData['firstName'];
+    $profile->lastName = $profileData['lastName'];
+    $profile->email = $profileData['email'];
+    $profile->password = $profileData['password'];
+    $profile->phone = $profileData['phone'];
+    $profile->assignRole($profileData['role']);
+    $profile->save();
+}
         DB::table('users')->insert(
             [  
                 'profile_id' => 1,
@@ -73,6 +91,12 @@ class ProfileSeeder extends Seeder
              DB::table('admins')->insert(
             [  
                 'profile_id' => 3,
+          
+            ]
+        );
+             DB::table('admins')->insert(
+            [  
+                'profile_id' => 6,
           
             ]
         );

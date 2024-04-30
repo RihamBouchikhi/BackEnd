@@ -36,7 +36,7 @@ trait Store
             $profile->email = $validatedProfile['email'];
             $profile->phone = $validatedProfile['phone'];
             $profile->password = bcrypt($validatedProfile['password']);
-            $profile->role = $request->role;
+            $profile->assignRole($request->role);
             $profile->save();
         if ($request->role == 'admin') {
            $admin = new Admin;
@@ -86,7 +86,7 @@ trait Store
             $profile->email = $validatedData['email'];
             $profile->phone = $validatedData['phone'];
             $profile->password = bcrypt($validatedData['password']);
-            $profile->role = 'user';
+            $profile->assignRole('user');
             $profile->save();
            
             $user = new User;
@@ -221,9 +221,8 @@ trait Store
         $intern->speciality = $offer['title'];
 
         $user->delete();
-
-        $profile->role = 'intern';
-        $profile->save();
+        $profile->removeRole('user');
+        $profile->assignRole('intern');
         
         $intern->save();
 

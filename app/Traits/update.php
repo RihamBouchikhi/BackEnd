@@ -42,11 +42,11 @@ trait Update
             'startDate' => $data['startDate'] ?? null,
             'endDate' => $data['endDate'] ?? null,
         ]);
-        if ($profile->role=='user') {
+        if ($profile->getRoleNames()[0]=='user') {
             $user = $profile->user;
             $user->update($otherData);
         }
-        if ($profile->role=='intern') {
+        if ($profile->getRoleNames()[0]=='intern') {
             $intern = $profile->intern;
             $intern->update($otherData);
         }

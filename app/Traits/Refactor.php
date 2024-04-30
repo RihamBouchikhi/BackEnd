@@ -5,11 +5,11 @@ trait Refactor
 {
     public function refactorProfile($profile){
         $files = $this->getElementFiles($profile);
-        if ($profile->role==='user'){
+        if ($profile->getRoleNames()[0]==='user'){
             $user = $profile->user;
             $demandsData = $user->demands;
             $demands = [];          
-             foreach($demandsData as $demand){
+            foreach($demandsData as $demand){
                 $demands[]=['id'=>$demand->id,"offer_id"=>$demand->offer_id];
             } 
             $refactored = [
@@ -19,7 +19,7 @@ trait Refactor
                 "lastName"=>$profile->lastName,
                 "email"=>$profile->email,
                 "phone"=>$profile->phone,
-                "role"=>$profile->role,
+                "role"=>$profile->getRoleNames()[0],
                 "academicLevel" => $user->academicLevel,
                 "establishment" => $user->establishment,
                 "demands"=>$demands,
@@ -27,7 +27,7 @@ trait Refactor
             ];
         return $refactored;
         };
-        if ($profile->role==='admin'){
+        if ($profile->getRoleNames()[0]==='admin'){
             $admin = $profile->admin;
             $refactored = [
                 "id"=>$admin->id,
@@ -36,12 +36,12 @@ trait Refactor
                 "lastName"=>$profile->lastName,
                 "email"=>$profile->email,
                 "phone"=>$profile->phone,
-                "role"=>$profile->role,
+                "role"=>$profile->getRoleNames()[0],
                 "files"=>$files??[],
             ];
             return $refactored;
         } ;
-        if ($profile->role==='supervisor'){
+        if ($profile->getRoleNames()[0]==='supervisor'){
             $supervisor = $profile->supervisor;
             $projectsData = $supervisor->projects;
             $projects = [];
@@ -55,13 +55,13 @@ trait Refactor
                 "lastName"=>$profile->lastName,
                 "email"=>$profile->email,
                 "phone"=>$profile->phone,
-                "role"=>$profile->role,
+                "role"=>$profile->getRoleNames()[0],
                 "projects"=>$projects,
                 "files"=>$files??[]
             ];
             return $refactored;
         };
-        if($profile->role==='intern'){
+        if($profile->getRoleNames()[0]==='intern'){
             $intern = $profile->intern;
             $projectsData = $intern->projects;
             $attestation = $profile->files->where('type','=','attestation')->first();
@@ -84,7 +84,7 @@ trait Refactor
                 "lastName"=>$profile->lastName,
                 "email"=>$profile->email,
                 "phone"=>$profile->phone,
-                "role"=>$profile->role,
+                "role"=>$profile->getRoleNames()[0],
                 "projects"=>$projects,
                 "academicLevel" => $intern->academicLevel,
                 "establishment" => $intern->establishment,
