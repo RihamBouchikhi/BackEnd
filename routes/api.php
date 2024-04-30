@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttestationController;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\DemandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\taskController;
@@ -21,19 +21,23 @@ Route::middleware('checkorigin')->middleware('auth:sanctum')->group(function () 
     Route::get('/generateAttestation/{id}/{attestation}', [AttestationController::class,'generatAttestation']);
     Route::POST('/logout', [AuthController::class, 'logout']);
     Route::GET('/user', [AuthController::class, 'user']);
-    Route::POST('/settings', [ProfileController::class, 'setAppSettings']);
+    Route::POST('/settings', [GeneralController::class, 'setAppSettings']);
     
     //get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
-    Route::get('/{data}', [Controller::class, 'index']);
-    Route::get('/{data}/{id}', [Controller::class, 'show']);
+    Route::get('/{data}', [GeneralController::class, 'index']);
+    Route::get('/{data}/{id}', [GeneralController::class, 'show']);
+
     //CRUD all profiles Routes
     Route::apiResource('profiles', ProfileController::class);
     Route::post('profiles/{id}/password', [ProfileController::class,'updatePassword']);
-    Route::post('/files/{id}', [ProfileController::class,'setFile']);
+    Route::post('/files/{id}', [ProfileController::class,'storeAvatar']);
     //Offers
     Route::apiResource('offers', OfferController::class);
-    //demand
-    Route::apiResource('demands', DemandController::class);
+   // Route::middleware('role:user')->group(function () {
+        //demands
+        Route::apiResource('demands', DemandController::class);
+   // });
+    //approve rejectDemand
     Route::post('/demands/{id}/{traitement}', [DemandController::class,'accepteDemand']);
     // Project
     Route::apiResource('projects', ProjectController::class);

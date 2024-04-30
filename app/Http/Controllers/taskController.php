@@ -9,9 +9,12 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class taskController 
+class taskController extends Controller
 {
     use Store, Refactor,Update,Delete;
+    public function __construct(){
+        $this->middleware('role:supervisor|intern');
+    }
     public function store(Request $request)
     {
         $task = $this->storeTask($request);

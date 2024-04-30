@@ -10,10 +10,12 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class ProfileController
+class ProfileController extends Controller
 {
     use Refactor, Store, Delete, Update;
-    
+        public function __construct(){
+        $this->middleware('role:admin')->only('store');
+    }
     //store all users 
     public function store(Request $request) {
         $profile=$this->storeProfile($request);
@@ -56,10 +58,16 @@ class ProfileController
         return $isUpdated;
 
     }   
-    public function setFile(Request $request,$id){
-       return  $this->storeFile($request,$id);
-    }
-    public function setAppSettings(Request $request){  
-        return response()->json($this->storAppSettings($request));
+    public function storeAvatar(Request $request,$id){
+        $profile=Profile::find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'profile non trouvé'], 404);
+        }
+        if (!$request->hasFile('avatar')) {
+            $this->deletOldFiles($profile, 'avatar');
+            return response()->json(['message' => 'avatar deleted succcefully'], 200);
+        } 
+        $this->storeOneFile($request,$profile,'avatar');
+        return response()->json(['message' => 'avatar changed successfully'], 200);
     }
 }

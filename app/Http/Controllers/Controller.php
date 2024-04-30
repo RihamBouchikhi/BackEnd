@@ -2,22 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\Get;
-use App\Models\Setting;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-use App\Traits\Store;
-use Illuminate\Http\Client\Request;
-
-class Controller 
+class Controller extends BaseController
 {
-    use Get,Store;
-    public function index($data){
-        return $this->GetAll($data);
-    }
-    public function show($data,$id){
-        return $this->GetByDataId($data,$id);
-    }
-    
-  
-   
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }

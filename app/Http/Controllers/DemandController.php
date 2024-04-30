@@ -8,9 +8,13 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class DemandController 
+class DemandController extends Controller
 {
     use Refactor, Store,Update;
+    public function __construct(){
+        $this->middleware('role:user')->only('store');
+        $this->middleware('role:admin')->only(['accepteDemand','destroy']);
+    }
     public function store(Request $request){
         // Création de l'offre de stage
         $demand = $this->storeDemand($request);

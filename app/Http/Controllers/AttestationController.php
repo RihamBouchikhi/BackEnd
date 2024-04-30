@@ -6,9 +6,12 @@ use App\Traits\Refactor;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
-class AttestationController 
+class AttestationController extends Controller
 {
   use Refactor;
+     public function __construct(){
+        $this->middleware('role:admin')->only('generatAttestation');
+    }
       public function showView($id,$attestation){
       return view('attestations.attestation'.$attestation);
     }

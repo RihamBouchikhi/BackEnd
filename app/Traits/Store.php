@@ -36,7 +36,7 @@ trait Store
             $profile->email = $validatedProfile['email'];
             $profile->phone = $validatedProfile['phone'];
             $profile->password = bcrypt($validatedProfile['password']);
-            $profile->assignRole($request->role);
+            $profile->role = $request->role;
             $profile->save();
         if ($request->role == 'admin') {
            $admin = new Admin;
@@ -86,7 +86,7 @@ trait Store
             $profile->email = $validatedData['email'];
             $profile->phone = $validatedData['phone'];
             $profile->password = bcrypt($validatedData['password']);
-            $profile->assignRole('user');
+            $profile->role = 'user';
             $profile->save();
            
             $user = new User;
@@ -190,6 +190,14 @@ trait Store
         return $offer;
     }
     public function storeDemand($request){
+        $request->validate([
+            'offer_id' => 'required|exists:offers,id',
+            'user_id' => 'required|exists:users,id',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+            'motivationLetter' => 'required|string',
+            'cv' => 'required|file'
+        ]);
         $demande = new Demand;
         $demande->offer_id = $request->input('offer_id');
         $demande->user_id = $request->input('user_id');
@@ -221,8 +229,9 @@ trait Store
         $intern->speciality = $offer['title'];
 
         $user->delete();
-        $profile->removeRole('user');
-        $profile->assignRole('intern');
+
+        $profile->role = 'intern';
+        $profile->save();
         
         $intern->save();
 
@@ -231,22 +240,6 @@ trait Store
         
         return response()->json($this->refactorDemand($demand)) ;
     }
-    public function storeFile($request, $id){
-        $profile=Profile::find($id);
-        $intern=Intern::find($id);
-        if (!$profile&&!$intern) {
-            return response()->json(['message' => 'cannot store files for undefined data'], 400);
-        }
-            if ($request->hasFile('avatar')&& $profile) {
-                    $this->storeOneFile($request,$profile,'avatar');
-            }else{
-                if (!$request->hasFile('avatar')&& $profile) {
-                    $this->deletOldFiles($profile, 'avatar');
-                    return;
-                }   
-        }
-        return response()->json(['message' => 'avatar changed successfully'], 200);
-    }  
     public function storeOneFile($request,$element,$fileType){
           $files = $request->file($fileType);
           $name =$files->getClientOriginalName();
@@ -269,7 +262,6 @@ trait Store
         );
         $files->move(public_path('/'.$fileType),$unique.$name);
     }
-
     public function storAppSettings($request){
         $setting = Setting::first();
         if (!$setting){

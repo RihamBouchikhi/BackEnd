@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 use App\Models\Offer;
 
 
-class OfferController
+class OfferController extends Controller
 {
     use Refactor, Store,Update,Delete,Get;
+        public function __construct(){
+        $this->middleware('role:admin')->except(['index','show']);
+    }
     public function index(){
         $offers = Offer::where("visibility",'=','Visible')->get();
         foreach ($offers as $offer) {

@@ -16,7 +16,7 @@ use App\Http\Requests\LoginRequest;
 class AuthController extends Controller
 {
     use Refactor;
-
+ 
 // login a user methods
     public function login(LoginRequest $request) {
 

@@ -9,10 +9,12 @@ use App\Traits\Store;
 use App\Traits\Update;
 use Illuminate\Http\Request;
 
-class ProjectController 
+class ProjectController extends Controller
 {
     use Refactor,Store,Update,Delete;
-
+      public function __construct(){
+        $this->middleware('role:supervisor');
+    }
     public function store(Request $request)
     {
         $project = $this->storeProject($request);
