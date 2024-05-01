@@ -27,7 +27,7 @@ trait Refactor
             ];
         return $refactored;
         };
-        if ($profile->getRoleNames()[0]==='admin'){
+        if (in_array($profile->getRoleNames()[0],['admin','super-admin']) ){
             $admin = $profile->admin;
             $refactored = [
                 "id"=>$admin->id,
@@ -89,6 +89,7 @@ trait Refactor
                 "academicLevel" => $intern->academicLevel,
                 "establishment" => $intern->establishment,
                 "startDate" => $intern->startDate,
+                "speciality" => $intern->speciality,
                 "endDate" => $intern->endDate,
                 "files"=>$files??[],
                 "tasks"=>$tasks,
@@ -185,9 +186,11 @@ trait Refactor
             "endDate"=>$demand->endDate,
             "motivationLetter"=>$demand->motivationLetter,
             "status"=>$demand->status,
+            "isRead"=> $demand->isRead,
             "owner"=> $this->refactorProfile($profile),
             "offer"=> $offer,
-            "files"=>$this->getElementFiles($demand)
+            "files"=>$this->getElementFiles($demand),
+
         ];
     }
     public function refactorSettings($setting){
@@ -208,7 +211,6 @@ trait Refactor
             "files"=>$files
         ];
     }
-
     public function getElementFiles($element){
         $files = $element->files;
         foreach($files as $file){

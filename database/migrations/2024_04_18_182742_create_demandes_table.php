@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('startDate');
             $table->date('endDate');
             $table->string('status')->default('Pending');
+            $table->string('isRead')->default('false');
             $table->text('motivationLetter')->nullable();
             $table->softDeletes();
             $table->timestamps();

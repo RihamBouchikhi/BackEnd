@@ -24,6 +24,8 @@ Route::middleware('checkorigin')->middleware('auth:sanctum')->group(function () 
     Route::POST('/settings', [GeneralController::class, 'setAppSettings']);
     
     //get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
+    Route::get('/users/accepted', [GeneralController::class, 'getAcceptedUsers']);
+    Route::post('/users/{id}/accept', [GeneralController::class, 'storeNewIntern']);
     Route::get('/{data}', [GeneralController::class, 'index']);
     Route::get('/{data}/{id}', [GeneralController::class, 'show']);
 
@@ -33,12 +35,11 @@ Route::middleware('checkorigin')->middleware('auth:sanctum')->group(function () 
     Route::post('/files/{id}', [ProfileController::class,'storeAvatar']);
     //Offers
     Route::apiResource('offers', OfferController::class);
-   // Route::middleware('role:user')->group(function () {
-        //demands
-        Route::apiResource('demands', DemandController::class);
-   // });
+   
+    Route::apiResource('demands', DemandController::class);
+    Route::put('demands/{id}/read', [DemandController::class,'markAsRead']);
     //approve rejectDemand
-    Route::post('/demands/{id}/{traitement}', [DemandController::class,'accepteDemand']);
+    Route::put('/demands/{id}/{traitement}', [DemandController::class,'accepteDemand']);
     // Project
     Route::apiResource('projects', ProjectController::class);
     //tasks

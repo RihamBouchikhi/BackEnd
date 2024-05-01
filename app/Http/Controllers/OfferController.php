@@ -15,7 +15,7 @@ class OfferController extends Controller
 {
     use Refactor, Store,Update,Delete,Get;
         public function __construct(){
-        $this->middleware('role:admin')->except(['index','show']);
+        $this->middleware('role:admin|super-admin')->except(['index','show']);
     }
     public function index(){
         $offers = Offer::where("visibility",'=','Visible')->get();

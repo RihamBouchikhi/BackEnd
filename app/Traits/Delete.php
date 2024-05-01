@@ -6,6 +6,12 @@ use App\Models\File;
 trait Delete
 {
     public function deleteProfile($profile){
+        $role=$profile->getRoleNames()[0];
+        if($role ='super-admin'){
+            return response()->json([''],403);
+        };
+        $this->deletOldFiles($profile, 'avatar');
+        $this->deletOldFiles($profile, 'cv');
         if($profile->delete()){
             return true;
         }
@@ -22,14 +28,14 @@ trait Delete
             $this->updateProjectStatus($project_id);
                 return true;
             }
+    }
+    public function deletOldFiles($element,$fileType){
+        $oldFile = $element->files->where('type','=',$fileType)->first();
+        if ($oldFile){
+            File::find($oldFile->id)->delete();
         }
-        public function deletOldFiles($element,$fileType){
-            $oldAvatar = $element->files->where('type','=',$fileType)->first();
-            if ($oldAvatar){
-                File::find($oldAvatar->id)->delete();
-            }
-            if ($oldAvatar&&\File::exists(public_path($oldAvatar->url))){
-                    \File::delete(public_path($oldAvatar->url));
-            }
+        if ($oldFile&&\File::exists(public_path($oldFile->url))){
+                \File::delete(public_path($oldFile->url));
+        }
     }
 }

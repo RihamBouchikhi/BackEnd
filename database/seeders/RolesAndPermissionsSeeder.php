@@ -12,6 +12,9 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Reset cached roles and permissions
     
+        Permission::create(['name' => 'store admins']);
+        Permission::create(['guard_name'=>'sanctum','name' => 'store admins']);
+
         Role::create(['name' => 'supervisor']);
         Role::create(['guard_name'=>'sanctum', 'name' => 'supervisor']);
 
@@ -24,6 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'user']);
         Role::create(['guard_name'=>'sanctum','name' => 'user']);
         
-        Role::create(['name' => 'super-admin']);
+        Role::create(['name' => 'super-admin'])->givePermissionTo('store admins');
+        Role::create(['guard_name'=>'sanctum','name' => 'super-admin'])->givePermissionTo('store admins');
     }
 }

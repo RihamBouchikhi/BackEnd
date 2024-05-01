@@ -13,7 +13,7 @@ class DemandController extends Controller
     use Refactor, Store,Update;
     public function __construct(){
         $this->middleware('role:user')->only('store');
-        $this->middleware('role:admin')->only(['accepteDemand','destroy']);
+        $this->middleware('role:admin|super-admin')->only(['accepteDemand','destroy']);
     }
     public function store(Request $request){
         // Création de l'offre de stage
@@ -33,22 +33,33 @@ class DemandController extends Controller
         if (!$demand) {
             return response()->json(['message' => 'cannot '.$traitement.' undefined demand!'], 404);
         }
-        if ($demand->status === 'Approved'&&$traitement==='approve') {
-            return response()->json(['message' => 'demand alraedy Approved'], 404);
+        if ($demand->status !== 'Pending') {
+            return response()->json(['message' => 'demand alraedy processed'], 404);
         }
         if($traitement==='approve'){
-           return response()->json($this->storeAcceptedIntern($demand) );
+            $demand->status = 'Approved';
+            $demand->save();
+            return response()->json(['message' => 'demand approved succeffully'], 200);
         }
         if($traitement==='reject'){
             $demand->status='Rejected';
             $demand->save();
-            return response()->json($this->refactorDemand($demand));
+            return response()->json(['message' => 'demand rejected succeffully'], 404);
         }
+    }
+    public function markAsRead($id){
+        $demand = demand::find($id);
+        if (!$demand) {
+            return response()->json(['message' => ' undefined demand!'], 404);
+        }
+        $demand->isRead = 'true';
+        $demand->save();
+        return response()->json(['message' => 'demand is readed now'],200);
     }
     public function destroy($id){
         $demand = demand::find($id);
         if (!$demand) {
-            return response()->json(['message' => 'Ocannot delete undefined demand!'], 404);
+            return response()->json(['message' => 'cannot delete undefined demand!'], 404);
         }
         $this->deletOldFiles($demand,'demandeStage');
         $demand->delete();

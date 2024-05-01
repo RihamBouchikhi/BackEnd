@@ -10,7 +10,7 @@ class AttestationController extends Controller
 {
   use Refactor;
      public function __construct(){
-        $this->middleware('role:admin')->only('generatAttestation');
+        $this->middleware('role:admin|super-admin')->only('generatAttestation');
     }
       public function showView($id,$attestation){
       return view('attestations.attestation'.$attestation);

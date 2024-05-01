@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 use App\Models\Project;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -10,7 +11,7 @@ trait Update
 {
     use Refactor;
     public function updateProfile($data,$profile){
-            $validatedData = $data->validate([
+        $validatedData = $data->validate([
                     'email' => 'email',
                     'firstName' =>'string',
                     'lastName' =>'string',
@@ -20,8 +21,8 @@ trait Update
                             Password::min(8)->mixedCase()->numbers()->symbols(),
                             'confirmed',
                         ]
-                    ]); 
-                    if ($profile->email!==$data['email']){
+            ]); 
+        if ($profile->email!==$data['email']){
             $validatedData = $data->validate([
                         'email' => 'email|unique:profiles,email',
                         'firstName' =>'string',
@@ -34,25 +35,31 @@ trait Update
                         ],                
             ]);
         }   
+        DB::beginTransaction();
         $profile->update($validatedData);
-
         $otherData = array_filter([
             'academicLevel' => $data['academicLevel'] ?? null,
             'establishment' => $data['establishment'] ?? null,
             'startDate' => $data['startDate'] ?? null,
+            'speciality' => $data['speciality'] ?? null,
             'endDate' => $data['endDate'] ?? null,
         ]);
         if ($profile->getRoleNames()[0]=='user') {
             $user = $profile->user;
-            $user->update($otherData);
+            $isCommited=$user->update($otherData);
         }
         if ($profile->getRoleNames()[0]=='intern') {
             $intern = $profile->intern;
-            $intern->update($otherData);
+            $isCommited=$intern->update($otherData);
         }
-        return response()->json($this->refactorProfile($profile));
+        if($isCommited){
+            DB::commit();
+            return response()->json($this->refactorProfile($profile));
+        }else{
+            DB::rollBack();
+            return [];
+        }
     }
-
     public function updateProfilePassword($request,$profile){
         $validatedData = $request->validate([
                     'currentPassword' => [
@@ -76,7 +83,7 @@ trait Update
         return response()->json(['message' => ' Password updated successfully'], 200); 
     }
     return response()->json(['message' => 'Incorrect current password'], 400);
-}
+    }
     public function updateProject($data,$project){
         $tasks=$project->tasks;
         $validatedProject = $data->validate([
@@ -103,7 +110,6 @@ trait Update
         }
         return $project;
     }
-
     public function updateTask($request,$task){
         $validatedData = $request->validate([
         'title' => 'nullable|max:255',

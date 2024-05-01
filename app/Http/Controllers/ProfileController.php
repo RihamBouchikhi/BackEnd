@@ -13,13 +13,13 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     use Refactor, Store, Delete, Update;
-        public function __construct(){
-        $this->middleware('role:admin|supervisor')->only('store');
+    public function __construct(){
+        $this->middleware('role:admin|super-admin|supervisor')->only('store');
     }
     //store all users 
     public function store(Request $request) {
         $profile=$this->storeProfile($request);
-        return response()->json($this->refactorProfile($profile));
+        return $profile;
     }
     public function register(Request $request){
         $profile = $this->storeUser($request);

@@ -11,6 +11,8 @@ use App\Models\Setting;
 use App\Models\Supervisor;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 trait Store
@@ -20,7 +22,7 @@ trait Store
         $validatedProfile = $request->validate([
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|string|unique:profiles,phone|max:255',
             'email' => 'required|email|unique:profiles,email|max:255',
             'password' => [
                 'required',
@@ -30,28 +32,35 @@ trait Store
             ],
             'role'=>'required|in:admin,supervisor,intern'
         ]);
+        DB::beginTransaction();
             $profile = new Profile;
             $profile->firstName = $validatedProfile['firstName'];
             $profile->lastName = $validatedProfile['lastName'];
             $profile->email = $validatedProfile['email'];
             $profile->phone = $validatedProfile['phone'];
             $profile->password = bcrypt($validatedProfile['password']);
-            $profile->role = $request->role;
+            $profile->assignRole($request->role) ;
             $profile->save();
-        if ( in_array($request->role,['admin','super-admin']) ) {
-           $admin = new Admin;
-            $admin->profile_id = $profile->id;
-            $admin->save();
+            $isCommited = false;
+        if ($request->role='admin' ) {
+           if( Auth::user()->hasRole('super-admin')){
+               $admin = new Admin;
+               $admin->profile_id = $profile->id;
+               $isCommited=$admin->save();
+            }else{
+                return response()->json(['error' => "You can't process this action "], 403);
+            }
         }
         if ($request->role == 'supervisor') {
             $supervisor = new Supervisor;
             $supervisor->profile_id = $profile->id;
-            $supervisor->save();
+            $isCommited=$supervisor->save();
         }
         if ($request->role == 'intern') {
                 $validatedIntern = $request->validate([
                 'academicLevel' => 'required|string',
                 'establishment' => 'required|string',
+                'speciality' => 'string',
                 'startDate' => 'required',
                 'endDate' => 'required',
             ]);
@@ -59,11 +68,18 @@ trait Store
             $intern->profile_id = $profile->id;
             $intern->academicLevel = $validatedIntern['academicLevel'];
             $intern->establishment = $validatedIntern['establishment'];
+            $intern->speciality = $validatedIntern['speciality'];
             $intern->startDate = $validatedIntern['startDate'];
             $intern->endDate = $validatedIntern['endDate'];
-            $intern->save();
+            $isCommited=$intern->save();
         }
-        return $profile;
+        if($isCommited){
+            DB::commit();
+            return response()->json($this->refactorProfile($profile),200)  ;
+        }else{
+            DB::rollBack();
+            return response()->json(['message'=>'cannot store this :'.$request->role] ,404)  ;
+        }
     }
     public function storeUser($request){
          $validatedData = $request->validate([
@@ -80,6 +96,7 @@ trait Store
             'academicLevel' => 'required|string',
             'establishment' => 'required|string'
                     ]);
+         DB::beginTransaction();                  
             $profile = new Profile;
             $profile->firstName = $validatedData['firstName'];
             $profile->lastName = $validatedData['lastName'];
@@ -93,8 +110,14 @@ trait Store
             $user->profile_id = $profile->id;
             $user->academicLevel = $validatedData['academicLevel'];
             $user->establishment = $validatedData['establishment'];
-            $user->save();
-        return $profile;
+            $isCommited =$user->save();
+             if($isCommited){
+                 DB::commit();
+                 return $profile;
+            }else{
+                DB::rollBack();
+                return [];
+            }
     }
     public function storeProject($request){
         $validatedProject = $request->validate([
@@ -214,37 +237,44 @@ trait Store
         }
         return response()->json($this->refactorDemand($demande));
     }
-    public function storeAcceptedIntern($demand){
-        $user = $demand->user;
-        $demands = $user->demands;
+    public function storInternFromUser($user,$id){
+        $demand =$user->demands->where('status','=','Approved')->first();
+        if(!$demand){
+            return response()->json(['message' => 'this user has no aprouved demand'], 404);
+        }
         $offer = $demand->offer;
         $profile = $user->profile;
-        $demand->status = 'Approved';
-        $demand->save();
+        $demands = $user->demands;
+
+        DB::beginTransaction();
         $intern = new Intern;
         $intern->profile_id = $profile->id;
         $intern->academicLevel = $user['academicLevel'];
         $intern->establishment = $user['establishment'];
         $intern->endDate = $demand['endDate'];
         $intern->startDate = $demand['startDate'];
-        $intern->speciality = $offer['title'];
+        $intern->speciality = $offer['sector'];
 
-        $user->delete();
-
+        $isCommited[]=$user->delete();
         $profile->removeRole('user'); 
-        $profile->assignRole('intern'); 
-
-        $intern->save();
-        $demand->intern_id = $intern->id;
+        $profile->assignRole('intern');
+        $isCommited[] = $profile->hasRole('intern');
+        $isCommited[]=$intern->save();
+        $isCommited[]=$demand->intern_id = $intern->id;
         $demand -> save();
         foreach($demands as $otherDemand){
             if($otherDemand->id !==$demand->id ){
-                $otherDemand->delete();
+                $isCommited[]=$otherDemand->delete();
             }
         } 
-        
-        return response()->json($this->refactorDemand($demand)) ;
-    }
+        if(in_array(false||null,$isCommited)){
+            DB::rollBack();
+            return response()->json(['message'=>'error , save this intern'],400) ;
+        }else{
+            DB::commit();
+            return response()->json($this->refactorProfile($profile),200) ;
+        } 
+    }   
     public function storeOneFile($request,$element,$fileType){
           $files = $request->file($fileType);
           $name =$files->getClientOriginalName();

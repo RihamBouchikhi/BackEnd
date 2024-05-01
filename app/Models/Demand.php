@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\Delete;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +12,7 @@ class Demand extends Model
         "motivationLetter",
         'offre_id',
         'user_id',
+        "isRead",
         "startDate",
         "endDate"
     ];   
@@ -33,7 +33,6 @@ class Demand extends Model
     parent::boot();
         static::deleting(function ($profile) {
             $profile->files()->delete();
-            $profile->deletOldFiles($profile,'demandeStage');         
         });
     }
 }

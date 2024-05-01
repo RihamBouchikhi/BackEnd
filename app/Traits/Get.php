@@ -149,12 +149,20 @@ trait Get
         }     
         else{
             return response()->json(['message' => 'Looking for undefined api'], 404);
-        }
+        }        
         if(empty($results)){
             return response()->json(['message' => 'Looking for undefined data, try with a different id'], 404);
         }
         return response()->json($results);
     }
-
-  
+    public function getAllAcceptedUsers(){
+        $users = User::all();
+        foreach($users as $user){
+            if (count($user->demands->where('status','=','Approved'))>0 ){
+                $profile = $user->profile;
+                $accptedUsers[] = $this->refactorProfile($profile);
+            }
+        }
+        return response()->json($accptedUsers??[],200);
+    }
 }
