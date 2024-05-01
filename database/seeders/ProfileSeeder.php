@@ -6,6 +6,7 @@ use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as Faker;
 
 class ProfileSeeder extends Seeder
 {
@@ -14,112 +15,55 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $profiles = [
-            [
-                'firstName' => 'hassan',
-                'lastName' => 'mhd',
-                'email' => 'hassan@gmail.com',
-                'password' => Hash::make('Hassan123?'),
-                'phone' => '0636453567',
-                'role' => 'user',
-            ],
-            [
-                'firstName' => 'walid',
-                'lastName' => 'zkn',
-                'email' => 'walid@gmail.com',
-                'password' => Hash::make('Walid123?'),
-                'phone' => '0636453567',
-                'role' => 'supervisor',
-            ],
-            [
-                'firstName' => 'riham',
-                'lastName' => 'rhm',
-                'email' => 'riham@gmail.com',
-                'password' => Hash::make('Riham123?'),
-                'phone' => '0636453567',
-                'role' => 'admin',
-            ],
-            [
-                'firstName' => 'zyad',
-                'lastName' => 'zyd',
-                'email' => 'zyad@gmail.com',
-                'password' => Hash::make('Zyad123?'),
-                'phone' => '0636453567',
-                'role' => 'intern',
-            ],
-            [
-                'firstName' => 'hassan2',
-                'lastName' => 'mhd',
-                'email' => 'hassan2@gmail.com',
-                'password' => Hash::make('Hassan123?'),
-                'phone' => '0636453567',
-                'role' => 'intern',
-            ],
-                 [
-                'firstName' => 'Bahae Eddin',
-                'lastName' => ' Halim',
-                'email' => 'bahae@gmail.com',
-                'password' => Hash::make('Bahae123?'),
-                'phone' => '0636453567',
-                'role' => 'super-admin',
-            ],
-        ];
-        foreach ($profiles as $profileData) {
-    $profile = new Profile;
-    $profile->firstName = $profileData['firstName'];
-    $profile->lastName = $profileData['lastName'];
-    $profile->email = $profileData['email'];
-    $profile->password = $profileData['password'];
-    $profile->phone = $profileData['phone'];
-    $profile->assignRole($profileData['role']);
-    $profile->save();
-}
-        DB::table('users')->insert(
-            [  
-                'profile_id' => 1,
-                'academicLevel' => 'bac+2',
-                'establishment' => 'Ofppt',
-            ]
-        );
-             DB::table('supervisors')->insert(
-            [  
-                'profile_id' => 2,
-          
-            ]
-        );
-             DB::table('admins')->insert(
-            [  
-                'profile_id' => 3,
-          
-            ]
-        );
-             DB::table('admins')->insert(
-            [  
-                'profile_id' => 6,
-          
-            ]
-        );
-             DB::table('interns')->insert(
-            [  
-                'profile_id' => 4,
-                'projectLink' => 'acdjscjvsvdvjbsd',
-                'academicLevel' => 'bac+2',
-                'establishment' => 'Ofppt',
-                'startDate' => "2024-03-18 18:38:13" ,
-                'endDate' => "2024-04-28 18:38:13",
-            ]
-        );
-             DB::table('interns')->insert(
-            [  
-                'profile_id' => 5,
-                'projectLink' => 'acdjscjvsvdvjbsd',
-                'academicLevel' => 'bac+2',
-                'establishment' => 'Ofppt',
-                'startDate' => "2024-03-18 18:38:13" ,
-                'endDate' => "2024-04-28 18:38:13",
-            ]
-        );
+
+$faker = Faker::create();
+
+$roles = ['user', 'supervisor', 'admin', 'intern', 'super-admin'];
+
+foreach ($roles as $role) {
+    for ($i = 0; $i < 5; $i++) {
+        $profile = new Profile;
+        $profile->firstName = $faker->firstName;
+        $profile->lastName = $faker->lastName;
+        $profile->email = $profile->firstName.'@gmail.com';
+        $profile->password = Hash::make($profile->firstName.'123?');
+        $profile->phone = $faker->phoneNumber;
+        $profile->assignRole($role);
+        $profile->save();
+
+        switch ($role) {
+            case 'user':
+                DB::table('users')->insert([
+                    'profile_id' => $profile->id,
+                    'academicLevel' => 'Bac+2',
+                    'establishment' => 'Ofppt',
+                ]);
+                break;
+            case 'supervisor':
+                DB::table('supervisors')->insert([
+                    'profile_id' => $profile->id,
+                ]);
+                break;
+            case 'admin':
+            case 'super-admin':
+                DB::table('admins')->insert([
+                    'profile_id' => $profile->id,
+                ]);
+                break;
+            case 'intern':
+                DB::table('interns')->insert([
+                    'profile_id' => $profile->id,
+                    'academicLevel' => 'Bac+2',
+                    'establishment' => 'Ofppt',
+                    'speciality' => 'Développement',
+                    'startDate' => $faker->dateTimeBetween('-1 years', '+1 years')->format('Y-m-d H:i:s'),
+                    'endDate' => $faker->dateTimeBetween('+1 years', '+2 years')->format('Y-m-d H:i:s'),
+                ]);
+                break;
+        }
+    }
+    }
+
          
     }
 }

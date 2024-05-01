@@ -29,17 +29,17 @@
               <h5 class="card-title text-center">Attestation de Stage</h5>
             </div>
             <div class="card-body pt-5">
-              <p>Je soussigné(e), ............................. , .............................................................., dont le siège social se situe au ......................, 
-                  atteste que M/Mme {{$firstName??'..............' }} {{$lastName??'..............'}} a effectué un stage ausein de notre service d'une durée du 
-                  {{$startDate??'................'}} au {{$endDate??'......................'}}.
+              <p>Je soussigné(e), ....................................................................................................................................................., dont le siège social se situe a ......................, 
+                  atteste que M/Mme {{$firstName??'.........................' }} {{$lastName??'...........................'}} a effectué un stage ausein de notre service d'une durée du 
+                  {{$startDate??'...........................'}} au {{$endDate??'...........................'}}
             </p>
               <p>
-                Par sa rigueur et ses qualités professionnelles et humaines, M/Mme {{$firstName??'......................' }} {{$lastName??'...................'}} a su
+                Par sa rigueur et ses qualités professionnelles et humaines, M/Mme {{$firstName??'...........................' }} {{$lastName??'...........................'}} a su
               trouver sa place au sein de l'équipe. Sa présence a été satisfaisante à tous points de vue.
               </p>
               <p>Cette attestation est délivrée à la demande du stagiaire pour servir et valoir ce que de droit.</p>
                 <div class=' mt-5 w-full d-flex justify-content-start gap-3  pt-5'>
-                  <p class="text-end">Fait a ....... , le {{date('d-m-y')}} </p>
+                  <p class="text-end">Fait a ................. , le {{date('d-m-y')}} </p>
                 </div>            <div class="row">
                 <div class="col-md-6">
                   <p class="text-end">Signature</p>

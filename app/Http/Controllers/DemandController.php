@@ -44,7 +44,7 @@ class DemandController extends Controller
         if($traitement==='reject'){
             $demand->status='Rejected';
             $demand->save();
-            return response()->json(['message' => 'demand rejected succeffully'], 404);
+            return response()->json(['message' => 'demand rejected succeffully'], 200);
         }
     }
     public function markAsRead($id){

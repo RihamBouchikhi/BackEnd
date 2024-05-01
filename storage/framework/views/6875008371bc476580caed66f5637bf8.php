@@ -5,48 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attestation de Stage</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" >
+  <style>
+    .contImage{
+      padding: 0 0 0 60px;
+    }
+    .footer{
+
+      font-size:15px;
+      padding-top:300px;
+    }
+  </style>
 </head>
-<body>
-      <header class="container py-3 d-flex justify-content-between align-items-center bg-light">
-    <div class="d-flex justify-content-center">
-       <img src="your_company_logo.png" alt="Company Logo" class="img-fluid" style="max-width: 150px;"> 
-    </div>
-    <div class="col-md-6 ">
-      <h1>Direction du système d'information</h1>
-      <p>Av. Ibn Rochd, Rabat</p>
-      <p>0537775554 - stagiaire@men.gov.ma</p>
-    </div>
+<body class=' col justify-between'>
+  <header class="container py-3 d-flex justify-content-center align-items-center bg-light contImage">
+      <img src="data:image/svg+xml;base64,<?php echo base64_encode(file_get_contents(base_path('public/settings/companyLogo.png'))); ?>"
+       alt="Company Logo" class="img-fluid " >
   </header>
   <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="card">
-          <div class="">
-            <h2 class="text-capitalize text-center">Attestation de Stage</h2>
-          </div>
-          <div class="card-body">
-            <p>Je soussigné(e),Monsieur Bahae-Eddin Halim, agissant en qualité de <?php echo e("..........."); ?> de l'entreprise DSI MEN dont le siège social se situe au Av. Ibn Rochd, Rabat , 
-              certifie par la présente avoir accueilli au sein de l'entreprise Monsieur <?php echo e($firstName??'.......'); ?> <?php echo e($lastName??'..............'); ?> , domicilié(e) a Rabat pour un stage destiné
-               à lui faire découvrir le métier de Developpement.</p>
-            <p>Je précise, par la présente, que ce stage s'est déroulé du <?php echo e($startDate??'.......'); ?> au <?php echo e($endDate??'..........'); ?>. 
-              Tout au long de cette période, Monsieur <?php echo e($firstName??'............'); ?> <?php echo e($lastName??'..............'); ?>  a su répondre à ses obligations de stagiaire,
-               notamment dans l'exercice des missions qui lui ont été confiées. Il s'est par ailleurs montré(e) très attentive aux conseils et à la formation qui lui 
-               ont été prodigués en vue d'exercer le métier de Developpement.</p>
-            <p>Cette attestation est délivrée à la demande du stagiaire pour servir et valoir ce que de droit.</p>
-              <div class=' mt-5 w-full d-flex justify-content-start gap-3'>
-                 <p class="text-end">Fait le <?php echo e(date('d-m-y')); ?></p>
-                 <p class="text-end">A Rabat</p>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header mb-10">
+              <h5 class="card-title text-center">Attestation de Stage</h5>
+            </div>
+            <div class="card-body pt-5">
+              <p>Je soussigné(e), ....................................................................................................................................................., dont le siège social se situe a ......................, 
+                  atteste que M/Mme <?php echo e($firstName??'.........................'); ?> <?php echo e($lastName??'...........................'); ?> a effectué un stage ausein de notre service d'une durée du 
+                  <?php echo e($startDate??'...........................'); ?> au <?php echo e($endDate??'...........................'); ?>
+
+            </p>
+              <p>
+                Par sa rigueur et ses qualités professionnelles et humaines, M/Mme <?php echo e($firstName??'...........................'); ?> <?php echo e($lastName??'...........................'); ?> a su
+              trouver sa place au sein de l'équipe. Sa présence a été satisfaisante à tous points de vue.
+              </p>
+              <p>Cette attestation est délivrée à la demande du stagiaire pour servir et valoir ce que de droit.</p>
+                <div class=' mt-5 w-full d-flex justify-content-start gap-3  pt-5'>
+                  <p class="text-end">Fait a ................. , le <?php echo e(date('d-m-y')); ?> </p>
+                </div>            <div class="row">
+                <div class="col-md-6">
+                  <p class="text-end">Signature</p>
+                </div>
               </div>
-                  <div class="col-md-6">
-                    <p class="text-end">Monsieur Bahae-Eddin Halim</p>
-                  </div>
-            <div class="text-end">
-              <p>Cachet de l'entreprise</p>
             </div>
           </div>
-        </div>
+      </div>
     </div>
-  </div>
-
+<footer  class=" text-center footer">
+    <p class='m-0'>Direction du Système d'Information</p>
+    <hr>
+    <p class='m-0'>Ministère de l'Education Nationale, du Préscolaire & des Sports</p>
+    <p class='m-0'>Avenue Ibn Rochd, Haut Agdal - Rabat ° Tél : 05 37 68 72 19 ° Fax : 05 37 77 18 74</p>
+</footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

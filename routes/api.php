@@ -18,7 +18,8 @@ Route::get('/offers/{id}', [OfferController::class,'show']);
 
 // protected Routes
 Route::middleware('checkorigin')->middleware('auth:sanctum')->group(function () {
-    Route::get('/generateAttestation/{id}/{attestation}', [AttestationController::class,'generatAttestation']);
+    Route::post('/generate/attestations', [AttestationController::class,'generateAttestations']);
+    Route::post('/generate/attestation/{id}', [AttestationController::class,'generateAttestation']);
     Route::POST('/logout', [AuthController::class, 'logout']);
     Route::GET('/user', [AuthController::class, 'user']);
     Route::POST('/settings', [GeneralController::class, 'setAppSettings']);
