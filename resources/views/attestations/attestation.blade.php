@@ -12,7 +12,7 @@
     .footer{
 
       font-size:15px;
-      padding-top:350px;
+      padding-top:300px;
     }
   </style>
 </head>
@@ -29,8 +29,7 @@
               <h5 class="card-title text-center">Attestation de Stage</h5>
             </div>
             <div class="card-body pt-5">
-              <p>Je soussigné(e), M. MOHAMED LOUDIFA, Chef division de centre informatique de la Direction du Système d'information
-                  dont le siège social se situe au Av. Ibn Rochd, Rabat, 
+              <p>Je soussigné(e), ............................. , .............................................................., dont le siège social se situe au ......................, 
                   atteste que M/Mme {{$firstName??'..............' }} {{$lastName??'..............'}} a effectué un stage ausein de notre service d'une durée du 
                   {{$startDate??'................'}} au {{$endDate??'......................'}}.
             </p>

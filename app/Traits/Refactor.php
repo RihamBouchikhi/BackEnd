@@ -26,7 +26,7 @@ trait Refactor
                 "files"=>$files
             ];
         return $refactored;
-        };
+            };
         if (in_array($profile->getRoleNames()[0],['admin','super-admin']) ){
             $admin = $profile->admin;
             $refactored = [
@@ -40,7 +40,7 @@ trait Refactor
                 "files"=>$files??[],
             ];
             return $refactored;
-        } ;
+            } ;
         if ($profile->getRoleNames()[0]==='supervisor'){
             $supervisor = $profile->supervisor;
             $projectsData = $supervisor->projects;
@@ -60,14 +60,10 @@ trait Refactor
                 "files"=>$files??[]
             ];
             return $refactored;
-        };
+            };
         if($profile->getRoleNames()[0]==='intern'){
             $intern = $profile->intern;
             $projectsData = $intern->projects;
-            $attestation = $profile->files->where('type','=','attestation')->first();
-            if($attestation){
-                $files[] =['url'=>asset($attestation->url),'type'=>'attestation'];
-            }
             $projects = [];
             foreach($projectsData as $project){
                 $projects[]=$project->id;
@@ -155,7 +151,7 @@ trait Refactor
         $demandsData = $offer->demands;
         $demands = [];
         foreach($demandsData as $demand){
-            array_push($demands,$demand->id);
+            array_push($demands,['id'=>$demand->id,'status'=>$demand->status]);
         }
         return [
             "id"=> $offer->id,

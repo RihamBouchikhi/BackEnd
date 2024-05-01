@@ -219,7 +219,7 @@ trait Store
             'startDate' => 'required|date',
             'endDate' => 'required|date|after_or_equal:startDate',
             'motivationLetter' => 'required|string',
-            'cv' => 'required|file'
+            'cv' => 'nullable|file'
         ]);
         $demande = new Demand;
         $demande->offer_id = $request->input('offer_id');

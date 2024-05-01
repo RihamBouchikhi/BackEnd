@@ -12,7 +12,7 @@
     .footer{
 
       font-size:15px;
-      padding-top:350px;
+      padding-top:300px;
     }
   </style>
 </head>
