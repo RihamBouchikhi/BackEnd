@@ -146,6 +146,8 @@ trait Refactor
                     'dueDate'=>$task->dueDate,
                     'priority'=>$task->priority,
                     'status'=>$task->status,
+                    'created_at'=>$task->created_at,
+                    'updated_at'=>$task->updated_at,
                     'assignee'=>$intern
                 ];
     }
