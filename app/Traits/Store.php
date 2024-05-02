@@ -237,7 +237,7 @@ trait Store
         }
         return response()->json($this->refactorDemand($demande));
     }
-    public function storInternFromUser($user,$id){
+    public function storInternFromUser($user){
         $demand =$user->demands->where('status','=','Approved')->first();
         if(!$demand){
             return response()->json(['message' => 'this user has no aprouved demand'], 404);
@@ -272,7 +272,6 @@ trait Store
             return response()->json(['message'=>'error , save this intern'],400) ;
         }else{
             DB::commit();
-            return response()->json($this->refactorProfile($profile),200) ;
         } 
     }   
     public function storeOneFile($request,$element,$fileType){

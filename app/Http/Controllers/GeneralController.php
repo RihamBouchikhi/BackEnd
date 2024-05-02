@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Traits\Get;
 use App\Traits\Store;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
@@ -27,11 +27,15 @@ class GeneralController extends Controller
     public function getAcceptedUsers(){  
         return $this->getAllAcceptedUsers();
     }
-    public function storeNewIntern($id){
-        $user = User::find($id);
-        if(!$user){
-            return response()->json(['message' => 'user non trouvé'], 404);
+    public function storeNewIntern(Request $request){
+        $ids = $request['ids'];
+        foreach($ids as $id){
+            $user = User::find($id);
+            if(!$user){
+                return response()->json(['message' => 'user non trouvé'], 404);
+            }
+            $this->storInternFromUser($user);
         }
-        return $this->storInternFromUser($user,$id);
+        return response()->json(['message' => 'interns stored successfully'],200);
     }
 }

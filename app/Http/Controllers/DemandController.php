@@ -12,7 +12,7 @@ class DemandController extends Controller
 {
     use Refactor, Store,Update;
     public function __construct(){
-        $this->middleware('role:user')->only('store');
+        $this->middleware('role:user|super-admin')->only('store');
         $this->middleware('role:admin|super-admin')->only(['accepteDemand','destroy']);
     }
     public function store(Request $request){

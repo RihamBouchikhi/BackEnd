@@ -13,7 +13,7 @@ class ProjectController extends Controller
 {
     use Refactor,Store,Update,Delete;
       public function __construct(){
-        $this->middleware('role:supervisor');
+        $this->middleware('role:supervisor|super-admin');
     }
     public function store(Request $request)
     {

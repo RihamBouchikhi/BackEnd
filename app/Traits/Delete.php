@@ -6,10 +6,6 @@ use App\Models\File;
 trait Delete
 {
     public function deleteProfile($profile){
-        $role=$profile->getRoleNames()[0];
-        if($role ='super-admin'){
-            return response()->json([''],403);
-        };
         $this->deletOldFiles($profile, 'avatar');
         $this->deletOldFiles($profile, 'cv');
         if($profile->delete()){

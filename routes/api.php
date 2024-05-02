@@ -26,7 +26,7 @@ Route::middleware('checkorigin')->middleware('auth:sanctum')->group(function () 
     
     //get all data => projects , admins , tasks ,supervisors , users ( NB data must be pluriel)
     Route::get('/users/accepted', [GeneralController::class, 'getAcceptedUsers']);
-    Route::post('/users/{id}/accept', [GeneralController::class, 'storeNewIntern']);
+    Route::post('/users/accept', [GeneralController::class, 'storeNewIntern']);
     Route::get('/{data}', [GeneralController::class, 'index']);
     Route::get('/{data}/{id}', [GeneralController::class, 'show']);
 
